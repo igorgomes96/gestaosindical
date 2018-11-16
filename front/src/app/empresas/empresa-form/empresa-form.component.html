@@ -1,0 +1,156 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <app-panel>
+                    <form role="form" [formGroup]="form">
+                        <h2>Empresa</h2>
+                        <p>
+                            Cadastro/edição de empresa
+                        </p>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6 col-xs-12">
+                                <app-custom-input formControlName="id" [control]="form.get('id')" id="id" label="Id"
+                                    name="id" readOnly="true">
+                                </app-custom-input>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group" [class.has-error]="hasError(form.get('cnpj'))">
+                                    <label class="control-label">CNPJ</label>
+                                    <input type="text" mask="00.000.000/0000-00" placeholder="CNPJ" class="form-control"
+                                        formControlName="cnpj">
+                                    <app-validator-message [control]="form.get('cnpj')" controlName="CNPJ"></app-validator-message>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <app-custom-input formControlName="nome" [control]="form.get('nome')" id="nome" label="Nome"
+                                    name="nome">
+                                </app-custom-input>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <app-custom-input formControlName="qtdaTrabalhadores" [control]="form.get('qtdaTrabalhadores')"
+                                            id="qtdaTrabalhadores" label="Qtda. de Trabalhadores" name="qtdaTrabalhadores"
+                                            type="number">
+                                        </app-custom-input>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <app-custom-input formControlName="massaSalarial" [control]="form.get('massaSalarial')"
+                                    id="massaSalarial" label="Massa Salarial" name="massaSalarial" type="number">
+                                </app-custom-input>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [class.has-error]="hasError(form.get('sindicatoLaboral'))">
+                                    <label class="control-label">Sindicato Laboral</label>
+                                    <app-autocomplete formControlName="sindicatoLaboral" [urlSource]="urlLaboralList"
+                                        [mapShowFunction]="mapShow" [linkFunction]="linkLaboral" placeholder="Sindicato Laboral">
+                                        <ng-template let-item>
+                                            <span class="fa fa-building-o m-r-sm"></span>
+                                            <strong>#{{item.id}}</strong> {{item.nome}}
+                                        </ng-template>
+                                    </app-autocomplete>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group" [class.has-error]="hasError(form.get('sindicatoPatronal'))">
+                                    <label class="control-label">Sindicato Patronal</label>
+                                    <app-autocomplete formControlName="sindicatoPatronal" [urlSource]="urlPatronalList"
+                                        [mapShowFunction]="mapShow" [linkFunction]="linkPatronal" placeholder="Sindicato Patronal">
+                                        <ng-template let-item>
+                                            <span class="fa fa-building m-r-sm"></span>
+                                            <strong>#{{item.id}}</strong> {{item.nome}}
+                                        </ng-template>
+                                    </app-autocomplete>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <h4>Endereço</h4>
+
+                        <fieldset formGroupName="endereco">
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <app-custom-input formControlName="id" [control]="form.get('endereco.id')" id="id"
+                                        label="Id" name="id" readOnly="false">
+                                    </app-custom-input>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <app-custom-input formControlName="cidade" [control]="form.get('endereco.cidade')"
+                                        id="cidade" label="Cidade" name="cidade">
+                                    </app-custom-input>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group" [class.has-error]="hasError(form.get('endereco.uf'))">
+                                        <label class="control-label">Estado</label>
+                                        <select class="form-control" name="uf" id="uf" formControlName="uf">
+                                            <option value="">(UF)</option>
+                                            <option *ngFor="let estado of estados$ | async" [value]="estado.sigla">{{
+                                                estado.nome
+                                                }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <app-custom-input formControlName="logradouro" [control]="form.get('endereco.logradouro')"
+                                        id="logradouro" label="Logradouro" name="logradouro" placeholder="Rua / Avenida">
+                                    </app-custom-input>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <app-custom-input formControlName="numero" [control]="form.get('endereco.numero')"
+                                        id="numero" label="Número" name="numero" type="number">
+                                    </app-custom-input>
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+                        <button class="btn btn-primary m-r-sm" [disabled]="form.invalid" (click)="salvar()">Salvar</button>
+
+                        <app-related-link [relatedLinks]="relatedLinks"></app-related-link>
+
+                    </form>
+                </app-panel>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <app-panel *ngIf="empresa">
+                    <app-contato [contatos$]="contatos$" (novoContato)="novoContato($event)" (deleteContato)="removeContato($event)"></app-contato>
+                </app-panel>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <app-arquivos *ngIf="empresa" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+    </div>
+</div>

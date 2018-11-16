@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <app-panel>
+                    <form role="form" [formGroup]="form" (submit)="salvar()">
+                        <h2>Sindicato</h2>
+                        <p>
+                            Cadastro/edição de sindicatos patronais
+                        </p>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-6 col-xs-12">
+                                <app-custom-input formControlName="id" [control]="form.get('id')" id="id" label="Id"
+                                    name="id" readOnly="true">
+                                </app-custom-input>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="form-group" [class.has-error]="hasError(form.get('cnpj'))">
+                                    <label class="control-label">CNPJ</label>
+                                    <input type="text" mask="00.000.000/0000-00" placeholder="CNPJ" class="form-control"
+                                        formControlName="cnpj">
+                                    <app-validator-message [control]="form.get('cnpj')" controlName="CNPJ"></app-validator-message>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <app-custom-input formControlName="nome" [control]="form.get('nome')" id="nome" label="Nome"
+                                    name="nome">
+                                </app-custom-input>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [class.has-error]="hasError(form.get('telefone1'))">
+                                    <label class="control-label">Telefone 1</label>
+                                    <input type="text" placeholder="Telefone 1" mask="(00) 0000-00009" class="form-control"
+                                        formControlName="telefone1">
+                                    <app-validator-message [control]="form.get('telefone1')" controlName="Telefone 1"></app-validator-message>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group" [class.has-error]="hasError(form.get('telefone1'))">
+                                    <label class="control-label">Telefone 2</label>
+                                    <input type="text" placeholder="Telefone 2" class="form-control" mask="(00) 0000-00009"
+                                        formControlName="telefone2">
+                                    <app-validator-message [control]="form.get('telefone2')" controlName="Telefone 2"></app-validator-message>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <app-custom-input formControlName="gestao" [control]="form.get('gestao')" id="gestao"
+                                    label="Gestão" name="gestao">
+                                </app-custom-input>
+                            </div>
+
+                            <div class="col-md-7">
+                                <app-custom-input formControlName="site" [control]="form.get('site')" id="site" label="Site"
+                                    name="site">
+                                </app-custom-input>
+                            </div>
+                        </div>
+
+                        <input type="submit" class="btn btn-success" value="Salvar" [disabled]="form.invalid">
+
+                        <app-related-link [relatedLinks]="relatedLinks"></app-related-link>
+
+                    </form>
+                </app-panel>
+            </div>
+        </div>
+        <div class="row" *ngIf="sindicatoPatronal">
+            <div class="col-md-12">
+                <app-panel>
+                    <app-contato [contatos$]="contatos$" (novoContato)="novoContato($event)" (deleteContato)="removeContato($event)"
+                        [referenteA]="'sindicatoPatronalId'" [referenteAId]="sindicatoPatronal.id"></app-contato>
+                </app-panel>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4" *ngIf="sindicatoPatronal">
+        <app-arquivos (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+    </div>
+</div>

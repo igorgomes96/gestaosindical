@@ -1,0 +1,10 @@
+.autocomplete.list-group {
+    display: inline-block;
+    position: absolute;
+    background-color: white;
+    z-index: 9999;
+}
+
+input {
+    color: #337ab7;
+}

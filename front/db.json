@@ -1,0 +1,38 @@
+{
+    "sindicatospatronais": [
+        {
+            "id": 1,
+            "nome": "Sindicato P 1",
+            "presidente": {
+                "id": 1,
+                "nome": "Presidente 1",
+                "telefone1": "9999-9999",
+                "telefone2": "5555-5555",
+                "email": "email@email.com"
+            },
+            "negociador": {
+                "id": 2,
+                "nome": "Negociador 1",
+                "telefone1": "8888-8888",
+                "telefone2": "6666-6666",
+                "email": "teste@teste.com"
+            },
+            "contatos": [
+                {
+                    "id": 1,
+                    "nome": "Negociador 1",
+                    "telefone1": "8888-8888",
+                    "telefone2": "6666-6666",
+                    "email": "teste@teste.com"
+                },
+                {
+                    "id": 2,
+                    "nome": "Presidente 1",
+                    "telefone1": "9999-9999",
+                    "telefone2": "5555-5555",
+                    "email": "email@email.com"
+                }
+            ]
+        }
+    ]
+}

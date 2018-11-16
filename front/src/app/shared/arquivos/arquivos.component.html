@@ -1,0 +1,34 @@
+<h2>Arquivos</h2>
+<!-- <p>
+  Coleção de arquivos relacionados
+</p> -->
+
+
+<label class="dropzone" (drop)="onDrop($event)" (dragover)="onDragOver($event)" [style.background]="dropzoneColor">
+  Arraste um arquivo para esta área ou clique para fazer upload.
+  <input type="file" multiple (change)="onInputChange($event)">
+</label>
+
+
+<div class="project-list table-responsive">
+
+  <table class="table table-hover">
+    <tbody>
+      <tr *ngFor="let arquivo of arquivos">
+        <td class="project-status">
+          <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="deleteFile(arquivo.id)">
+            <i class="fa fa-trash"></i>
+          </button>
+          <button class="btn btn-outline btn-primary btn-xs" (click)="download(arquivo)">
+            <i class="fa fa-download"></i>
+          </button>
+        </td>
+        <td class="project-title">
+          <strong>{{ arquivo.nome }}</strong>
+          <br />
+          <small>Upload: {{ arquivo.dataUpload | date:'dd/MM/yyy HH:mm' }}, {{ (arquivo.tamanho / 1024) | number:'1.0-1' }}k</small>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

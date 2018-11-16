@@ -1,0 +1,20 @@
+.navbar-form-custom {
+    width: 300px;
+}
+.navbar-form-custom .form-control {
+    width: 100%;
+}
+
+.content-nav {
+    padding-left: 37px;
+}
+
+.content-nav button.btn {
+    color: #2f4050;
+}
+
+.icon-nav {
+    float: left;
+    padding-top: 5px;
+}
+

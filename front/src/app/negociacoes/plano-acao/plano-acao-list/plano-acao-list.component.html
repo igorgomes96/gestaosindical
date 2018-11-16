@@ -1,0 +1,63 @@
+<app-list-container [list]="planosAcao" title="Planos de Ação" description="Relação de todos os planos de ação."
+  searchPlaceholder="Pesquisar Planos" newLink="/negociacoes/planosacao/novo" [referent]="referent" (onFilter)="onFilter($event)" [filterParams]="filterParams">
+
+  <div class="hr-line-dashed"></div>
+  <div> <!-- class="custom-slider" -->
+    <ng5-slider [(value)]="value" [options]="options" (userChangeEnd)="onUserChangeEnd($event)"></ng5-slider>
+  </div>
+
+  <div class="clients-list">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>#</th>
+            <th>Referente a</th>
+            <!-- <th>Sindicato</th> -->
+            <th>Data</th>
+            <th>Estado</th>
+            <th>Reclamante</th>
+            <th>Responsável Ação</th>
+            <th>Procedente?</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let plano of planosAcaoFiltrados">
+            <td>
+              <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(plano)">
+                <i class="fa fa-trash"></i>
+              </button>
+              <a [routerLink]="['/negociacoes/planosacao', plano.id]" class="btn btn-outline btn-success btn-xs">
+                <i class="fa fa-pencil"></i>
+              </a>
+            </td>
+            <td>#{{ plano.id }}</td>
+            <td>
+              <span *ngIf="Referente[plano.referente] === Referente.Patronal">
+                  {{ plano.patronal.nome }}
+              </span>
+              <span *ngIf="Referente[plano.referente] === Referente.Laboral">
+                  {{ plano.laboral.nome }}
+              </span>
+              <span *ngIf="Referente[plano.referente] === Referente.MTE || Referente[plano.referente] === Referente.MPT">
+                  {{ plano.referente }}
+              </span>
+            </td>
+            <td>{{ plano.data | date:'dd/MM/yyyy' }}</td>
+            <td>{{ plano.estado }}</td>
+            <td>{{ plano.reclamante }}</td>
+            <td>{{ plano.responsavelAcao }}</td>
+            <td>{{ plano.procedencia ? 'Sim' : 'Não' }}</td>
+            <td>
+              <span [ngClass]="classStatus(plano.status)" class="label">
+                {{ StatusPlanoAcao[plano.status] }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-list-container>

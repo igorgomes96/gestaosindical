@@ -1,0 +1,39 @@
+<app-list-container [list]="empresas" title="Empresa" description="Relação de todas as empresas cadastradas."
+    searchPlaceholder="Pesquisar Empresas" newLink="/empresas/nova" (onFilter)="onFilter($event)">
+
+    <div class="clients-list">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>CNPJ</th>
+                        <th class="text-right">Massa Salarial</th>
+                        <th class="text-right">Qtda. Trabalhadores</th>
+                        <th>Cidade - UF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let empresa of empresasFiltradas">
+                        <td>
+                            <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(empresa)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <a [routerLink]="['/empresas', empresa.id]" class="btn btn-outline btn-success btn-xs">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </td>
+                        <td>{{ empresa.id }}</td>
+                        <td>{{ empresa.nome }}</td>
+                        <td>{{ empresa.cnpj | mask:'00.000.000/0000-00'}}</td>
+                        <td class="text-right">{{ empresa.massaSalarial | number:'1.2-2' }}</td>
+                        <td class="text-right">{{ empresa.qtdaTrabalhadores }}</td>
+                        <td>{{ empresa.endereco?.cidade }} - {{ empresa.endereco?.uf }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</app-list-container>

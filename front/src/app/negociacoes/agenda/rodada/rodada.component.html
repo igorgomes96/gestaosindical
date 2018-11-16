@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-md-8 border-right">
+    <h2>Rodada {{ rodada.numero }}</h2>
+
+
+    <form role="form">
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="form-label">Data</label>
+            <input type="date" class="form-control" [ngModel] ="rodada.data | date:'yyyy-MM-dd'" (ngModelChange)="rodada.data = $event" [ngModelOptions]="{standalone: true}" id="data" name="data">
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="form-label">Custos em Viagem</label>
+            <input type="number" class="form-control" [(ngModel)]="rodada.custosViagens" [ngModelOptions]="{standalone: true}" id="data" name="data">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="control-label">Resumo</label>
+            <textarea name="resumo" id="resumo" rows="3" class="form-control" [(ngModel)]="rodada.resumo" [ngModelOptions]="{standalone: true}"></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-4">
+    <app-arquivos dropzoneColor="#f3f3f4" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <button type="submit" class="btn btn-primary m-r-sm" (click)="salvar()" [disabled]="!rodada.data">Salvar</button>
+    <button class="btn btn-danger" (click)="excluir()">Excluir</button>
+  </div>
+</div>

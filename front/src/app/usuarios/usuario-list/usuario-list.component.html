@@ -1,0 +1,34 @@
+<app-list-container [list]="usuarios" title="Usuários do Sistema" 
+  description="Relação de todos os usuários cadastrados." searchPlaceholder="Pesquisar Usuários" 
+  newLink="/usuarios/novo" (onFilter)="onFilter($event)">
+
+  <div class="clients-list">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nome</th>
+            <th>Login</th>
+            <th>Perfil</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuariosFiltrados">
+            <td>
+              <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(usuario)">
+                <i class="fa fa-trash"></i>
+              </button>
+              <a [routerLink]="['/usuarios', usuario.login]" class="btn btn-outline btn-success btn-xs">
+                <i class="fa fa-pencil"></i>
+              </a>
+            </td>
+            <td>{{ usuario.nome }}</td>
+            <td>{{ usuario.login }}</td>
+            <td>{{ usuario.perfil }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-list-container>

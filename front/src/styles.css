@@ -1,0 +1,96 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~font-awesome/css/font-awesome.css';
+@import 'src/assets/styles/styles.css';
+@import 'src/assets/styles/animate.css';
+@import 'src/assets/plugins/toastr/toastr.min.css';
+
+.table-responsive th,
+.table-responsive td {
+    white-space: nowrap;
+}
+
+textarea {
+    resize: vertical;
+}
+
+ul.inline {
+    padding-left: 0;
+}
+
+ul.inline li {
+    display: inline;
+    padding-right: 10px; 
+}
+
+ul.inline li a:not(.btn) {
+    text-decoration: underline;
+}
+
+.custom-slider .ng5-slider .ng5-slider-bar {
+    background: #1bb394;
+    height: 2px;
+}
+.custom-slider .ng5-slider .ng5-slider-selection {
+    background: orange;
+}
+
+.custom-slider .ng5-slider .ng5-slider-pointer {
+    width: 8px;
+    height: 16px;
+    top: auto; /* to remove the default positioning */
+    bottom: 0;
+    background-color: #333;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.custom-slider .ng5-slider .ng5-slider-pointer:after {
+    display: none;
+}
+
+.custom-slider .ng5-slider .ng5-slider-bubble {
+    bottom: 14px;
+}
+
+.custom-slider .ng5-slider .ng5-slider-limit {
+    font-weight: bold;
+    color: orange;
+}
+
+.custom-slider .ng5-slider .ng5-slider-tick {
+    width: 1px;
+    height: 10px;
+    margin-left: 4px;
+    border-radius: 0;
+    background: #1bb394;
+    top: -1px;
+}
+
+.custom-slider .ng5-slider .ng5-slider-tick.ng5-slider-selected {
+    background: orange;
+}
+
+.toast-success:before {
+    content: '' !important;
+}
+
+.toast-error:before {
+    content: '' !important;
+}
+
+.toast-info:before {
+    content: '' !important;
+}
+
+.toast-warning:before {
+    content: '' !important;
+}
+
+.navbar-form-custom a.list-group-item {
+    background: #f9f9f9;
+}
+
+.navbar-form-custom a.list-group-item.active {
+    background: #1ab394;
+}

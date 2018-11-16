@@ -1,0 +1,79 @@
+<app-modal title="Reajustes de Empresa Concorrente">
+
+  <form [formGroup]="formConcorrente" body>
+    <div class="row">
+      <div class="col-md-12">
+        <app-custom-input formControlName="nome" [control]="formConcorrente.get('nome')" id="nome" label="Nome do Concorrente"
+          name="nome">
+        </app-custom-input>
+      </div>
+    </div>
+
+    <fieldset formGroupName="reajuste">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12">
+              <app-custom-input formControlName="salario" type="number" [control]="formConcorrente.get('reajuste.salario')" id="salario"
+                label="Salário" name="salario">
+              </app-custom-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <app-custom-input formControlName="piso" type="number" [control]="formConcorrente.get('reajuste.piso')" id="piso"
+                label="Piso" name="piso">
+              </app-custom-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <app-custom-input formControlName="auxCreche" type="number" [control]="formConcorrente.get('reajuste.auxCreche')"
+                id="auxCreche" label="Auxílio Creche" name="auxCreche">
+              </app-custom-input>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12">
+              <app-custom-input formControlName="descontoVt" type="number" [control]="formConcorrente.get('reajuste.descontoVt')"
+                id="descontoVt" label="Desconto VT" name="descontoVt">
+              </app-custom-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <app-custom-input formControlName="vaVr" type="number" [control]="formConcorrente.get('reajuste.vaVr')" id="vaVr"
+                label="VA/VR" name="vaVr">
+              </app-custom-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <label for="vaVrFerias">VA/VR nas Férias</label>
+              <select formControlName="vaVrFerias" name="vaVrFerias" id="vaVrFerias" class="form-control">
+                <option [value]="true">Sim</option>
+                <option [value]="false">Não</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="row" footer>
+    <div class="col-md-12">
+      <button class="btn btn-primary push-right" (click)="salvar()" [disabled]="formConcorrente.invalid">Salvar</button>
+    </div>
+  </div>
+
+</app-modal>

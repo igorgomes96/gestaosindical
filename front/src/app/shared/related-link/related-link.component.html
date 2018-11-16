@@ -1,0 +1,10 @@
+<div class="row m-t-md" *ngIf="relatedLinks && relatedLinks.length">
+    <div class="col-md-12">
+      <p class="m-b-xs">Ver Relacionados:</p>
+      <ul class="inline">
+        <li *ngFor="let link of relatedLinks">
+          <a [routerLink]="link.link" [queryParams]="link.queryParams" class="btn btn-default">{{ link.label }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>

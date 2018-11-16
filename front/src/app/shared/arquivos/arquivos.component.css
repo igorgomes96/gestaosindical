@@ -1,0 +1,8 @@
+label.dropzone input[type=file] {
+    display: none;
+}
+
+label.dropzone {
+    text-align: center;
+    cursor: pointer;
+}

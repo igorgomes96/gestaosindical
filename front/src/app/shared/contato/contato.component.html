@@ -1,0 +1,74 @@
+<h2>Contatos Relacionados</h2>
+<p>
+    Cadastro de contatos
+</p>
+<form role="form" [formGroup]="formContato" (submit)="addContato()">
+    <div class="row">
+        <div class="col-md-7">
+            <app-custom-input formControlName="nome" [control]="formContato.get('nome')" id="nome" label="Nome do Contato"
+                name="nome">
+            </app-custom-input>
+        </div>
+
+        <div class="col-md-5">
+            <div class="form-group">
+                <label>Tipo de Contato</label>
+                <select name="tipo" id="tipo" class="form-control" formControlName="tipoContato">
+                    <option value="Presidente">Presidente</option>
+                    <option value="Negociador">Negociador</option>
+                    <option value="Contato">Contato</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <app-custom-input formControlName="email" [control]="formContato.get('email')" id="email" label="E-mail"
+                name="email" type="email">
+            </app-custom-input>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group" [class.has-error]="hasError(formContato.get('telefone1'))">
+                <label class="control-label">Telefone</label>
+                <input type="text" mask="(00) 0000-00009" placeholder="Telefone" class="form-control" formControlName="telefone1">
+                <app-validator-message [control]="formContato.get('telefone1')" controlName="Telefone"></app-validator-message>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group" [class.has-error]="hasError(formContato.get('telefone2'))">
+                <label class="control-label">Celular</label>
+                <input type="text" mask="(00) 0000-00009" placeholder="Telefone" class="form-control" formControlName="telefone2">
+                <app-validator-message [control]="formContato.get('telefone2')" controlName="Celular"></app-validator-message>
+            </div>
+        </div>
+    </div>
+
+    <input type="submit" value="Adicionar Contato" class="btn btn-primary" [disabled]="formContato.invalid">
+</form>
+
+<div class="hr-line-dashed"></div>
+
+<div class="clients-list">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <tbody>
+                <tr *ngFor="let contato of contatos$ | async">
+                    <td>
+                        <button class="btn btn-outline btn-danger btn-xs" (click)="removeContato(contato.id)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                    <td><strong>#{{ contato.id }}</strong> {{ contato.nome }}</td>
+                    <td><i class="fa fa-phone"> </i> {{ contato.telefone1 | mask:'(00) 0000-00009' }}</td>
+                    <td><i class="fa fa-phone"> </i> {{ contato.telefone2 | mask:'(00) 0000-00009' }}</td>
+                    <td><i class="fa fa-envelope"> </i> {{ contato.email }}</td>
+                    <td>{{ contato.tipoContato }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

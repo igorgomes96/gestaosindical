@@ -1,0 +1,10 @@
+<div class="row wrapper border-bottom white-bg page-heading" [hidden]="!title">
+    <div class="col-lg-10">
+        <h2>{{ title }}</h2>
+        <ol class="breadcrumb">
+            <li *ngFor="let breadcrumb of breadcrumbs$ | async; let ultimo = last" [class.active]="ultimo">
+                <a>{{ breadcrumb.label }}</a>
+            </li>
+        </ol>
+    </div>
+</div>

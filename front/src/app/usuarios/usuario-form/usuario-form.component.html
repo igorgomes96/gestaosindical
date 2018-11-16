@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col-md-12">
+
+    <app-panel>
+      <h2>Usuários</h2>
+      <p>
+        Cadastro/edição de usuários
+      </p>
+      <div class="row">
+        <div class="col-md-6 b-r">
+          <form role="form" [formGroup]="form">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <app-custom-input formControlName="login" [control]="form.get('login')" id="login" label="Login do Usuário"
+                  name="login" readOnly="true">
+                </app-custom-input>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <app-custom-input formControlName="nome" [control]="form.get('nome')" id="nome" label="Nome" name="nome"
+                  readOnly="true">
+                </app-custom-input>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label class="control-label">Perfil</label><br>
+                  <input type="radio" formControlName="perfil" value="Administrador"> Administrador <label class="checkbox-inline">
+                  </label>
+                  <input type="radio" formControlName="perfil" value="Usuário Padrão"> Usuário Padrão <label class="checkbox-inline">
+                  </label>
+                </div>
+              </div>
+            </div>
+          </form>
+
+        </div>
+
+        <div class="col-md-6" *ngIf="form.get('perfil').value === 'Usuário Padrão'">
+
+          <form [formGroup]="formSearch">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="control-label">Conceder permissão de leitura:</label>
+                  <app-autocomplete [urlSource]="urlEmpresasList" formControlName="search" placeholder="Empresa..."
+                    [mapValueFunction]="mapValueFunction">
+                    <ng-template let-item>
+                      <span class="fa fa-users m-r-sm"></span>
+                      <strong>#{{item.id}}</strong> {{item.nome}}
+                    </ng-template>
+                  </app-autocomplete>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Id</th>
+                <th>CNPJ</th>
+                <th>Empresa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let empresa of empresas">
+                <td>
+                    <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="disallow(empresa.id)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+                <td>{{ empresa.id }}</td>
+                <td>{{ empresa.cnpj | mask:'00.000.000/0000-00' }}</td>
+                <td>{{ empresa.nome }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+
+    </app-panel>
+  </div>
+</div>

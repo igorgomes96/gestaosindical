@@ -1,0 +1,44 @@
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="minimalize-styl-2 btn btn-primary" (click)="toggleNavigation()"><i class="fa fa-bars"></i>
+            </a>
+            <form role="search" class="navbar-form-custom" [formGroup]="form">
+                <div class="form-group">
+                    <app-autocomplete formControlName="pesquisa" [classFunction]="getClassColor" [mapShowFunction]="mapShowFunction" [urlSource]="url" urlQueryParam="nome" placeholder="Pesquisar...">
+                        <ng-template let-item>
+                            <div class="item-nav">
+
+                                <div class="icon-nav">
+                                    <span class="fa m-r-sm fa-lg" [ngClass]="getClassIcon(item)"></span>
+                                </div>
+
+                                <div class="content-nav">
+                                    <div class="m-b-sm">
+                                        #{{ item.obj.id }} {{ item.obj.nome }}
+                                    </div>
+                                    <button class="btn btn-xs m-r-xs btn-default" (click)="navigate('/negociacoes/agenda', item, $event)">Negociações</button>
+                                    <button class="btn btn-xs m-r-xs btn-default" (click)="navigate('/negociacoes/planosacao', item, $event)">Planos de Ação</button>
+                                    <button class="btn btn-xs btn-default" (click)="navigate('/negociacoes/litigios', item, $event)">Litígios</button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </app-autocomplete>
+                    <!-- <input type="text" placeholder="Pesquisar..." formControlName="pesquisa" class="form-control" name="top-search"
+                        id="top-search"> -->
+                </div>
+            </form>
+        </div>
+
+
+        <ul class="nav navbar-top-links navbar-right">
+            <li>
+                <a (click)="logout()">
+                    <i class="fa fa-sign-out"></i> Log out
+                </a>
+            </li>
+        </ul>
+
+    </nav>
+</div>
+<app-breadcrump></app-breadcrump>

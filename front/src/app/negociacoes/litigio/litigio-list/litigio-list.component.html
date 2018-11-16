@@ -1,0 +1,53 @@
+<app-list-container [list]="litigios" title="Litígios" description="Relação de todos os litígios." searchPlaceholder="Pesquisar Litígios"
+  newLink="/negociacoes/litigios/novo" [referent]="referent" (onFilter)="onFilter($event)" [filterParams]="filterParams">
+
+  <div class="hr-line-dashed"></div>
+  <div>
+    <!-- class="custom-slider" -->
+    <ng5-slider [(value)]="value" [options]="options" (userChangeEnd)="onUserChangeEnd($event)"></ng5-slider>
+  </div>
+
+  <div class="clients-list">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>#</th>
+            <th>Empresa</th>
+            <th>Referente a</th>
+            <th>Procedimento</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let litigio of litigiosFiltrados">
+            <td>
+              <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(litigio)">
+                <i class="fa fa-trash"></i>
+              </button>
+              <a [routerLink]="['/negociacoes/litigios', litigio.id]" class="btn btn-outline btn-success btn-xs">
+                <i class="fa fa-pencil"></i>
+              </a>
+            </td>
+            <td>#{{ litigio.id }}</td>
+            <td>{{ litigio.empresa.nome }}</td>
+            <td>
+              <span *ngIf="Referente[litigio.referente] === Referente.Patronal">
+                {{ litigio.patronal.nome }}
+              </span>
+              <span *ngIf="Referente[litigio.referente] === Referente.Laboral">
+                {{ litigio.laboral.nome }}
+              </span>
+              <span *ngIf="Referente[litigio.referente] === Referente.MTE || Referente[litigio.referente] === Referente.MPT">
+                {{ litigio.referente }}
+              </span>
+            </td>
+            <td>{{ ProcedimentoLitigio[litigio.procedimento] }}</td>
+            <td>{{ litigio.data | date:'dd/MM/yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-list-container>

@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-12">
+    <app-panel>
+      <h2>{{ title }}</h2>
+      <p>
+        {{ description }}
+      </p>
+      <ul *ngIf="referent" class="m-b-md">
+        <li [hidden]="!queryParamsName[r]" *ngFor="let r of objectKeys(referent)">{{ queryParamsName[r] }} <strong>#{{
+            referent[r] }}</strong>
+        </li>
+      </ul>
+      <form [formGroup]="formFiltro">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+          </span>
+          <input type="text" formControlName="filtro" [placeholder]="searchPlaceholder" class="input form-control">
+        </div>
+      </form>
+
+      <a class="btn btn-primary m-t-md" [routerLink]="newLink">Novo <span class="fa fa-plus"></span></a>
+      <ng-content></ng-content>      
+    </app-panel>
+  </div>
+</div>

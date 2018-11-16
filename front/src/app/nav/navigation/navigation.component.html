@@ -1,0 +1,71 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="block m-t-xs"> <strong class="font-bold">Usuário</strong> </span>
+                        <span class="text-muted text-xs block">Administrador <b class="caret"></b> </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a (click)="logout()">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    G.S.
+                </div>
+            </li>
+            <li routerLinkActive="active" *ngFor="let item of menu">
+                <a *ngIf="item.children == null" [routerLink]="[item.link]">
+                    <i [ngClass]="item.icon"></i>
+                    <span class="nav-label">{{ item.label }}</span>
+                    <span class="fa arrow" *ngIf="item.children != null"></span>
+                </a>
+                <a *ngIf="item.children != null">
+                    <i [ngClass]="item.icon"></i>
+                    <span class="nav-label">{{ item.label }}</span>
+                    <span class="fa arrow" *ngIf="item.children != null"></span>
+                </a>
+                <ul class="nav nav-second-level" *ngIf="item.children != null">
+                    <li routerLinkActive="active" *ngFor="let sub of item.children">
+                        <a [routerLink]="[sub.link]">{{ sub.label }}</a>
+                    </li>
+                </ul>
+            </li>
+            <!-- <li routerLinkActive="active">
+                <a><i class="fa fa-bar-chart"></i> <span class="nav-label">Dashboard</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li routerLinkActive="active"><a [routerLink]="['/dashboard/negociacoes']">Negociações</a></li>
+                </ul>
+            </li>
+            <li routerLinkActive="active">
+                <a [routerLink]="['/sindicatos/patronais']"><i class="fa fa-building"></i> <span class="nav-label">Sindicatos
+                        Patronais</span></a>
+            </li>
+            <li routerLinkActive="active">
+                <a [routerLink]="['/sindicatos/laborais']"><i class="fa fa-building-o"></i> <span class="nav-label">Sindicatos
+                        Laborais</span> </a>
+            </li>
+            <li routerLinkActive="active">
+                <a [routerLink]="['/empresas']"><i class="fa fa-users"></i> <span class="nav-label">Empresas</span> </a>
+            </li>
+            <li routerLinkActive="active">
+                <a [routerLink]="['/negociacoes/agenda']"><i class="fa fa-calendar"></i> <span class="nav-label">Agenda</span>
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a [routerLink]="['/negociacoes/litigios']"><i class="fa fa-book"></i> <span class="nav-label">Litígios</span>
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a [routerLink]="['/negociacoes/planosacao']"><i class="fa fa-bullseye"></i> <span class="nav-label">Planos
+                        de Ações</span> </a>
+            </li> -->
+            <li routerLinkActive="active" *ngIf="isAdmin">
+                <a [routerLink]="['/usuarios']"><i class="fa fa-user"></i><span class="nav-label">Usuários</span></a>
+            </li>
+
+        </ul>
+
+    </div>
+</nav>

@@ -1,0 +1,5 @@
+<div class="form-group" [class.has-error]="hasError">
+  <label class="control-label">{{ label }}</label>
+  <input [type]="type" [readOnly]="!!readOnly" [(ngModel)]="value" [placeholder]="placeholder" [name]="name" [id]="id" class="form-control">
+  <app-validator-message [control]="control" [controlName]="label"></app-validator-message>
+</div>

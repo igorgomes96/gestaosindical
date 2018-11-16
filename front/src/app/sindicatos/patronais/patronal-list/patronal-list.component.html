@@ -1,0 +1,42 @@
+<app-list-container [list]="sindicatos" title="Sindicatos Patronais" 
+  description="Relação de todos os sindicatos cadastrados." searchPlaceholder="Pesquisar Sindicatos" 
+  newLink="/sindicatos/patronais/novo" (onFilter)="onFilter($event)">
+
+  <div class="clients-list">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>#</th>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Fone 1</th>
+            <th>Fone 2</th>
+            <th>Gestão</th>
+            <th>Site</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sindicato of sindicatosFiltrados">
+            <td>
+              <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(sindicato)">
+                <i class="fa fa-trash"></i>
+              </button>
+              <a [routerLink]="['/sindicatos/patronais', sindicato.id]" class="btn btn-outline btn-success btn-xs">
+                <i class="fa fa-pencil"></i>
+              </a>
+            </td>
+            <td>{{ sindicato.id }}</td>
+            <td>{{ sindicato.nome }}</td>
+            <td>{{ sindicato.cnpj | mask:'00.000.000/0000-00' }}</td>
+            <td>{{ sindicato.telefone1 | mask:'(00) 0000-00009' }}</td>
+            <td>{{ sindicato.telefone2 | mask:'(00) 0000-00009' }}</td>
+            <td>{{ sindicato.gestao }}</td>
+            <td>{{ sindicato.site }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-list-container>

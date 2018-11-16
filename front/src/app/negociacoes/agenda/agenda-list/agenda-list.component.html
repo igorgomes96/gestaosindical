@@ -1,0 +1,57 @@
+<app-list-container [list]="negociacoes" title="Agenda de Negociações" description="Relação de todas as negociações."
+  searchPlaceholder="Pesquisar Negociações" newLink="/negociacoes/agenda/nova" [referent]="referent" (onFilter)="onFilter($event)"
+  [filterParams]="filterParams">
+
+  <div class="hr-line-dashed"></div>
+  <div> <!-- class="custom-slider" -->
+    <ng5-slider [(value)]="value" [options]="options" (userChangeEnd)="onUserChangeEnd($event)"></ng5-slider>
+  </div>
+
+  <div class="clients-list">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>#</th>
+            <th>Ano</th>
+            <th>Empresa</th>
+            <th>Sindicato Laboral</th>
+            <th>Sindicato Patronal</th>
+            <th>Rodadas</th>
+            <th>Status ACT/CCT</th>
+            <th>Status PLR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let negociacao of negociacoesFiltradas">
+            <td>
+              <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(negociacao)">
+                <i class="fa fa-trash"></i>
+              </button>
+              <a [routerLink]="['/negociacoes/agenda', negociacao.id]" class="btn btn-outline btn-success btn-xs">
+                <i class="fa fa-pencil"></i>
+              </a>
+            </td>
+            <td>#{{ negociacao.id }}</td>
+            <td>{{ negociacao.ano }}</td>
+            <td>{{ negociacao.empresa?.nome }}</td>
+            <td>{{ negociacao.sindicatoLaboral?.nome }}</td>
+            <td>{{ negociacao.sindicatoPatronal?.nome }}</td>
+            <td>{{ negociacao.qtdaRodadas }}</td>
+            <td>
+              <span [ngClass]="classStatus(negociacao.statusACT_CCT)" class="label">
+                {{ StatusNegociacao[negociacao.statusACT_CCT] }}
+              </span>
+            </td>
+            <td>
+              <span [ngClass]="classStatus(negociacao.statusPLR)" class="label">
+                {{ StatusNegociacao[negociacao.statusPLR] }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-list-container>

@@ -1,0 +1,27 @@
+<!-- Wrapper-->
+<div id="wrapper">
+
+    <!-- Left navigation bar -->
+    <app-navigation [hidden]="!exibeMenu"></app-navigation>
+
+    <!-- Main page wrapper -->
+    <div id="page-wrapper" class="gray-bg">
+
+        <!-- Top navigation -->
+        <app-topnav *ngIf="exibeMenu"></app-topnav>
+
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <!-- Main view/routes wrapper-->
+            <router-outlet></router-outlet>
+            <router-outlet name="popup"></router-outlet>
+        </div>
+
+        <!-- Footer -->
+        <app-footer *ngIf="exibeMenu"></app-footer>
+
+    </div>
+    <!-- End page wrapper-->
+
+</div>
+<!-- End wrapper-->
+<app-toasts [mensagem]="toastService.messageEmitter"></app-toasts>
