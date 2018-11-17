@@ -1,7 +1,33 @@
+<div>
+  <!-- class="custom-slider" -->
+  <ng5-slider [(value)]="ano" [options]="options" (userChangeEnd)="onUserChangeEnd($event)"></ng5-slider>
+</div>
+<div class="hr-line-dashed"></div>
+
 <div class="row">
   <div class="col-md-6">
+    <app-panel title="Status das Negociações - ACT/CCT">
+      <div class="row">
+        <div class="col-md-6">
+          <canvas id="actMassaSalarial" height="180px"></canvas>
+        </div>
+        <div class="col-md-6">
+          <canvas id="actTrabalhadores" height="180px"></canvas>
+        </div>
+      </div>
+    </app-panel>
+
+  </div>
+  <div class="col-md-6">
     <app-panel title="Status das Negociações - PLR">
-      <canvas id="plrMassaSalarial"></canvas>
+      <div class="row">
+        <div class="col-md-6">
+          <canvas id="plrMassaSalarial" height="180px"></canvas>
+        </div>
+        <div class="col-md-6">
+          <canvas id="plrTrabalhadores" height="180px"></canvas>
+        </div>
+      </div>
     </app-panel>
   </div>
 </div>

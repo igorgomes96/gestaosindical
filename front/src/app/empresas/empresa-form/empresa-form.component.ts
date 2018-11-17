@@ -56,8 +56,8 @@ export class EmpresaFormComponent implements OnInit {
         logradouro: ['', Validators.required],
         numero: ['']
       }),
-      qtdaTrabalhadores: [''],
-      massaSalarial: [''],
+      qtdaTrabalhadores: [{ value: '', disabled: true }],
+      massaSalarial: [{ value: '', disabled: true }],
       sindicatoLaboral: ['', Validators.required],
       sindicatoPatronal: ['', Validators.required]
     });

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { StatusNegociacao } from '../model/negociacao';
 
 declare var $: any;
 declare var Chart: any;
@@ -8,14 +9,16 @@ declare var Chart: any;
 })
 export class ChartsService {
 
+  StatusNegociacao: typeof StatusNegociacao = StatusNegociacao;
+
   constructor() { }
 
   mapColorStatus(data: any) {
     const colorStatus = {
-      NaoIniciada: '#1c84c6',
-      EmNegociacao: '#f8ac59',
-      Fechada: '#1ab394',
-      Dissidio: '#ed5565'
+      'Não Iniciada': '#1c84c6',
+      'Em Negociação': '#f8ac59',
+      'Fechada': '#1ab394',
+      'Dissídio': '#ed5565'
     };
     return colorStatus[data['label']];
   }

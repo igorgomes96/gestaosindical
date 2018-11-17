@@ -25,6 +25,10 @@ namespace GestaoSindicatos.Model
         public int? EmpresaId { get; set; }
         public int? SindicatoLaboralId { get; set; }
         public int? SindicatoPatronalId { get; set; }
+        [Required]
+        public int QtdaTrabalhadores { get; set; }
+        [Required]
+        public double MassaSalarial { get; set; }
         public int? QtdaRodadas { get; set; }
         public float? TaxaLaboral { get; set; }
         public float? TaxaPatronal { get; set; }

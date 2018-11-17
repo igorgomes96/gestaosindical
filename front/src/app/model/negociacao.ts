@@ -18,6 +18,8 @@ export class Negociacao {
     sindicatoPatronalId: number;
     orcadoId: number;
     negociadoId: number;
+    qtdaTrabalhadores: number;
+    massaSalarial: number;
     taxaLaboral: number;
     taxaPatronal: number;
     statusACT_CCT: StatusNegociacao;

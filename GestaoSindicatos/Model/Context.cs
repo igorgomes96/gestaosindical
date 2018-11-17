@@ -39,7 +39,8 @@ namespace GestaoSindicatos.Model
                 .IsUnique();
 
             modelBuilder.Entity<Negociacao>()
-                .HasIndex(e => new { e.Ano, e.EmpresaId });
+                .HasIndex(e => new { e.Ano, e.EmpresaId })
+                .IsUnique();
 
             modelBuilder.Entity<RodadaNegociacao>()
                .HasIndex(e => new { e.Data, e.NegociacaoId });

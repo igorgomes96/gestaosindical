@@ -28,7 +28,8 @@
               <div class="col-md-9">
                 <div class="form-group" [class.has-error]="hasError(form.get('empresa'))">
                   <label class="control-label">Empresa</label>
-                  <app-autocomplete formControlName="empresa" [mapValueFunction]="mapValue" [linkFunction]="linkEmpresa" [urlSource]="urlEmpresaList" placeholder="Empresa">
+                  <app-autocomplete formControlName="empresa" [mapValueFunction]="mapValue" [linkFunction]="linkEmpresa"
+                    [urlSource]="urlEmpresaList" placeholder="Empresa">
                     <ng-template let-item>
                       <span class="fa fa-users m-r-sm"></span>
                       <strong>#{{item.id}}</strong> {{item.nome}}
@@ -42,8 +43,8 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Sindicato Laboral</label>
-                  <app-autocomplete formControlName="sindicatoLaboral" [mapValueFunction]="mapValue" [linkFunction]="linkLaboral" [urlSource]="urlLaboralList" placeholder="Sindicato Laboral"
-                    readOnly="true">
+                  <app-autocomplete formControlName="sindicatoLaboral" [mapValueFunction]="mapValue" [linkFunction]="linkLaboral"
+                    [urlSource]="urlLaboralList" placeholder="Sindicato Laboral" readOnly="true">
                     <ng-template let-item>
                       <span class="fa fa-building m-r-sm"></span>
                       <strong>#{{item.id}}</strong> {{item.nome}}
@@ -55,8 +56,8 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Sindicato Patronal</label>
-                  <app-autocomplete formControlName="sindicatoPatronal" [mapValueFunction]="mapValue" [linkFunction]="linkPatronal" [urlSource]="urlPatronalList" placeholder="Sindicato Patronal"
-                    readOnly="true">
+                  <app-autocomplete formControlName="sindicatoPatronal" [mapValueFunction]="mapValue" [linkFunction]="linkPatronal"
+                    [urlSource]="urlPatronalList" placeholder="Sindicato Patronal" readOnly="true">
                     <ng-template let-item>
                       <span class="fa fa-building m-r-sm"></span>
                       <strong>#{{item.id}}</strong> {{item.nome}}
@@ -65,6 +66,23 @@
                 </div>
               </div>
 
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <app-custom-input formControlName="qtdaTrabalhadores" [control]="form.get('qtdaTrabalhadores')" id="qtdaTrabalhadores"
+                      label="Qtda. de Trabalhadores" name="qtdaTrabalhadores" type="number">
+                    </app-custom-input>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <app-custom-input formControlName="massaSalarial" [control]="form.get('massaSalarial')" id="massaSalarial"
+                  label="Massa Salarial" name="massaSalarial" type="number">
+                </app-custom-input>
+              </div>
             </div>
 
             <div class="row">

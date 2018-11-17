@@ -1,3 +1,4 @@
+import { Ng5SliderModule } from 'ng5-slider';
 import { SharedModule } from './../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -9,7 +10,8 @@ import { DashboardNegociacoesComponent } from './dashboard-negociacoes/dashboard
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    SharedModule
+    SharedModule,
+    Ng5SliderModule
   ],
   declarations: [DashboardNegociacoesComponent]
 })

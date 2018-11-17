@@ -46,6 +46,8 @@ export class AgendaFormComponent implements OnInit {
       empresa: ['', Validators.required],
       sindicatoLaboral: ['', Validators.required],
       sindicatoPatronal: ['', Validators.required],
+      qtdaTrabalhadores: ['', Validators.required],
+      massaSalarial: ['', Validators.required],
       statusACT_CCT: ['NaoIniciada'],
       statusPLR: ['NaoIniciada'],
       qtdaRodadas: [''],

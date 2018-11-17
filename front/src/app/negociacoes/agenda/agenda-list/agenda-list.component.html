@@ -18,6 +18,8 @@
             <th>Empresa</th>
             <th>Sindicato Laboral</th>
             <th>Sindicato Patronal</th>
+            <th class="text-right">Qtda de Trabalhadores</th>
+            <th class="text-right">Massa Salarial</th>
             <th>Rodadas</th>
             <th>Status ACT/CCT</th>
             <th>Status PLR</th>
@@ -38,6 +40,8 @@
             <td>{{ negociacao.empresa?.nome }}</td>
             <td>{{ negociacao.sindicatoLaboral?.nome }}</td>
             <td>{{ negociacao.sindicatoPatronal?.nome }}</td>
+            <td class="text-right">{{ negociacao.qtdaTrabalhadores }}</td>
+            <td class="text-right">{{ negociacao.massaSalarial | number:'1.2-2' }}</td>
             <td>{{ negociacao.qtdaRodadas }}</td>
             <td>
               <span [ngClass]="classStatus(negociacao.statusACT_CCT)" class="label">

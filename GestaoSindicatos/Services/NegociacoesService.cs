@@ -54,9 +54,37 @@ namespace GestaoSindicatos.Services
             return negociacao;
         }
 
+        private void UpdateEmpresaValores(Negociacao negociacao)
+        {
+            Negociacao ultimaNegociacao = _db.Negociacoes.FirstOrDefault(x => x.Ano == _db.Negociacoes.Max(y => y.Ano));
+            if (ultimaNegociacao.Id == negociacao.Id)
+            {
+                if (!_db.Entry(negociacao).Reference(n => n.Empresa).IsLoaded)
+                    _db.Entry(negociacao).Reference(n => n.Empresa).Load();
+
+                negociacao.Empresa.MassaSalarial = negociacao.MassaSalarial;
+                negociacao.Empresa.QtdaTrabalhadores = negociacao.QtdaTrabalhadores;
+                _db.SaveChanges();
+            }
+        }
+
+        public override Negociacao Add(Negociacao entity)
+        {
+            Negociacao neg = base.Add(entity);
+            UpdateEmpresaValores(neg);
+            return neg;
+        }
+
+        public override void Add(ICollection<Negociacao> entities)
+        {
+            entities.ToList().ForEach(e => Add(e));
+        }
+
         public override Negociacao Update(Negociacao entity, params object[] key)
         {
             Negociacao neg = base.Update(entity, key);
+
+            UpdateEmpresaValores(neg);
 
             if (entity.Negociado != null)
             {
