@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace GestaoSindicatos.Model.Dashboard
 {
-    public class PieChartData
+    public class ChartDataset
     {
-        public double Y { get; set; }
         public string Label { get; set; }
+        public ICollection<ChartData> Data { get; set; }
     }
 }

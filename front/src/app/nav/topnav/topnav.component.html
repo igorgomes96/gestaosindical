@@ -19,7 +19,8 @@
                                     </div>
                                     <button class="btn btn-xs m-r-xs btn-default" (click)="navigate('/negociacoes/agenda', item, $event)">Negociações</button>
                                     <button class="btn btn-xs m-r-xs btn-default" (click)="navigate('/negociacoes/planosacao', item, $event)">Planos de Ação</button>
-                                    <button class="btn btn-xs btn-default" (click)="navigate('/negociacoes/litigios', item, $event)">Litígios</button>
+                                    <button class="btn btn-xs m-r-xs btn-default" (click)="navigate('/negociacoes/litigios', item, $event)">Litígios</button>
+                                    <button class="btn btn-xs btn-default" *ngIf="item.entityType == EntityType[EntityType.Empresa]" (click)="navigate('/dashboard/empresa', item, $event)">Dashboard</button>
                                 </div>
                             </div>
                         </ng-template>

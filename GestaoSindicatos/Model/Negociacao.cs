@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -51,6 +52,19 @@ namespace GestaoSindicatos.Model
         public virtual Reajuste Negociado { get; set; }
 
         public virtual ICollection<Concorrente> Concorrentes { get; set; }
+        [JsonIgnore]
         public virtual ICollection<RodadaNegociacao> RodadasNegociacoes { get; set; }
+
+        [NotMapped]
+        public float CustosViagens
+        {
+            get
+            {
+                if (RodadasNegociacoes == null || RodadasNegociacoes.Count <= 0)
+                    return 0F;
+
+                return RodadasNegociacoes.Sum(r => r.CustosViagens ?? 0);
+            }
+        }
     }
 }

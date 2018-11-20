@@ -2,7 +2,7 @@
   <input type="text" #inputRef autocomplete="off" class="form-control" id="exampleInputAmount" (keydown)="keydown($event)"
     [placeholder]="placeholder" [(ngModel)]="value" (input)="pushChanges($event.target.value)" [readonly]="readOnly"
     (keypress)="keypress($event)">
-  <span class="input-group-btn"><button type="button" class="btn btn-primary" [disabled]="!value" (click)="navigate()"><span class="fa fa-info"></span></button>
+  <span class="input-group-btn"><button type="button" class="btn btn-primary" [disabled]="!enabledLink" (click)="navigate()"><span class="fa fa-info"></span></button>
   </span>
 </div>
 <input type="text" #inputRef  *ngIf="!linkFunction" autocomplete="off" class="form-control" id="exampleInputAmount" (keydown)="keydown($event)"

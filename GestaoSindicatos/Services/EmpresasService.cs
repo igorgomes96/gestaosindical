@@ -94,6 +94,8 @@ namespace GestaoSindicatos.Services
         {
             Empresa empresa = base.Find(key);
             _db.Entry(empresa).Reference(e => e.Endereco).Load();
+            _db.Entry(empresa).Reference(e => e.SindicatoLaboral).Load();
+            _db.Entry(empresa).Reference(e => e.SindicatoPatronal).Load();
             return empresa;
         }
 

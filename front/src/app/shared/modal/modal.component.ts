@@ -17,12 +17,13 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   closeModal() {
     $('#modal-component').modal('hide');
-    this.router.navigate(['../', { outlets: { popup: null }}]);
   }
 
   ngOnInit() {
     $('#modal-component').modal('show');
+    $('#modal-component').on('hidden.bs.modal', () => this.router.navigate(['../', { outlets: { popup: null }}]));
   }
+
 
   ngOnDestroy(): void {
     $('#modal-component').modal('hide');

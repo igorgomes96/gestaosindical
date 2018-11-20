@@ -23,6 +23,7 @@ export class AutocompleteComponent implements OnInit, ControlValueAccessor {
   objectValue = null;   // Valor original
   _mostraLista = false;
   activeItem = -1;
+  enabledLink = false;
 
   @Input() urlSource: string;
   @Input() urlQueryParam = 'filter';
@@ -108,6 +109,7 @@ export class AutocompleteComponent implements OnInit, ControlValueAccessor {
   }
 
   pushChanges(value: any) {
+    this.enabledLink = false;
     this.onChange(null);
     if (!value) {
       this.list = [];
@@ -122,6 +124,9 @@ export class AutocompleteComponent implements OnInit, ControlValueAccessor {
   updateValue(value) {
     const v = this.mapValueFunction(value);
     this.onChange(v);
+    if (v) {
+      this.enabledLink = true;
+    }
     this.objectValue = value;
     this.value = this.mapShowFunction(value);
     this.mostraLista = false;

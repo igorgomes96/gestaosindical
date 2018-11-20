@@ -21,6 +21,7 @@ export class TopnavComponent implements OnInit {
 
   url = environment.api + endpoints.pesquisa;
   form: FormGroup;
+  EntityType: typeof EntityType = EntityType;
   constructor(private authService: AuthService,
     private router: Router,
     private formBuilder: FormBuilder) { }

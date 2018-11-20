@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
 import { Options, ChangeContext } from 'ng5-slider';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { NegociacoesService } from '../../negociacoes.service';
 
 declare var $: any;
 
@@ -32,19 +33,10 @@ export class AgendaListComponent implements OnInit {
 
   constructor(private api: NegociacoesApiService, private route: ActivatedRoute,
     private intervalService: IntervalFilterService,
-    private toast: ToastsService) { }
+    private toast: ToastsService, private negociacoesService: NegociacoesService) { }
 
   classStatus(status: StatusNegociacao) {
-    switch (StatusNegociacao[status]) {
-      case StatusNegociacao.Dissidio:
-        return 'label-danger';
-      case StatusNegociacao.EmNegociacao:
-        return 'label-warning';
-      case StatusNegociacao.Fechada:
-        return 'label-primary';
-      case StatusNegociacao.NaoIniciada:
-        return 'label-success';
-    }
+    return this.negociacoesService.classStatus(status);
   }
 
   ngOnInit() {

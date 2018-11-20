@@ -27,6 +27,7 @@ export class Negociacao {
     qtdaRodadas: number;
     plr1Sem: number;
     plr2Sem: number;
+    custosViagens: number;
 
     empresa: Empresa;
     sindicatoLaboral: SindicatoLaboral;
@@ -60,6 +61,7 @@ export class Reajuste {
 
 export class Concorrente {
     id: number;
+    nome: string;
     negociacaoId: number;
     reajusteId: number;
 

@@ -13,6 +13,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { Negociacao, RodadaNegociacao } from 'src/app/model/negociacao';
 import { PatronaisApiService } from './../../../sindicatos/patronais/patronais-api.service';
 import { LaboraisApiService } from './../../../sindicatos/laborais/laborais-api.service';
+import { Empresa } from 'src/app/model/empresa';
 
 @Component({
   selector: 'app-agenda-form',
@@ -78,12 +79,18 @@ export class AgendaFormComponent implements OnInit {
     .subscribe();
 
     this.form.get('empresa').valueChanges
-      .pipe(tap(_ => {
+      .pipe(filter(_ => this.negociacao == null), tap(_ => {
         this.form.get('sindicatoLaboral').reset();
         this.form.get('sindicatoPatronal').reset();
+        this.form.get('massaSalarial').reset();
+        this.form.get('qtdaTrabalhadores').reset();
       }),
         distinctUntilChanged(), filter(v => v && !(v instanceof Object)),
         switchMap(v => this.empresasApi.get(v)),
+        tap((empresa: Empresa) => {
+          this.form.get('massaSalarial').setValue(empresa.massaSalarial);
+          this.form.get('qtdaTrabalhadores').setValue(empresa.qtdaTrabalhadores);
+        }),
         switchMap(v => forkJoin(this.laboraisApi.get(v.sindicatoLaboralId), this.patronaisApi.get(v.sindicatoPatronalId))))
       .subscribe(v => {
         this.form.get('sindicatoLaboral').setValue(v[0]);

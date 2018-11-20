@@ -29,20 +29,14 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         icon: 'fa fa-bar-chart',
         children: [
           {
-            label: 'Empresas',
-            link: '/dashboard/empresas',
+            label: 'Por Ano',
+            link: '/dashboard/anual',
             children: null,
             icon: null
           },
           {
-            label: 'Sindicatos',
-            link: '/dashboard/sindicatos',
-            children: null,
-            icon: null
-          },
-          {
-            label: 'Negociações',
-            link: '/dashboard/negociacoes',
+            label: 'Por Empresa',
+            link: '/dashboard/empresa',
             children: null,
             icon: null
           }

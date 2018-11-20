@@ -10,22 +10,23 @@ declare var $: any;
 export class PanelComponent implements OnInit {
 
   @Input() title: string;
+  @Input() collapsible = true;
 
   constructor() { }
 
-  ngOnInit() {
-    $('.collapse-link').on('click', function () {
-      const ibox = $(this).closest('div.ibox');
-      const button = $(this).find('i');
-      const content = ibox.children('.ibox-content');
-      content.slideToggle(200);
-      button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
-      ibox.toggleClass('').toggleClass('border-bottom');
-      setTimeout(function () {
-          ibox.resize();
-          ibox.find('[id^=map-]').resize();
-      }, 50);
-  });
+  ngOnInit() {}
+
+  collapse($event) {
+    const ibox = $($event.target).closest('div.ibox');
+    const button = $(this).find('i');
+    const content = ibox.children('.ibox-content');
+    content.slideToggle(200);
+    button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+    ibox.toggleClass('').toggleClass('border-bottom');
+    setTimeout(function () {
+      ibox.resize();
+      ibox.find('[id^=map-]').resize();
+    }, 50);
   }
 
 }

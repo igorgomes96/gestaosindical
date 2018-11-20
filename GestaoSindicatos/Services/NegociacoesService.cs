@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Linq.Expressions;
 using GestaoSindicatos.Auth;
+using GestaoSindicatos.Model.Dashboard;
 
 namespace GestaoSindicatos.Services
 {
@@ -14,12 +15,15 @@ namespace GestaoSindicatos.Services
         private readonly Context _db;
         private readonly RodadasService _rodadasService;
         private readonly CrudService<Reajuste> _reajustesService;
+        private readonly EmpresasService _empresasService;
 
-        public NegociacoesService(Context db, RodadasService rodadasService, CrudService<Reajuste> reajustesService) : base(db)
+        public NegociacoesService(Context db, RodadasService rodadasService, CrudService<Reajuste> reajustesService,
+            EmpresasService empresasService) : base(db)
         {
             _db = db;
             _rodadasService = rodadasService;
             _reajustesService = reajustesService;
+            _empresasService = empresasService;
         }
 
         private Expression<Func<Negociacao, bool>> QueryUser(ClaimsPrincipal claims)
@@ -47,6 +51,8 @@ namespace GestaoSindicatos.Services
         {
             Negociacao negociacao = base.Find(key);
             _db.Entry(negociacao).Reference(n => n.Empresa).Load();
+            if (negociacao.Empresa != null)
+                _db.Entry(negociacao.Empresa).Reference(e => e.Endereco).Load();
             _db.Entry(negociacao).Reference(n => n.SindicatoLaboral).Load();
             _db.Entry(negociacao).Reference(n => n.SindicatoPatronal).Load();
             _db.Entry(negociacao).Reference(n => n.Orcado).Load();
@@ -56,8 +62,8 @@ namespace GestaoSindicatos.Services
 
         private void UpdateEmpresaValores(Negociacao negociacao)
         {
-            Negociacao ultimaNegociacao = _db.Negociacoes.FirstOrDefault(x => x.Ano == _db.Negociacoes.Max(y => y.Ano));
-            if (ultimaNegociacao.Id == negociacao.Id)
+            Negociacao ultimaNegociacao = _db.Negociacoes.FirstOrDefault(x => x.EmpresaId == negociacao.EmpresaId && x.Ano == _db.Negociacoes.Max(y => y.Ano));
+            if (ultimaNegociacao != null && ultimaNegociacao.Id == negociacao.Id)
             {
                 if (!_db.Entry(negociacao).Reference(n => n.Empresa).IsLoaded)
                     _db.Entry(negociacao).Reference(n => n.Empresa).Load();
@@ -174,6 +180,24 @@ namespace GestaoSindicatos.Services
                 return (DateTime.Today.Year, DateTime.Today.Year);
             return (_db.Negociacoes.Min(x => x.Ano), _db.Negociacoes.Max(x => x.Ano));
         }
+
+        public ICollection<RodadaNegociacao> ProximasViagens(ClaimsPrincipal claims, int count = 5)
+        {
+            return ProximasViagens(_empresasService.Query(claims)
+                .Select(x => x.Id).ToList(), count);
+        }
+
+        public ICollection<RodadaNegociacao> ProximasViagens(List<int> empresasId, int count = 5)
+        {
+            return _db.RodadasNegociacoes
+                .Where(x => x.Data >= DateTime.Today)
+                .Include(x => x.Negociacao).ThenInclude(x => x.Empresa).ThenInclude(x => x.Endereco)
+                .Where(x => x.Negociacao.EmpresaId.HasValue && empresasId.Contains(x.Negociacao.EmpresaId.Value))
+                .Take(count)
+                .OrderBy(x => x.Data)
+                .ToList();
+        }
+
 
     }
 }

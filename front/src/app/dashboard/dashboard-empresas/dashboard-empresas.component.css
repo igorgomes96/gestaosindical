@@ -1,0 +1,13 @@
+td.highlight {
+    background-color: #f6f6f9;
+}
+
+.table-reajustes td {
+    border-bottom: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    height: 34px;
+}
+
+#table-concorrentes tr:first-child td {
+    font-weight: bold;
+}

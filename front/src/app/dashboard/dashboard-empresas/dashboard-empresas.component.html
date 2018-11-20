@@ -1,0 +1,292 @@
+<div class="row">
+  <div class="col-md-5">
+    <form class="form-group" [formGroup]="form">
+      <label class="control-label">Escolha uma empresa</label>
+      <app-autocomplete [linkFunction]="linkEmpresa" formControlName="empresa" #empresaFiltro [urlSource]="urlEmpresaList"
+        placeholder="Empresa">
+        <ng-template let-item>
+          <span class="fa fa-users m-r-sm"></span>
+          <strong>#{{item.id}}</strong> {{item.nome}}
+        </ng-template>
+      </app-autocomplete>
+    </form>
+    <div [hidden]="!empresa" class="m-b-md">
+
+      <address>
+        <strong>#{{ empresa?.id }} {{ empresa?.nome }}, {{ empresa?.cnpj |
+          mask:'00.000.000/0000-00' }}</strong><br>
+        {{ empresa?.endereco.cidade }} - {{ empresa?.endereco.uf }}<br>
+      </address>
+
+      <address *ngIf="empresa">
+        <strong>Sindicato Patronal</strong><br>
+        <a [routerLink]="['/sindicatos/patronais', empresa?.sindicatoPatronalId]">{{ empresa?.sindicatoPatronal?.nome
+          }}</a><br>
+        <strong>Sindicato Laboral</strong><br>
+        <a [routerLink]="['/sindicatos/laborais', empresa?.sindicatoLaboralId]">{{ empresa?.sindicatoLaboral?.nome }}</a>
+      </address>
+    </div>
+
+  </div>
+
+  <div class="col-md-7" [hidden]="!empresa">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+            <span class="label label-success pull-right">Último Registro</span>
+            <h5>Trabalhadores</h5>
+          </div>
+          <div class="ibox-content">
+            <h1 class="no-margins">{{ empresa?.qtdaTrabalhadores | number }}</h1>
+            <!-- <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div> -->
+            <small>Qtda de Trabalhadores</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+            <span class="label label-success pull-right">Último Registro</span>
+            <h5>Salário</h5>
+          </div>
+          <div class="ibox-content">
+            <h1 class="no-margins">R$ {{ empresa?.massaSalarial | number:'1.2-2' }}</h1>
+            <!-- <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div> -->
+            <small>Massa Salarial</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="hr-line-dashed"></div>
+
+<div *ngIf="empresa">
+  <div class="row">
+    <div class="col-md-12">
+      <app-panel title="Negociações">
+        <button class="btn btn-primary m-r-sm" routerLink="/negociacoes/agenda/nova">Nova Negociação</button>
+        <button class="btn btn-success" routerLink="/negociacoes/agenda">Todas as Negociações</button>
+        <div class="clients-list">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th class="text-right">Ano</th>
+                  <th class="text-right">Trabalhadores</th>
+                  <th class="text-right">Massa Salarial</th>
+                  <th class="text-right">Rodadas</th>
+                  <th class="text-right">% Salário</th>
+                  <th class="text-right">% Piso</th>
+                  <th class="text-right">% VA/VR</th>
+                  <th class="text-right">% Aux. Creche</th>
+                  <th class="text-right">Tx. Neg. Patronal</th>
+                  <th class="text-right">Tx. Neg. Laboral</th>
+                  <th class="text-right">Viagens</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let negociacao of negociacoes">
+                  <td>
+                    <!-- <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(negociacao)">
+                    <i class="fa fa-trash"></i>
+                  </button> -->
+                    <a [routerLink]="['/negociacoes/agenda', negociacao.id]" class="btn btn-outline btn-success btn-xs">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                  </td>
+                  <td class="text-right">{{ negociacao.ano }}</td>
+                  <td class="text-right">{{ negociacao.qtdaTrabalhadores }}</td>
+                  <td class="text-right">{{ negociacao.massaSalarial | number:'1.2-2' }}</td>
+                  <td class="text-right">{{ negociacao.qtdaRodadas }}</td>
+                  <td class="text-right">{{ negociacao.negociado.salario | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.negociado.piso | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.negociado.vaVr | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.negociado.auxCreche | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.taxaPatronal | number:'1.2-2' }}</td>
+                  <td class="text-right">{{ negociacao.taxaLaboral | number:'1.2-2' }}</td>
+                  <td class="text-right">{{ negociacao.custosViagens | number:'1.2-2' }}</td>
+                  <td>
+                    <span [ngClass]="classStatus(negociacao.statusACT_CCT)" class="label">
+                      {{ StatusNegociacao[negociacao.statusACT_CCT] }}
+                    </span>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row m-t-md">
+          <div class="col-lg-6">
+            <canvas id="reajustesNegociados" height="200px"></canvas>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <canvas id="evolucaoTrabalhadores" height="200px"></canvas>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <canvas id="evolucaoSalario" height="200px"></canvas>
+          </div>
+        </div>
+        <div class="row m-t-md">
+          <div class="col-md-6">
+            <canvas id="taxasNegociais" height="200px"></canvas>
+          </div>
+          <div class="col-md-6">
+            <canvas id="custosViagens" height="200px"></canvas>
+          </div>
+        </div>
+      </app-panel>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <app-panel title="Orçado X Negociado">
+        <div class="clients-list m-b-md">
+          <div class="table-responsive">
+            <table class="table table-bordered table-reajustes">
+              <thead>
+                <tr>
+                  <th class="text-right">Ano</th>
+                  <th class="text-right">% Orç. Salário</th>
+                  <th class="text-right">% Neg. Salário</th>
+                  <th class="text-right">% Orç. Piso</th>
+                  <th class="text-right">% Neg. Piso</th>
+                  <th class="text-right">% Orç. VA/VR</th>
+                  <th class="text-right">% Neg. VA/VR</th>
+                  <th class="text-right">% Orç. Aux. Creche</th>
+                  <th class="text-right">% Neg. Aux. Creche</th>
+                  <th class="text-right">Orç. Desconto TV</th>
+                  <th class="text-right">Neg. Desconto TV</th>
+                  <th class="text-right">Orç. VA/VR Férias</th>
+                  <th class="text-right">Neg. VA/VR Férias</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let negociacao of negociacoes">
+                  <td class="text-right"><strong>{{ negociacao.ano }}</strong></td>
+                  <td class="text-right highlight">{{ negociacao.orcado.salario | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ negociacao.negociado.salario | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.orcado.piso | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.negociado.piso | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ negociacao.orcado.vaVr | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ negociacao.negociado.vaVr | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.orcado.auxCreche | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.negociado.auxCreche | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ negociacao.orcado.descontoVt | number:'1.2-2' }}</td>
+                  <td class="text-right highlight">{{ negociacao.negociado.descontoVt | number:'1.2-2' }}</td>
+                  <td class="text-right">{{ negociacao.orcado.vaVrFerias ? 'Sim' : 'Não' }}</td>
+                  <td class="text-right">{{ negociacao.negociado.vaVrFerias ? 'Sim' : 'Não' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <canvas id="orcXnegSal" height="200px"></canvas>
+          </div>
+          <div class="col-md-3">
+            <canvas id="orcXnegPiso" height="200px"></canvas>
+          </div>
+          <div class="col-md-3">
+            <canvas id="orcXnegVaVr" height="200px"></canvas>
+          </div>
+          <div class="col-md-3">
+            <canvas id="orcXnegCreche" height="200px"></canvas>
+          </div>
+        </div>
+      </app-panel>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-7">
+      <app-panel title="Concorrentes">
+        <div>
+          <!-- class="custom-slider" -->
+          <ng5-slider [(value)]="ano" [options]="options" (userChangeEnd)="onUserChangeEnd($event)"></ng5-slider>
+        </div>
+        <div class="clients-list m-b-md">
+          <div class="table-responsive">
+            <table class="table table-bordered table-reajustes" id="table-concorrentes">
+              <thead>
+                <tr>
+                  <th>Empresa</th>
+                  <th class="text-right">% Salário</th>
+                  <th class="text-right">% Piso</th>
+                  <th class="text-right">% VA/VR</th>
+                  <th class="text-right">% Aux. Creche</th>
+                  <th class="text-right">Desconto TV</th>
+                  <th class="text-right">VA/VR Férias</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let concorrente of concorrentes">
+                  <td>{{ concorrente.nome }}</td>
+                  <td class="text-right highlight">{{ concorrente.reajuste.salario | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ concorrente.reajuste.piso | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ concorrente.reajuste.vaVr | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ concorrente.reajuste.auxCreche | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ concorrente.reajuste.descontoVt | number:'1.2-2' }}</td>
+                  <td class="text-right">{{ concorrente.reajuste.vaVrFerias ? 'Sim' : 'Não' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <canvas id="concorrentes" height="220px"></canvas>
+          </div>
+        </div>
+      </app-panel>
+    </div>
+
+    <div class="col-md-5">
+      <app-panel title="PLR">
+        <div class="clients-list m-b-md">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Ano</th>
+                  <th class="text-right">Valor 1º Sem.</th>
+                  <th class="text-right">Valor 2º Sem.</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let negociacao of negociacoes">
+                  <td>{{ negociacao.ano }}</td>
+                  <td class="text-right">{{ negociacao.plr1Sem | number:'1.2-2' }}</td>
+                  <td class="text-right">{{ negociacao.plr2Sem | number:'1.2-2' }}</td>
+                  <td>
+                    <span [ngClass]="classStatus(negociacao.statusPLR)" class="label">
+                      {{ StatusNegociacao[negociacao.statusPLR] }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <canvas id="plr" height="230px"></canvas>
+          </div>
+        </div>
+      </app-panel>
+    </div>
+  </div>
+</div>
