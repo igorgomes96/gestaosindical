@@ -5,13 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\assets\**" />
-    <Content Remove="wwwroot\assets\**" />
-    <EmbeddedResource Remove="wwwroot\assets\**" />
-    <None Remove="wwwroot\assets\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="Migrations\20181102173856_Inicio.cs" />
     <Compile Remove="Migrations\20181102173856_Inicio.Designer.cs" />
   </ItemGroup>
@@ -24,7 +17,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Include="wwwroot\assets\js\pace\pace.min.js" />
+    <None Include="wwwroot\assets\plugins\.editorconfig" />
+    <None Include="wwwroot\assets\plugins\.gitignore" />
+    <None Include="wwwroot\assets\plugins\.npmignore" />
+    <None Include="wwwroot\assets\plugins\CONTRIBUTING.md" />
+    <None Include="wwwroot\assets\plugins\history.md" />
+    <None Include="wwwroot\assets\plugins\index.md" />
+    <None Include="wwwroot\assets\plugins\js\ion.rangeSlider.js" />
+    <None Include="wwwroot\assets\plugins\js\ion.rangeSlider.min.js" />
+    <None Include="wwwroot\assets\plugins\License.md" />
+    <None Include="wwwroot\assets\plugins\PSD\sprite-skin.psd" />
+    <None Include="wwwroot\assets\plugins\readme.md" />
+    <None Include="wwwroot\assets\plugins\readme.ru.md" />
+    <None Include="wwwroot\assets\plugins\toastr\toastr.min.js" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
