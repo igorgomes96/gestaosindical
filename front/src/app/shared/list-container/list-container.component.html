@@ -6,8 +6,8 @@
         {{ description }}
       </p>
       <ul *ngIf="referent" class="m-b-md">
-        <li [hidden]="!queryParamsName[r]" *ngFor="let r of objectKeys(referent)">{{ queryParamsName[r] }} <strong>#{{
-            referent[r] }}</strong>
+        <li [hidden]="!queryParamsName[r]" *ngFor="let r of objectKeys(referent)">{{ queryParamsName[r] }}: <strong>{{
+            (r === 'de' || r === 'ate') ? (referent[r] | date:'dd/MM/yyyy') : referent[r] }}</strong>
         </li>
       </ul>
       <form [formGroup]="formFiltro">
@@ -19,7 +19,7 @@
         </div>
       </form>
 
-      <a class="btn btn-primary m-t-md" [routerLink]="newLink">Novo <span class="fa fa-plus"></span></a>
+      <a class="btn btn-primary m-t-md" *ngIf="newLink" [routerLink]="newLink">Novo <span class="fa fa-plus"></span></a>
       <ng-content></ng-content>      
     </app-panel>
   </div>

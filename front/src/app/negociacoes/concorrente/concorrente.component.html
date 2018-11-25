@@ -15,7 +15,7 @@
           <div class="row">
             <div class="col-md-12">
               <app-custom-input formControlName="salario" type="number" [control]="formConcorrente.get('reajuste.salario')" id="salario"
-                label="Salário" name="salario">
+                label="Salário" name="salario" addOnAfter="%">
               </app-custom-input>
             </div>
           </div>
@@ -23,7 +23,7 @@
           <div class="row">
             <div class="col-md-12">
               <app-custom-input formControlName="piso" type="number" [control]="formConcorrente.get('reajuste.piso')" id="piso"
-                label="Piso" name="piso">
+                label="Piso" name="piso" addOnAfter="%">
               </app-custom-input>
             </div>
           </div>
@@ -31,7 +31,7 @@
           <div class="row">
             <div class="col-md-12">
               <app-custom-input formControlName="auxCreche" type="number" [control]="formConcorrente.get('reajuste.auxCreche')"
-                id="auxCreche" label="Auxílio Creche" name="auxCreche">
+                id="auxCreche" label="Auxílio Creche" name="auxCreche" addOnAfter="%">
               </app-custom-input>
             </div>
           </div>
@@ -43,7 +43,7 @@
           <div class="row">
             <div class="col-md-12">
               <app-custom-input formControlName="descontoVt" type="number" [control]="formConcorrente.get('reajuste.descontoVt')"
-                id="descontoVt" label="Desconto VT" name="descontoVt">
+                id="descontoVt" label="Desconto VT" name="descontoVt" addOnAfter="%">
               </app-custom-input>
             </div>
           </div>
@@ -51,18 +51,16 @@
           <div class="row">
             <div class="col-md-12">
               <app-custom-input formControlName="vaVr" type="number" [control]="formConcorrente.get('reajuste.vaVr')" id="vaVr"
-                label="VA/VR" name="vaVr">
+                label="VA/VR" name="vaVr" addOnAfter="%">
               </app-custom-input>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-12">
-              <label for="vaVrFerias">VA/VR nas Férias</label>
-              <select formControlName="vaVrFerias" name="vaVrFerias" id="vaVrFerias" class="form-control">
-                <option [value]="true">Sim</option>
-                <option [value]="false">Não</option>
-              </select>
+              <app-custom-input formControlName="vaVrFerias" type="number" [control]="formConcorrente.get('reajuste.vaVrFerias')"
+                id="vaVrFerias" label="VA/VR nas Férias" name="vaVrFerias" addOnAfter="%">
+              </app-custom-input>
             </div>
           </div>
         </div>

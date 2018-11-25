@@ -1,3 +1,4 @@
+import { ToastsService } from 'src/app/shared/toasts.service';
 import { RelatedLink } from '../../../shared/related-link/related-link';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Arquivo } from 'src/app/model/arquivo';
@@ -8,6 +9,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { Component, OnInit } from '@angular/core';
 import { switchMap, filter } from 'rxjs/operators';
 import { LaboraisApiService } from '../laborais-api.service';
+import { ToastType } from 'src/app/shared/toasts/toasts.component';
 
 @Component({
   selector: 'app-laboral-form',
@@ -25,7 +27,8 @@ export class LaboralFormComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private service: LaboraisApiService,
-    private router: Router) { }
+    private router: Router,
+    private toast: ToastsService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -89,10 +92,18 @@ export class LaboralFormComponent implements OnInit {
   }
 
   removeContato(idContato: number) {
-    this.contatos$ = this.service.deleteContato(this.sindicatoLaboral.id, idContato)
-    .pipe(
-      switchMap(_ => this.service.getContatos(this.sindicatoLaboral.id))
-    );
+    this.toast.swalMessage({
+      title: 'Confirma exlusão?',
+      message: 'Essa ação não poderá ser desfeita!',
+      type: ToastType.warning
+    }, () => this.service.deleteContato(this.sindicatoLaboral.id, idContato).subscribe(_ => {
+      this.contatos$ = this.service.getContatos(this.sindicatoLaboral.id);
+      this.toast.showMessage({
+        message: 'Contato excluído com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      });
+    }));
   }
 
   upload(files: FileList) {

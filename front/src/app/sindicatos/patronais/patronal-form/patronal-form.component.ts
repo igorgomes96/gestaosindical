@@ -1,3 +1,4 @@
+import { ToastsService } from './../../../shared/toasts.service';
 import { RelatedLink } from './../../../shared/related-link/related-link';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -10,6 +11,7 @@ import { SindicatoPatronal } from 'src/app/model/sindicato-patronal';
 import { PatronaisApiService } from './../patronais-api.service';
 import { switchMap, filter } from 'rxjs/operators';
 import { Arquivo } from 'src/app/model/arquivo';
+import { ToastType } from 'src/app/shared/toasts/toasts.component';
 
 
 @Component({
@@ -28,7 +30,8 @@ export class PatronalFormComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private service: PatronaisApiService,
-    private router: Router) { }
+    private router: Router,
+    private toast: ToastsService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -42,35 +45,35 @@ export class PatronalFormComponent implements OnInit {
     });
 
     this.route.data
-    .pipe(
-      filter(d => d.hasOwnProperty('sindicatoPatronal')),
-      switchMap(d => {
-        if (d.hasOwnProperty('sindicatoPatronal')) {
-          this.sindicatoPatronal = d['sindicatoPatronal'];
-          this.relatedLinks = [
-            {
-              label: 'Negociações',
-              link: '/negociacoes/agenda',
-              queryParams: { patronalId: this.sindicatoPatronal.id }
-            },
-            {
-              label: 'Litígios',
-              link: '/negociacoes/litigios',
-              queryParams: { patronalId: this.sindicatoPatronal.id }
-            },
-            {
-              label: 'Planos de Ação',
-              link: '/negociacoes/planosacao',
-              queryParams: { patronalId: this.sindicatoPatronal.id }
-            }
-          ];
-          this.contatos$ = this.service.getContatos(this.sindicatoPatronal.id);
-          this.updateForm(this.sindicatoPatronal);
-          return this.service.getArquivos(this.sindicatoPatronal.id);
-        }
-      })
-    )
-    .subscribe(d => this.arquivos = d);
+      .pipe(
+        filter(d => d.hasOwnProperty('sindicatoPatronal')),
+        switchMap(d => {
+          if (d.hasOwnProperty('sindicatoPatronal')) {
+            this.sindicatoPatronal = d['sindicatoPatronal'];
+            this.relatedLinks = [
+              {
+                label: 'Negociações',
+                link: '/negociacoes/agenda',
+                queryParams: { patronalId: this.sindicatoPatronal.id }
+              },
+              {
+                label: 'Litígios',
+                link: '/negociacoes/litigios',
+                queryParams: { patronalId: this.sindicatoPatronal.id }
+              },
+              {
+                label: 'Planos de Ação',
+                link: '/negociacoes/planosacao',
+                queryParams: { patronalId: this.sindicatoPatronal.id }
+              }
+            ];
+            this.contatos$ = this.service.getContatos(this.sindicatoPatronal.id);
+            this.updateForm(this.sindicatoPatronal);
+            return this.service.getArquivos(this.sindicatoPatronal.id);
+          }
+        })
+      )
+      .subscribe(d => this.arquivos = d);
   }
 
   hasError(control: AbstractControl) {
@@ -83,24 +86,32 @@ export class PatronalFormComponent implements OnInit {
 
   novoContato(contato: Contato) {
     this.contatos$ = this.service.addContato(this.sindicatoPatronal.id, contato)
-    .pipe(
-      switchMap(_ => this.service.getContatos(this.sindicatoPatronal.id))
-    );
+      .pipe(
+        switchMap(_ => this.service.getContatos(this.sindicatoPatronal.id))
+      );
   }
 
   removeContato(idContato: number) {
-    this.contatos$ = this.service.deleteContato(this.sindicatoPatronal.id, idContato)
-    .pipe(
-      switchMap(_ => this.service.getContatos(this.sindicatoPatronal.id))
-    );
+    this.toast.swalMessage({
+      title: 'Confirma exlusão?',
+      message: 'Essa ação não poderá ser desfeita!',
+      type: ToastType.warning
+    }, () => this.service.deleteContato(this.sindicatoPatronal.id, idContato).subscribe(_ => {
+      this.contatos$ = this.service.getContatos(this.sindicatoPatronal.id);
+      this.toast.showMessage({
+        message: 'Contato excluído com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      });
+    }));
   }
 
   upload(files: FileList) {
     this.service.uploadFiles(this.sindicatoPatronal.id, files)
-    .pipe(
-      switchMap(_ => this.service.getArquivos(this.sindicatoPatronal.id))
-    )
-    .subscribe(d => this.arquivos = d);
+      .pipe(
+        switchMap(_ => this.service.getArquivos(this.sindicatoPatronal.id))
+      )
+      .subscribe(d => this.arquivos = d);
   }
 
   deleteFile(event: any) {
@@ -109,12 +120,12 @@ export class PatronalFormComponent implements OnInit {
 
   post(patronal: SindicatoPatronal) {
     this.service.post(patronal)
-    .subscribe((s: SindicatoPatronal) => this.router.navigate(['/sindicatos/patronais', s.id]));
+      .subscribe((s: SindicatoPatronal) => this.router.navigate(['/sindicatos/patronais', s.id]));
   }
 
   put(patronal: SindicatoPatronal) {
     this.service.put(patronal.id, patronal)
-    .subscribe(_ => this.router.navigate(['/sindicatos/patronais']));
+      .subscribe(_ => this.router.navigate(['/sindicatos/patronais']));
   }
 
   salvar() {

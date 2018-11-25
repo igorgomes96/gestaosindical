@@ -35,7 +35,8 @@ namespace GestaoSindicatos.Controllers
                     new Tuple<object, object>(n.PatronalId, patronalId),
                     new Tuple<object, object>(n.EmpresaId, empresaId), 
                     new Tuple<object, object>(n.Data.Year, ano)), User)
-                .Include(e => e.Empresa).Include(e => e.Laboral).Include(e => e.Patronal).ToList();
+                .Include(e => e.Empresa).Include(e => e.Laboral).Include(e => e.Patronal)
+                .OrderByDescending(l => l.Data).ToList();
         }
 
         [HttpGet("{id}")]

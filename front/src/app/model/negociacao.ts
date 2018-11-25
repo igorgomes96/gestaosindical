@@ -1,5 +1,5 @@
 import { SindicatoPatronal } from './sindicato-patronal';
-import { SindicatoLaboral } from './sindicato-laboral';
+import { SindicatoLaboral, Mes } from './sindicato-laboral';
 import { Empresa } from './empresa';
 
 export enum StatusNegociacao {
@@ -8,7 +8,6 @@ export enum StatusNegociacao {
     Fechada = 'Fechada',
     Dissidio = 'Dissídio'
 }
-
 
 export class Negociacao {
     id: number;
@@ -55,8 +54,17 @@ export class Reajuste {
     piso: number;
     auxCreche: number;
     vaVr: number;
-    vaVrFerias: boolean;
+    vaVrFerias: number;
     descontoVt: number;
+
+    parcelas: ParcelaReajuste[];
+}
+
+export class ParcelaReajuste {
+    id: number;
+    reajusteId: number;
+    mes: Mes;
+    valor: number;
 }
 
 export class Concorrente {

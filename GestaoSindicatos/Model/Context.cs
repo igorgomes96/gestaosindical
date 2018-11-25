@@ -55,6 +55,10 @@ namespace GestaoSindicatos.Model
                 .HasIndex(e => new { e.UserName, e.EmpresaId })
                 .IsUnique();
 
+            modelBuilder.Entity<ParcelaReajuste>()
+                .HasIndex(e => new { e.Mes, e.ReajusteId, e.TipoReajuste })
+                .IsUnique();
+
             var cascadeFKs = modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetForeignKeys())
                 .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
@@ -81,6 +85,7 @@ namespace GestaoSindicatos.Model
         public virtual DbSet<Concorrente> Concorrentes { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
         public virtual DbSet<EmpresaUsuario> EmpresasUsuarios { get; set; }
+        public virtual DbSet<ParcelaReajuste> ParcelasReajustes { get; set; }
 
     }
 }

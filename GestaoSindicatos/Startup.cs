@@ -283,6 +283,8 @@ namespace GestaoSindicatos
             {
                 Ano = 2018,
                 EmpresaId = empresa1.Id,
+                QtdaTrabalhadores = 1000,
+                MassaSalarial = 50000,
                 SindicatoLaboralId = laboral1.Id,
                 SindicatoPatronalId = patronal1.Id,
                 QtdaRodadas = 1,
@@ -299,7 +301,7 @@ namespace GestaoSindicatos
                     AuxCreche = 0.1F,
                     DescontoVt = 0.06F,
                     VaVr = 0.1F,
-                    VaVrFerias = true
+                    VaVrFerias = 0.06F
                 },
                 Negociado = new Reajuste
                 {
@@ -308,7 +310,7 @@ namespace GestaoSindicatos
                     AuxCreche = 0.09F,
                     DescontoVt = 0.06F,
                     VaVr = 0.09F,
-                    VaVrFerias = true
+                    VaVrFerias = 0.06F
                 }
             };
 
@@ -316,6 +318,8 @@ namespace GestaoSindicatos
             {
                 Ano = 2018,
                 EmpresaId = empresa2.Id,
+                QtdaTrabalhadores = 1000,
+                MassaSalarial = 50000,
                 SindicatoLaboralId = laboral2.Id,
                 SindicatoPatronalId = patronal2.Id,
                 QtdaRodadas = 1,
@@ -332,7 +336,7 @@ namespace GestaoSindicatos
                     AuxCreche = 0.1F,
                     DescontoVt = 0.06F,
                     VaVr = 0.1F,
-                    VaVrFerias = true
+                    VaVrFerias = 0.06F
                 },
                 Negociado = new Reajuste
                 {
@@ -341,7 +345,7 @@ namespace GestaoSindicatos
                     AuxCreche = 0.09F,
                     DescontoVt = 0.06F,
                     VaVr = 0.09F,
-                    VaVrFerias = true
+                    VaVrFerias = 0.06F
                 }
             };
 
@@ -451,7 +455,7 @@ namespace GestaoSindicatos
                     AuxCreche = 0.1F,
                     DescontoVt = 0.06F,
                     VaVr = 0.1F,
-                    VaVrFerias = true
+                    VaVrFerias = 0.06F
                 }
             });
 
@@ -466,7 +470,7 @@ namespace GestaoSindicatos
                     AuxCreche = 0.2F,
                     DescontoVt = 0.06F,
                     VaVr = 0.2F,
-                    VaVrFerias = true
+                    VaVrFerias = 0.06F
                 }
             });
 

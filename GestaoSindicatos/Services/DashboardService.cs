@@ -243,6 +243,7 @@ namespace GestaoSindicatos.Services
                         new ChartData { Y = Math.Round(negociacoes.Average(x => x.Orcado.Piso), 2), Label = "Piso" },
                         new ChartData { Y = Math.Round(negociacoes.Average(x => x.Orcado.Salario), 2), Label = "Salário" },
                         new ChartData { Y = Math.Round(negociacoes.Average(x => x.Orcado.VaVr), 2), Label = "VA/VR" },
+                        new ChartData { Y = Math.Round(negociacoes.Average(x => x.Orcado.VaVrFerias), 2), Label = "VA/VR Férias" },
                         new ChartData { Y = Math.Round(negociacoes.Average(x => x.Orcado.AuxCreche), 2), Label = "Aux. Creche" }
                     }
                 };
@@ -255,6 +256,7 @@ namespace GestaoSindicatos.Services
                             new ChartData { Y = Math.Round(negociacoes.Average(x => x.Negociado.Piso), 2), Label = "Piso" },
                             new ChartData { Y = Math.Round(negociacoes.Average(x => x.Negociado.Salario), 2), Label = "Salário" },
                             new ChartData { Y = Math.Round(negociacoes.Average(x => x.Negociado.VaVr), 2), Label = "VA/VR" },
+                            new ChartData { Y = Math.Round(negociacoes.Average(x => x.Negociado.VaVrFerias), 2), Label = "VA/VR Férias" },
                             new ChartData { Y = Math.Round(negociacoes.Average(x => x.Negociado.AuxCreche), 2), Label = "Aux. Creche" }
                         }
                 };
@@ -267,6 +269,7 @@ namespace GestaoSindicatos.Services
                             new ChartData { Y = 0, Label = "Piso" },
                             new ChartData { Y = 0, Label = "Salário" },
                             new ChartData { Y = 0, Label = "VA/VR" },
+                            new ChartData { Y = 0, Label = "VA/VR Férias" },
                             new ChartData { Y = 0, Label = "Aux. Creche" }
                         }
                 };
@@ -279,6 +282,7 @@ namespace GestaoSindicatos.Services
                             new ChartData { Y = Math.Round(negociaoesComConcorrentes.Average(x => x.Concorrentes.Average(y => y.Reajuste.Piso)), 2), Label = "Piso" },
                             new ChartData { Y = Math.Round(negociaoesComConcorrentes.Average(x => x.Concorrentes.Average(y => y.Reajuste.Salario)), 2), Label = "Salário" },
                             new ChartData { Y = Math.Round(negociaoesComConcorrentes.Average(x => x.Concorrentes.Average(y => y.Reajuste.VaVr)), 2), Label = "VA/VR" },
+                            new ChartData { Y = Math.Round(negociaoesComConcorrentes.Average(x => x.Concorrentes.Average(y => y.Reajuste.VaVrFerias)), 2), Label = "VA/VR Férias" },
                             new ChartData { Y = Math.Round(negociaoesComConcorrentes.Average(x => x.Concorrentes.Average(y => y.Reajuste.AuxCreche)), 2), Label = "Aux. Creche" }
                         }
                     };

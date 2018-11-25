@@ -77,6 +77,20 @@ export class ChartsService {
     return label;
   }
 
+  labelPercentSymbol(tooltipItem, data) {
+    let label = data.labels[tooltipItem.index] || '';
+    const valor: number = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+    label += `: ${valor}%`;
+    return label;
+  }
+
+  labelRealSymbol(tooltipItem, data) {
+    let label = data.labels[tooltipItem.index] || '';
+    const valor: number = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+    label += `: R$ ${valor.toFixed(2)}`;
+    return label;
+  }
+
   mapChartData(data: any, mapColor: Function = null) {
     return {
       datasets: [

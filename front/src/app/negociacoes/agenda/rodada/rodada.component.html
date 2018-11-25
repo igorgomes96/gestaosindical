@@ -9,14 +9,19 @@
         <div class="col-md-4">
           <div class="form-group">
             <label class="form-label">Data</label>
-            <input type="date" class="form-control" [ngModel] ="rodada.data | date:'yyyy-MM-dd'" (ngModelChange)="rodada.data = $event" [ngModelOptions]="{standalone: true}" id="data" name="data">
+            <input type="date" class="form-control" [ngModel]="rodada.data | date:'yyyy-MM-dd'" (ngModelChange)="setData($event)"
+              [ngModelOptions]="{standalone: true}" id="data" name="data">
           </div>
         </div>
 
         <div class="col-md-4">
           <div class="form-group">
             <label class="form-label">Custos em Viagem</label>
-            <input type="number" class="form-control" [(ngModel)]="rodada.custosViagens" [ngModelOptions]="{standalone: true}" id="data" name="data">
+            <div class="input-group">
+              <span class="input-group-addon">R$</span>
+              <input type="number" class="form-control" [(ngModel)]="rodada.custosViagens" [ngModelOptions]="{standalone: true}"
+                id="data" name="data">
+            </div>
           </div>
         </div>
       </div>
@@ -25,7 +30,8 @@
         <div class="col-md-12">
           <div class="form-group">
             <label class="control-label">Resumo</label>
-            <textarea name="resumo" id="resumo" rows="3" class="form-control" [(ngModel)]="rodada.resumo" [ngModelOptions]="{standalone: true}"></textarea>
+            <textarea name="resumo" id="resumo" rows="3" class="form-control" [(ngModel)]="rodada.resumo"
+              [ngModelOptions]="{standalone: true}"></textarea>
           </div>
         </div>
       </div>
@@ -38,6 +44,7 @@
 <div class="row">
   <div class="col-md-12">
     <button type="submit" class="btn btn-primary m-r-sm" (click)="salvar()" [disabled]="!rodada.data">Salvar</button>
-    <button class="btn btn-danger" (click)="excluir()">Excluir</button>
+    <button class="btn btn-danger m-r-sm" (click)="excluir()">Excluir</button>
+    <a class="btn btn-default" (click)="navigatePlanosAcao()">Planos de Ações nesta data</a>
   </div>
 </div>

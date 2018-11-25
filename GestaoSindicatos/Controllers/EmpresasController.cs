@@ -35,7 +35,7 @@ namespace GestaoSindicatos.Controllers
             else
                 empresas = _service.Query(e => e.Nome.Contains(filter, StringComparison.CurrentCultureIgnoreCase), User)
                     .Include(e => e.Endereco);
-            return empresas.ToList();
+            return empresas.OrderBy(e => e.Nome).ToList();
         }
 
         [HttpGet]
@@ -44,10 +44,10 @@ namespace GestaoSindicatos.Controllers
         {
             IQueryable<object> empresas;
             if (filter == null)
-                empresas = _service.Query().Select(e => new { e.Id, e.Cnpj ,e.Nome});
+                empresas = _service.Query().Select(e => new { e.Id, e.Cnpj ,e.Nome}).OrderBy(e => e.Nome);
             else
                 empresas = _service.Query(e => e.Nome.Contains(filter, StringComparison.CurrentCultureIgnoreCase))
-                    .Select(e => new { e.Id, e.Cnpj, e.Nome });
+                    .Select(e => new { e.Id, e.Cnpj, e.Nome }).OrderBy(e => e.Nome);
             return empresas.ToList();
         }
 
@@ -55,7 +55,7 @@ namespace GestaoSindicatos.Controllers
         [HttpGet("usuarios/{userName}")]
         public ActionResult<List<Empresa>> GetRelated(string userName)
         {
-            return _service.Query(userName).ToList();
+            return _service.Query(userName).OrderBy(e => e.Nome).ToList();
         }
 
         [HttpGet("{id}")]

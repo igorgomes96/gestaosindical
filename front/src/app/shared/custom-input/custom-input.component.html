@@ -1,5 +1,15 @@
 <div class="form-group" [class.has-error]="hasError">
   <label class="control-label">{{ label }}</label>
-  <input [type]="type" [readOnly]="!!readOnly" [(ngModel)]="value" [placeholder]="placeholder" [name]="name" [id]="id" class="form-control">
+  <div class="input-group" *ngIf="addOnBefore != null || addOnAfter != null">
+    <span class="input-group-addon" *ngIf="addOnBefore != null">{{ addOnBefore }}</span>
+    <input [type]="type" [readOnly]="!!readOnly" [(ngModel)]="value" [placeholder]="placeholder" [name]="name" [id]="id"
+      class="form-control">
+    <span class="input-group-addon" *ngIf="addOnAfter != null">{{ addOnAfter }}</span>
+    <span class="input-group-btn" *ngIf="parcelasReajuste">
+      <button type="button" class="btn btn-success" (click)="showParcelasClick()"><i class="fa fa-calendar"></i></button>
+    </span>
+  </div>
+  <input [type]="type" *ngIf="addOnBefore == null && addOnAfter == null" [readOnly]="!!readOnly" [(ngModel)]="value"
+    [placeholder]="placeholder" [name]="name" [id]="id" class="form-control">
   <app-validator-message [control]="control" [controlName]="label"></app-validator-message>
 </div>

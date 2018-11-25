@@ -13,8 +13,10 @@ namespace GestaoSindicatos.Model
         public float Piso { get; set; }
         public float AuxCreche { get; set; }
         public float VaVr { get; set; }
-        public bool VaVrFerias { get; set; }
+        public float VaVrFerias { get; set; }
         public float DescontoVt { get; set; }
+
+        public virtual ICollection<ParcelaReajuste> Parcelas { get; set; }
 
     }
 }

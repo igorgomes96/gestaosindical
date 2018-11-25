@@ -1,3 +1,4 @@
+import { ToastsService } from 'src/app/shared/toasts.service';
 import { EmpresasApiService } from './../../../empresas/empresas-api.service';
 import { Concorrente } from './../../../model/negociacao';
 import { ActivatedRoute, Router, NavigationEnd, ActivationStart } from '@angular/router';
@@ -14,6 +15,7 @@ import { Negociacao, RodadaNegociacao } from 'src/app/model/negociacao';
 import { PatronaisApiService } from './../../../sindicatos/patronais/patronais-api.service';
 import { LaboraisApiService } from './../../../sindicatos/laborais/laborais-api.service';
 import { Empresa } from 'src/app/model/empresa';
+import { ToastType } from 'src/app/shared/toasts/toasts.component';
 
 @Component({
   selector: 'app-agenda-form',
@@ -23,6 +25,7 @@ import { Empresa } from 'src/app/model/empresa';
 export class AgendaFormComponent implements OnInit {
 
   form: FormGroup;
+  parcelasForm: FormGroup;
   negociacao: Negociacao;
   arquivos: Arquivo[];
   rodadas: RodadaNegociacao[];
@@ -30,6 +33,7 @@ export class AgendaFormComponent implements OnInit {
   urlEmpresaList = environment.api + endpoints.empresa;
   urlPatronalList = environment.api + endpoints.sindicatosPatronais;
   urlLaboralList = environment.api + endpoints.sindicatosLaborais;
+  parcelas = null;
 
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -37,7 +41,8 @@ export class AgendaFormComponent implements OnInit {
     private laboraisApi: LaboraisApiService,
     private patronaisApi: PatronaisApiService,
     private empresasApi: EmpresasApiService,
-    private router: Router) { }
+    private router: Router,
+    private toast: ToastsService) { }
 
   ngOnInit() {
 
@@ -72,6 +77,13 @@ export class AgendaFormComponent implements OnInit {
       }),
       plr1Sem: [''],
       plr2Sem: ['']
+    });
+
+    this.parcelasForm = this.formBuilder.group({
+      id: [''],
+      mes: ['', Validators.required],
+      referencia: ['', Validators.required],
+      valor: ['', Validators.required],
     });
 
     this.router.events
@@ -118,9 +130,24 @@ export class AgendaFormComponent implements OnInit {
     return control.dirty && control.invalid;
   }
 
+  showModal(_, parcelas) {
+    this.parcelas = parcelas;
+  }
+
+  closeModal(_) {
+    this.parcelas = null;
+  }
+
   novaRodada() {
     this.service.postRodada(this.negociacao.id)
-      .subscribe(r => this.rodadas.push(r));
+      .subscribe(r => {
+        this.rodadas.push(r);
+        this.toast.showMessage({
+          message: 'Rodada aberta com sucesso!',
+          title: 'Sucesso!',
+          type: ToastType.success
+        });
+      });
   }
 
   put(negociacao: Negociacao) {
@@ -179,8 +206,18 @@ export class AgendaFormComponent implements OnInit {
   }
 
   deleteConcorrente(id: number) {
-    this.service.deleteConcorrente(this.negociacao.id, id)
-    .pipe(tap(_ => this.loadConcorrentes())).subscribe();
+    this.toast.swalMessage({
+      title: 'Confirma exlusão?',
+      message: 'Essa ação não poderá ser desfeita!',
+      type: ToastType.warning
+    }, () => this.service.deleteConcorrente(this.negociacao.id, id).subscribe(d => {
+      this.loadConcorrentes();
+      this.toast.showMessage({
+        message: 'Concorrente excluído com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      });
+    }));
   }
 
   linkLaboral(valor) {

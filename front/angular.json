@@ -30,6 +30,8 @@
               "node_modules/metismenu/dist/metisMenu.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/sweetalert/dist/sweetalert.min.js",
+              "node_modules/daterangepicker/moment.min.js",
+              "node_modules/daterangepicker/daterangepicker.js",
               "src/assets/js/pace/pace.min.js",
               "src/assets/plugins/toastr/toastr.min.js"
             ]

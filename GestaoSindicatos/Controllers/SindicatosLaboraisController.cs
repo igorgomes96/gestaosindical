@@ -33,10 +33,10 @@ namespace GestaoSindicatos.Controllers
             try
             {
                 if (string.IsNullOrEmpty(filter))
-                    return _service.Query(User).ToList();
+                    return _service.Query(User).OrderBy(s => s.Nome).ToList();
                 else
                     return _service.Query(s => s.Nome.Contains(filter, StringComparison.CurrentCultureIgnoreCase), User)
-                        .Take(count).ToList();
+                        .OrderBy(s => s.Nome).Take(count).ToList();
             }
             catch (Exception e)
             {

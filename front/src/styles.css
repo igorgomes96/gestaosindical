@@ -4,6 +4,7 @@
 @import 'src/assets/styles/styles.css';
 @import 'src/assets/styles/animate.css';
 @import 'src/assets/plugins/toastr/toastr.min.css';
+@import '~daterangepicker/daterangepicker.css';
 
 .table-responsive th,
 .table-responsive td {

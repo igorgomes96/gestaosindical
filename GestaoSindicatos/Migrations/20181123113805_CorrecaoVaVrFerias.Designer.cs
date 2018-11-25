@@ -4,14 +4,16 @@ using GestaoSindicatos.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestaoSindicatos.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20181123113805_CorrecaoVaVrFerias")]
+    partial class CorrecaoVaVrFerias
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,30 +303,6 @@ namespace GestaoSindicatos.Migrations
                         .HasFilter("[EmpresaId] IS NOT NULL");
 
                     b.ToTable("Negociacoes");
-                });
-
-            modelBuilder.Entity("GestaoSindicatos.Model.ParcelaReajuste", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Mes");
-
-                    b.Property<int>("ReajusteId");
-
-                    b.Property<int>("TipoReajuste");
-
-                    b.Property<float>("Valor");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReajusteId");
-
-                    b.HasIndex("Mes", "ReajusteId", "TipoReajuste")
-                        .IsUnique();
-
-                    b.ToTable("ParcelasReajustes");
                 });
 
             modelBuilder.Entity("GestaoSindicatos.Model.PlanoAcao", b =>
@@ -620,14 +598,6 @@ namespace GestaoSindicatos.Migrations
                     b.HasOne("GestaoSindicatos.Model.SindicatoPatronal", "SindicatoPatronal")
                         .WithMany()
                         .HasForeignKey("SindicatoPatronalId");
-                });
-
-            modelBuilder.Entity("GestaoSindicatos.Model.ParcelaReajuste", b =>
-                {
-                    b.HasOne("GestaoSindicatos.Model.Reajuste", "Reajuste")
-                        .WithMany("Parcelas")
-                        .HasForeignKey("ReajusteId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("GestaoSindicatos.Model.PlanoAcao", b =>

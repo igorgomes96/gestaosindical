@@ -43,7 +43,7 @@ namespace GestaoSindicatos.Controllers
                 .Include(n => n.Empresa)
                 .Include(n => n.SindicatoLaboral)
                 .Include(n => n.SindicatoPatronal);
-            return negociacoes.ToList();
+            return negociacoes.OrderBy(n => n.Empresa.Nome).ToList();
         }
 
         [HttpGet("{id}")]

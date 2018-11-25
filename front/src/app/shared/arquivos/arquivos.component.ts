@@ -1,8 +1,10 @@
+import { ToastsService } from './../toasts.service';
 import { ArquivosApiService } from './arquivos-api.service';
 import { Observable } from 'rxjs';
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Arquivo } from './../../model/arquivo';
+import { ToastType } from '../toasts/toasts.component';
 
 @Component({
   selector: 'app-arquivos',
@@ -16,15 +18,15 @@ export class ArquivosComponent implements OnInit {
   @Output() delete = new EventEmitter<number>();
   @Input() dropzoneColor = 'white';
 
-  constructor(private service: ArquivosApiService) { }
+  constructor(private service: ArquivosApiService, private toast: ToastsService) { }
 
   ngOnInit() {
   }
 
   download(arquivo: Arquivo) {
     this.service.download(arquivo.id).subscribe(res => {
-      var a = document.createElement('a');
-      var binaryData = [];
+      const a = document.createElement('a');
+      const binaryData = [];
       binaryData.push(res);
       a.href = window.URL.createObjectURL(new Blob(binaryData, { type: arquivo.contentType }));
       document.body.appendChild(a);
@@ -39,7 +41,18 @@ export class ArquivosComponent implements OnInit {
   }
 
   deleteFile(id: string) {
-    this.service.delete(id).subscribe(_ => this.delete.emit());
+    this.toast.swalMessage({
+      title: 'Confirma exlusão?',
+      message: 'Essa ação não poderá ser desfeita!',
+      type: ToastType.warning
+    }, () => this.service.delete(id).subscribe(_ => {
+      this.delete.emit();
+      this.toast.showMessage({
+        message: 'Arquivo excluído com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      });
+    }));
   }
 
   onDrop(event: DragEvent) {

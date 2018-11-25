@@ -56,7 +56,9 @@ namespace GestaoSindicatos.Services
             _db.Entry(negociacao).Reference(n => n.SindicatoLaboral).Load();
             _db.Entry(negociacao).Reference(n => n.SindicatoPatronal).Load();
             _db.Entry(negociacao).Reference(n => n.Orcado).Load();
+            _db.Entry(negociacao.Orcado).Collection(n => n.Parcelas).Load();
             _db.Entry(negociacao).Reference(n => n.Negociado).Load();
+            _db.Entry(negociacao.Negociado).Collection(n => n.Parcelas).Load();
             return negociacao;
         }
 

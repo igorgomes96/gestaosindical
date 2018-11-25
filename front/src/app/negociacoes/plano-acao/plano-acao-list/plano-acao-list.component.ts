@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 import { Referente } from './../../../model/litigio';
 import { Component, OnInit } from '@angular/core';
 
@@ -31,10 +32,13 @@ export class PlanoAcaoListComponent implements OnInit {
   options: Options;
   StatusPlanoAcao: typeof StatusPlanoAcao = StatusPlanoAcao;
   Referente: typeof Referente = Referente;
+  formRangeDate: FormGroup;
 
   filterParams = (v: string) => ({ laboral: { nome: v }, patronal: { nome: v }, referente: v });
 
   ngOnInit() {
+
+
     this.intervalService.options
       .subscribe(opt => this.options = opt);
 
@@ -47,6 +51,7 @@ export class PlanoAcaoListComponent implements OnInit {
         } else {
           this.referent['ano'] = this.value = this.intervalService.value;
         }
+        this.updateDateRange();
       }),
       switchMap(_ => this.api.getAll(this.referent))
     ).subscribe(d => {
@@ -67,18 +72,84 @@ export class PlanoAcaoListComponent implements OnInit {
         return 'label-success';
     }
   }
+
+  datestring(d: Date) {
+    return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' +
+      d.getFullYear();
+  }
+
+  updateDateRange(options: any = null) {
+    const startDate = new Date(this.referent ? this.referent['ano'] : new Date().getFullYear(), 0, 1);
+    const endDate = new Date(this.referent ? this.referent['ano'] : new Date().getFullYear(), 11, 31);
+
+    const opt = {
+      'locale': {
+        'format': 'DD/MM/YYYY',
+        'separator': ' - ',
+        'applyLabel': 'Aplicar',
+        'cancelLabel': 'Cancelar',
+        'fromLabel': 'De',
+        'toLabel': 'Até',
+        'customRangeLabel': 'Custom',
+        'weekLabel': 'S',
+        'daysOfWeek': [
+          'Dom',
+          'Seg',
+          'Ter',
+          'Qua',
+          'Qui',
+          'Sex',
+          'Sab'
+        ],
+        'monthNames': [
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outrubro',
+          'Novembro',
+          'Dezembro'
+        ],
+        'firstDay': 1
+      },
+      'showDropdowns': true,
+      'minYear': 2018,
+      'maxYear': 2018,
+      'startDate': startDate,
+      'endDate': endDate,
+      'minDate': this.datestring(startDate),
+      'maxDate': this.datestring(endDate),
+      'buttonClasses': 'btn btn-success'
+    };
+    if (options) {
+      Object.assign(opt, options);
+    }
+
+    $('#dataRange').daterangepicker(opt, function (start, end, label) {
+      // tslint:disable-next-line:max-line-length
+      console.log(start.toDate(), end, label);
+    });
+
+  }
+
   onUserChangeEnd(changeContext: ChangeContext): void {
     this.referent['ano'] = changeContext.value;
+    this.updateDateRange();
     this.intervalService.value = changeContext.value;
     this.load();
   }
 
   load() {
     this.api.getAll(this.referent)
-    .subscribe((d: PlanoAcao[]) => {
-      this.planosAcao = d;
-      this.planosAcaoFiltrados = this.planosAcao;
-    });
+      .subscribe((d: PlanoAcao[]) => {
+        this.planosAcao = d;
+        this.planosAcaoFiltrados = this.planosAcao;
+      });
   }
 
   onFilter(planosAcao: PlanoAcao[]) {

@@ -1,5 +1,5 @@
 import { distinctUntilChanged, tap, filter } from 'rxjs/operators';
-import { Component, OnInit, forwardRef, Input } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, Output, EventEmitter } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, AbstractControl } from '@angular/forms';
 
 export const CUSTOM_VALUE_ACCESSOR: any = {
@@ -22,6 +22,10 @@ export class CustomInputComponent implements OnInit, ControlValueAccessor {
   @Input() type = 'text';
   @Input() control: AbstractControl;
   @Input() readOnly = false;
+  @Input() addOnAfter: string = null;
+  @Input() addOnBefore: string = null;
+  @Input() parcelasReajuste = false;
+  @Output() parcelasClick = new EventEmitter<boolean>();
 
   private innerValue: any;
   public hasError = false;
@@ -53,6 +57,10 @@ export class CustomInputComponent implements OnInit, ControlValueAccessor {
     } else {
       this.innerValue = '';
     }
+  }
+
+  showParcelasClick() {
+    this.parcelasClick.emit(true);
   }
 
   writeValue(obj: any): void {

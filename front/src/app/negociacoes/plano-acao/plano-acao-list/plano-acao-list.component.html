@@ -1,9 +1,23 @@
 <app-list-container [list]="planosAcao" title="Planos de Ação" description="Relação de todos os planos de ação."
-  searchPlaceholder="Pesquisar Planos" newLink="/negociacoes/planosacao/novo" [referent]="referent" (onFilter)="onFilter($event)" [filterParams]="filterParams">
+  searchPlaceholder="Pesquisar Planos" newLink="/negociacoes/planosacao/novo" [referent]="referent" (onFilter)="onFilter($event)"
+  [filterParams]="filterParams">
 
   <div class="hr-line-dashed"></div>
-  <div> <!-- class="custom-slider" -->
+  <div>
+    <!-- class="custom-slider" -->
     <ng5-slider [(value)]="value" [options]="options" (userChangeEnd)="onUserChangeEnd($event)"></ng5-slider>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group m-t-md">
+        <label class="control-label" for="dataRange">Filtrar no Período</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          <input type="text" id="dataRange" class="form-control">
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="clients-list">
@@ -36,13 +50,13 @@
             <td>#{{ plano.id }}</td>
             <td>
               <span *ngIf="Referente[plano.referente] === Referente.Patronal">
-                  {{ plano.patronal.nome }}
+                {{ plano.patronal.nome }}
               </span>
               <span *ngIf="Referente[plano.referente] === Referente.Laboral">
-                  {{ plano.laboral.nome }}
+                {{ plano.laboral.nome }}
               </span>
               <span *ngIf="Referente[plano.referente] === Referente.MTE || Referente[plano.referente] === Referente.MPT">
-                  {{ plano.referente }}
+                {{ plano.referente }}
               </span>
             </td>
             <td>{{ plano.data | date:'dd/MM/yyyy' }}</td>

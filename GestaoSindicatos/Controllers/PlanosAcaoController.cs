@@ -29,30 +29,37 @@ namespace GestaoSindicatos.Controllers
             _empresasService = empresasService;
         }
 
-        public ActionResult<List<PlanoAcao>> Get(int? laboralId = null, int? patronalId = null, int? empresaId = null, int? ano = null)
+        public ActionResult<List<PlanoAcao>> Get(int? laboralId = null, int? patronalId = null, int? empresaId = null, int? ano = null, DateTime? de = null, DateTime? ate = null)
         {
             if (empresaId.HasValue)
             {
                 Empresa emp = _empresasService.Find(empresaId.Value);
-                if (emp != null) {
+                if (emp != null)
+                {
                     return _service.Query(n =>
                         FilterQuery.Or(
                             new Tuple<object, object>(n.LaboralId, emp.SindicatoLaboralId),
                             new Tuple<object, object>(n.PatronalId, emp.SindicatoPatronalId)), User)
-                        .Where(n => !ano.HasValue || n.Data.Year == ano.Value)
-                        .Include(e => e.Laboral).Include(e => e.Patronal).ToList();
-                } else
+                        .Where(n => (!ano.HasValue || n.Data.Year == ano.Value) && (!de.HasValue || !ate.HasValue || (n.Data >= de.Value && n.Data <= ate.Value)))
+                        .Include(e => e.Laboral).Include(e => e.Patronal)
+                        .OrderByDescending(p => p.Data).ToList();
+                }
+                else
                 {
                     return new List<PlanoAcao>();
                 }
             }
 
-            return _service.Query(n => 
+            IQueryable<PlanoAcao> planos = _service.Query(n =>
                 FilterQuery.And(
                     new Tuple<object, object>(n.LaboralId, laboralId),
                     new Tuple<object, object>(n.PatronalId, patronalId),
                     new Tuple<object, object>(n.Data.Year, ano)), User)
-                .Include(e => e.Laboral).Include(e => e.Patronal).ToList();
+                .Include(e => e.Laboral).Include(e => e.Patronal).OrderByDescending(p => p.Data);
+            if (de.HasValue && ate.HasValue)
+                return planos.Where(p => p.Data >= de.Value && p.Data <= ate.Value).ToList();
+
+            return planos.ToList();
         }
 
         [HttpGet("{id}")]

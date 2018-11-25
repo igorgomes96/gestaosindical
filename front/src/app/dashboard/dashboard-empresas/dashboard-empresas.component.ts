@@ -44,8 +44,7 @@ export class DashboardEmpresasComponent implements OnInit {
     private negociacoesService: NegociacoesService,
     private negociacoesApi: NegociacoesApiService,
     private chartsService: ChartsService,
-    private intervalService: IntervalFilterService,
-    private location: Location) { }
+    private intervalService: IntervalFilterService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -133,7 +132,7 @@ export class DashboardEmpresasComponent implements OnInit {
     return concorrentes.map((c: Concorrente, i: number) => {
       return {
         label: c.nome,
-        data: [c.reajuste.salario, c.reajuste.piso, c.reajuste.vaVr, c.reajuste.auxCreche],
+        data: [c.reajuste.salario, c.reajuste.piso, c.reajuste.vaVr, c.reajuste.vaVrFerias, c.reajuste.auxCreche],
         backgroundColor: this.chartsService.colors[i % this.chartsService.colors.length]
       };
     });
@@ -143,7 +142,7 @@ export class DashboardEmpresasComponent implements OnInit {
     const reajustes = (<HTMLCanvasElement>$('#concorrentes')[0]).getContext('2d');
     return this.chartsService.chart('bar', reajustes, {
       datasets: this.getDatasetsConcorrentes(concorrentes),
-      labels: ['Salário', 'Piso', 'VA/VR', 'Aux. Creche']
+      labels: ['Salário', 'Piso', 'VA/VR', 'VA/VR Férias', 'Aux. Creche']
     },
       {
         legend: {
@@ -156,7 +155,12 @@ export class DashboardEmpresasComponent implements OnInit {
             }
           }]
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: this.chartsService.labelPercentSymbol
+          }
+        }
       });
   }
 
@@ -200,7 +204,12 @@ export class DashboardEmpresasComponent implements OnInit {
           display: true,
           text: 'Massa Salarial'
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: this.chartsService.labelRealSymbol
+          }
+        }
       });
   }
 
@@ -224,7 +233,12 @@ export class DashboardEmpresasComponent implements OnInit {
           display: true,
           text: 'Custos em Viagens'
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: this.chartsService.labelRealSymbol
+          }
+        }
       });
   }
 
@@ -255,7 +269,12 @@ export class DashboardEmpresasComponent implements OnInit {
           display: true,
           text: 'Taxas Negociais'
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: this.chartsService.labelRealSymbol
+          }
+        }
       });
   }
 
@@ -286,7 +305,12 @@ export class DashboardEmpresasComponent implements OnInit {
           display: true,
           text: 'Valores pagos em PLR'
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: this.chartsService.labelRealSymbol
+          }
+        }
       });
   }
 
@@ -322,7 +346,12 @@ export class DashboardEmpresasComponent implements OnInit {
           display: true,
           text: title
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: this.chartsService.labelPercentSymbol
+          }
+        }
       });
   }
 
@@ -346,9 +375,14 @@ export class DashboardEmpresasComponent implements OnInit {
           backgroundColor: this.chartsService.colors[2]
         },
         {
+          label: '% VA/VR Férias',
+          data: n.map(y => y.negociado.vaVrFerias),
+          backgroundColor: this.chartsService.colors[3]
+        },
+        {
           label: '% Aux. Creche',
           data: n.map(y => y.negociado.auxCreche),
-          backgroundColor: this.chartsService.colors[3]
+          backgroundColor: this.chartsService.colors[4]
         }
       ],
       labels: n.map(x => x.ano)
@@ -368,7 +402,12 @@ export class DashboardEmpresasComponent implements OnInit {
           display: true,
           text: 'Histórico de Reajustes'
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: this.chartsService.labelPercentSymbol
+          }
+        }
       });
   }
 

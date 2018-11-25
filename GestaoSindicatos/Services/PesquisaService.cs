@@ -27,9 +27,15 @@ namespace GestaoSindicatos.Services
             List<PesquisaResult> result = new List<PesquisaResult>();
             search = search.ToLower().Trim();
 
-            List<Empresa> empresas = _empresasService.Query(e => e.Nome.ToLower().Contains(search)).Take(4).ToList();
-            List<SindicatoLaboral> laborais = _laboraisService.Query(e => e.Nome.ToLower().Contains(search)).Take(4).ToList();
-            List<SindicatoPatronal> patronais = _patronaisService.Query(e => e.Nome.ToLower().Contains(search)).Take(4).ToList();
+            List<Empresa> empresas = _empresasService.Query(e => e.Nome.ToLower().Contains(search))
+                .OrderBy(e => e.Nome)
+                .Take(4).ToList();
+            List<SindicatoLaboral> laborais = _laboraisService.Query(e => e.Nome.ToLower().Contains(search))
+                .OrderBy(e => e.Nome)
+                .Take(4).ToList();
+            List<SindicatoPatronal> patronais = _patronaisService.Query(e => e.Nome.ToLower().Contains(search))
+                .OrderBy(e => e.Nome)
+                .Take(4).ToList();
 
             result.AddRange(empresas.Select(e => new PesquisaResult { EntityType = EntityType.Empresa, Obj = e }));
             result.AddRange(laborais.Select(e => new PesquisaResult { EntityType = EntityType.SindicatoLaboral, Obj = e }));

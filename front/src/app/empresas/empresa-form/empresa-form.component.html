@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <app-custom-input formControlName="qtdaTrabalhadores" [control]="form.get('qtdaTrabalhadores')"
+                                        <app-custom-input formControlName="qtdaTrabalhadores" [readOnly]="!!empresa" [control]="form.get('qtdaTrabalhadores')"
                                             id="qtdaTrabalhadores" label="Qtda. de Trabalhadores" name="qtdaTrabalhadores"
                                             type="number">
                                         </app-custom-input>
@@ -48,7 +48,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <app-custom-input formControlName="massaSalarial" [control]="form.get('massaSalarial')"
+                                <app-custom-input formControlName="massaSalarial" [readOnly]="!!empresa" [control]="form.get('massaSalarial')"
                                     id="massaSalarial" label="Massa Salarial" name="massaSalarial" type="number">
                                 </app-custom-input>
                             </div>

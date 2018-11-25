@@ -13,7 +13,7 @@
     <div [hidden]="!empresa" class="m-b-md">
 
       <address>
-        <strong>#{{ empresa?.id }} {{ empresa?.nome }}, {{ empresa?.cnpj |
+        <strong>#{{ empresa?.id }} {{ empresa?.nome }}, CNPJ {{ empresa?.cnpj |
           mask:'00.000.000/0000-00' }}</strong><br>
         {{ empresa?.endereco.cidade }} - {{ empresa?.endereco.uf }}<br>
       </address>
@@ -83,6 +83,7 @@
                   <th class="text-right">% Salário</th>
                   <th class="text-right">% Piso</th>
                   <th class="text-right">% VA/VR</th>
+                  <th class="text-right">% VA/VR Férias</th>
                   <th class="text-right">% Aux. Creche</th>
                   <th class="text-right">Tx. Neg. Patronal</th>
                   <th class="text-right">Tx. Neg. Laboral</th>
@@ -107,10 +108,11 @@
                   <td class="text-right">{{ negociacao.negociado.salario | number:'1.2-2' }}%</td>
                   <td class="text-right">{{ negociacao.negociado.piso | number:'1.2-2' }}%</td>
                   <td class="text-right">{{ negociacao.negociado.vaVr | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.negociado.vaVrFerias | number:'1.2-2' }}%</td>
                   <td class="text-right">{{ negociacao.negociado.auxCreche | number:'1.2-2' }}%</td>
-                  <td class="text-right">{{ negociacao.taxaPatronal | number:'1.2-2' }}</td>
-                  <td class="text-right">{{ negociacao.taxaLaboral | number:'1.2-2' }}</td>
-                  <td class="text-right">{{ negociacao.custosViagens | number:'1.2-2' }}</td>
+                  <td class="text-right">R$ {{ negociacao.taxaPatronal | number:'1.2-2' }}</td>
+                  <td class="text-right">R$ {{ negociacao.taxaLaboral | number:'1.2-2' }}</td>
+                  <td class="text-right">R$ {{ negociacao.custosViagens | number:'1.2-2' }}</td>
                   <td>
                     <span [ngClass]="classStatus(negociacao.statusACT_CCT)" class="label">
                       {{ StatusNegociacao[negociacao.statusACT_CCT] }}
@@ -161,12 +163,12 @@
                   <th class="text-right">% Neg. Piso</th>
                   <th class="text-right">% Orç. VA/VR</th>
                   <th class="text-right">% Neg. VA/VR</th>
+                  <th class="text-right">% Orç. VA/VR Férias</th>
+                  <th class="text-right">% Neg. VA/VR Férias</th>
                   <th class="text-right">% Orç. Aux. Creche</th>
                   <th class="text-right">% Neg. Aux. Creche</th>
-                  <th class="text-right">Orç. Desconto TV</th>
-                  <th class="text-right">Neg. Desconto TV</th>
-                  <th class="text-right">Orç. VA/VR Férias</th>
-                  <th class="text-right">Neg. VA/VR Férias</th>
+                  <th class="text-right">% Orç. Desconto VT</th>
+                  <th class="text-right">% Neg. Desconto VT</th>
                 </tr>
               </thead>
               <tbody>
@@ -178,12 +180,12 @@
                   <td class="text-right">{{ negociacao.negociado.piso | number:'1.2-2' }}%</td>
                   <td class="text-right highlight">{{ negociacao.orcado.vaVr | number:'1.2-2' }}%</td>
                   <td class="text-right highlight">{{ negociacao.negociado.vaVr | number:'1.2-2' }}%</td>
-                  <td class="text-right">{{ negociacao.orcado.auxCreche | number:'1.2-2' }}%</td>
-                  <td class="text-right">{{ negociacao.negociado.auxCreche | number:'1.2-2' }}%</td>
-                  <td class="text-right highlight">{{ negociacao.orcado.descontoVt | number:'1.2-2' }}</td>
-                  <td class="text-right highlight">{{ negociacao.negociado.descontoVt | number:'1.2-2' }}</td>
-                  <td class="text-right">{{ negociacao.orcado.vaVrFerias ? 'Sim' : 'Não' }}</td>
-                  <td class="text-right">{{ negociacao.negociado.vaVrFerias ? 'Sim' : 'Não' }}</td>
+                  <td class="text-right">{{ negociacao.orcado.vaVrFerias | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.negociado.vaVrFerias | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ negociacao.orcado.auxCreche | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ negociacao.negociado.auxCreche | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.orcado.descontoVt | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ negociacao.negociado.descontoVt | number:'1.2-2' }}%</td>
                 </tr>
               </tbody>
             </table>
@@ -224,9 +226,9 @@
                   <th class="text-right">% Salário</th>
                   <th class="text-right">% Piso</th>
                   <th class="text-right">% VA/VR</th>
+                  <th class="text-right">% VA/VR Férias</th>
                   <th class="text-right">% Aux. Creche</th>
-                  <th class="text-right">Desconto TV</th>
-                  <th class="text-right">VA/VR Férias</th>
+                  <th class="text-right">% Desconto VT</th>
                 </tr>
               </thead>
               <tbody>
@@ -235,9 +237,9 @@
                   <td class="text-right highlight">{{ concorrente.reajuste.salario | number:'1.2-2' }}%</td>
                   <td class="text-right">{{ concorrente.reajuste.piso | number:'1.2-2' }}%</td>
                   <td class="text-right highlight">{{ concorrente.reajuste.vaVr | number:'1.2-2' }}%</td>
-                  <td class="text-right">{{ concorrente.reajuste.auxCreche | number:'1.2-2' }}%</td>
-                  <td class="text-right highlight">{{ concorrente.reajuste.descontoVt | number:'1.2-2' }}</td>
-                  <td class="text-right">{{ concorrente.reajuste.vaVrFerias ? 'Sim' : 'Não' }}</td>
+                  <td class="text-right">{{ concorrente.reajuste.vaVrFerias | number:'1.2-2' }}%</td>
+                  <td class="text-right highlight">{{ concorrente.reajuste.auxCreche | number:'1.2-2' }}%</td>
+                  <td class="text-right">{{ concorrente.reajuste.descontoVt | number:'1.2-2' }}%</td>
                 </tr>
               </tbody>
             </table>
@@ -268,8 +270,8 @@
               <tbody>
                 <tr *ngFor="let negociacao of negociacoes">
                   <td>{{ negociacao.ano }}</td>
-                  <td class="text-right">{{ negociacao.plr1Sem | number:'1.2-2' }}</td>
-                  <td class="text-right">{{ negociacao.plr2Sem | number:'1.2-2' }}</td>
+                  <td class="text-right">R$ {{ negociacao.plr1Sem | number:'1.2-2' }}</td>
+                  <td class="text-right">R$ {{ negociacao.plr2Sem | number:'1.2-2' }}</td>
                   <td>
                     <span [ngClass]="classStatus(negociacao.statusPLR)" class="label">
                       {{ StatusNegociacao[negociacao.statusPLR] }}

@@ -59,7 +59,7 @@ export class DashboardNegociacoesComponent implements OnInit {
     this.load();
   }
 
-  getOptionsPieChart(title: string = null, showLegendas = false, positionLegend = 'top', maintainAspectRatio = true) {
+  getOptionsPieChart(title: string = null, showLegendas = false, positionLegend = 'left', maintainAspectRatio = true) {
     return {
       title: {
         display: title != null,
@@ -134,7 +134,12 @@ export class DashboardNegociacoesComponent implements OnInit {
             legend: {
               display: false
             },
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            tooltips: {
+              callbacks: {
+                label: this.chartsService.labelRealSymbol
+              }
+            }
           }));
       });
 
@@ -162,6 +167,11 @@ export class DashboardNegociacoesComponent implements OnInit {
                     beginAtZero: true
                   }
                 }]
+              },
+              tooltips: {
+                callbacks: {
+                  label: this.chartsService.labelPercentSymbol
+                }
               }
             }));
         }
@@ -208,7 +218,7 @@ export class DashboardNegociacoesComponent implements OnInit {
         map(d => d.map(x => Object.assign(x, { label: Referente[x['label']] }))),
         map(d => this.chartsService.mapChartData(d, this.chartsService.mapColorReferencia))
       ).subscribe(d => this.charts.push(this.chartsService
-        .chart('pie', referenciaLitigios, d, this.getOptionsPieChart(null, true, 'top', false)))
+        .chart('pie', referenciaLitigios, d, this.getOptionsPieChart(null, true, 'left', false)))
       );
 
     const litigiosProcedimento = (<HTMLCanvasElement>$('#litigiosProcedimento')[0]).getContext('2d');
@@ -217,7 +227,7 @@ export class DashboardNegociacoesComponent implements OnInit {
         map(d => d.map(x => Object.assign(x, { label: ProcedimentoLitigio[x['label']] }))),
         map(d => this.chartsService.mapChartData(d, this.chartsService.mapColorProcedimentoLitigio))
       ).subscribe(d => this.charts.push(this.chartsService
-        .chart('pie', litigiosProcedimento, d, this.getOptionsPieChart(null, true, 'top', false)))
+        .chart('pie', litigiosProcedimento, d, this.getOptionsPieChart(null, true, 'left', false)))
       );
 
     this.api.getLitigiosEmpresa(this.ano)

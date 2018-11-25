@@ -1,3 +1,4 @@
+import { ToastsService } from 'src/app/shared/toasts.service';
 import { EstadosApiService } from './../../shared/estados-api.service';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +18,7 @@ import { LaboraisApiService } from 'src/app/sindicatos/laborais/laborais-api.ser
 import { PatronaisApiService } from './../../sindicatos/patronais/patronais-api.service';
 import { RelatedLink } from 'src/app/shared/related-link/related-link';
 import { Estado } from 'src/app/model/estado';
+import { ToastType } from 'src/app/shared/toasts/toasts.component';
 
 
 @Component({
@@ -42,7 +44,8 @@ export class EmpresaFormComponent implements OnInit {
     private empresasApi: EmpresasApiService,
     private laboraisApi: LaboraisApiService,
     private patronaisApi: PatronaisApiService,
-    private estadosApi: EstadosApiService) { }
+    private estadosApi: EstadosApiService,
+    private toast: ToastsService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -56,8 +59,8 @@ export class EmpresaFormComponent implements OnInit {
         logradouro: ['', Validators.required],
         numero: ['']
       }),
-      qtdaTrabalhadores: [{ value: '', disabled: true }],
-      massaSalarial: [{ value: '', disabled: true }],
+      qtdaTrabalhadores: [''],
+      massaSalarial: [''],
       sindicatoLaboral: ['', Validators.required],
       sindicatoPatronal: ['', Validators.required]
     });
@@ -150,8 +153,18 @@ export class EmpresaFormComponent implements OnInit {
   }
 
   removeContato(idContato: number) {
-    this.contatos$ = this.empresasApi.deleteContato(this.empresa.id, idContato)
-      .pipe(switchMap(_ => this.empresasApi.getContatos(this.empresa.id)));
+    this.toast.swalMessage({
+      title: 'Confirma exlusão?',
+      message: 'Essa ação não poderá ser desfeita!',
+      type: ToastType.warning
+    }, () => this.empresasApi.deleteContato(this.empresa.id, idContato).subscribe(_ => {
+      this.contatos$ = this.empresasApi.getContatos(this.empresa.id);
+      this.toast.showMessage({
+        message: 'Contato excluído com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      });
+    }));
   }
 
   upload(files: FileList) {
