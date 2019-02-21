@@ -24,6 +24,17 @@ export class FormValidators {
         return validator;
     }
 
+    public static date(formControl: AbstractControl) {
+        if (!formControl.root || !(<FormGroup>formControl.root).controls) {
+            return null;
+        }
+
+        if (formControl.value && !(formControl.value instanceof Date)) {
+            return { date: true };
+        }
+        return null;
+    }
+
     public static referenteA(otherField: string) {
         const validator = (formControl: AbstractControl) => {
             if (otherField == null) {

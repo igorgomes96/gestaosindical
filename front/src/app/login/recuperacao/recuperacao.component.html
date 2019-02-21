@@ -1,0 +1,35 @@
+<div class="middle-box text-center loginscreen animated fadeInDown">
+  <div>
+    <div>
+
+      <h1 class="logo-name">G.S.</h1>
+
+    </div>
+    <h3>Bem Vindo ao Sistema de Gestão Sindical</h3>
+    <p>Informe os dados abaixo para cadastrar uma nova senha</p>
+    <form [formGroup]="form" class="m-t" (submit)="changePassword()">
+      <div class="form-group" [class.has-error]="hasError(form.get('login'))">
+        <input type="email" class="form-control" placeholder="E-mail" required="" formControlName="login">
+        <app-validator-message [control]="form.get('login')" controlName="E-mail"></app-validator-message>
+      </div>
+      <div class="form-group" [class.has-error]="hasError(form.get('codigoRecuperacao'))">
+        <input type="text" class="form-control" placeholder="Código de Recuperação" required="" formControlName="codigoRecuperacao">
+        <app-validator-message [control]="form.get('codigoRecuperacao')" controlName="Código de Recuperação"></app-validator-message>
+      </div>
+      <div class="form-group" [class.has-error]="hasError(form.get('senha'))">
+        <input type="password" class="form-control" placeholder="Senha" required="" formControlName="senha">
+        <app-validator-message [control]="form.get('senha')" controlName="Senha"></app-validator-message>
+      </div>
+      <div class="form-group" [class.has-error]="hasError(form.get('confirmaSenha'))">
+        <input type="password" class="form-control" placeholder="Confirmação da senha" required="" formControlName="confirmaSenha">
+        <app-validator-message [control]="form.get('confirmaSenha')" controlName="Confirmação da senha"></app-validator-message>
+      </div>
+      <button type="submit" class="btn btn-primary block ladda-button full-width m-b" [disabled]="form.invalid" data-style="zoom-in">Alterar Senha</button>
+
+      <p class="text-muted text-center"><small>Lembrou-se da senha?</small></p>
+      <a class="btn btn-sm btn-white btn-block" routerLink="/login">Login</a>
+
+    </form>
+    <!-- <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p> -->
+  </div>
+</div>

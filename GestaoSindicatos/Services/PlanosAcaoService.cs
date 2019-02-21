@@ -13,12 +13,14 @@ namespace GestaoSindicatos.Services
     public class PlanosAcaoService : CrudService<PlanoAcao>
     {
         private readonly Context _db;
-        public PlanosAcaoService(Context db): base(db)
+        private readonly ArquivosService _arquivosService;
+        public PlanosAcaoService(Context db, ArquivosService arquivosService): base(db)
         {
             _db = db;
+            _arquivosService = arquivosService;
         }
 
-        private Expression<Func<PlanoAcao, bool>> QueryUser(ClaimsPrincipal claims)
+        /*private Expression<Func<PlanoAcao, bool>> QueryUser(ClaimsPrincipal claims)
         {
             return (PlanoAcao p) => _db.EmpresasUsuarios
                 .Where(u => u.UserName == claims.Identity.Name)
@@ -48,6 +50,17 @@ namespace GestaoSindicatos.Services
             _db.Entry(plano).Reference(p => p.Laboral).Load();
             _db.Entry(plano).Reference(p => p.Patronal).Load();
             return plano;
+        }*/
+
+        public override PlanoAcao Delete(params object[] key)
+        {
+            _arquivosService.DeleteFiles(DependencyFileType.PlanoAcao, (int)key[0]);
+            return base.Delete(key);
+        }
+
+        public override void Delete(Expression<Func<PlanoAcao, bool>> query)
+        {
+            Query(query).ToList().ForEach(p => Delete(p.Id));
         }
     }
 }

@@ -1,9 +1,9 @@
 import { SindicatoLaboral } from './../../model/sindicato-laboral';
 import { Observable, of } from 'rxjs';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, Resolve } from '@angular/router';
-import { LaboraisApiService } from './laborais-api.service';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
+import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
 
 @Injectable({
   providedIn: 'root'

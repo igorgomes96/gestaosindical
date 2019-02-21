@@ -11,5 +11,6 @@ export const endpoints = {
     pesquisa: 'pesquisa/',
     usuarios: 'usuarios/',
     dashboard: 'dashboard/',
+    itensLitigios: 'litigios/itens/',
     estados: 'assets/estados.json'
 };

@@ -6,6 +6,10 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using GestaoSindicatos.Properties;
 
 namespace GestaoSindicatos.Services
 {
@@ -13,11 +17,14 @@ namespace GestaoSindicatos.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly Context _db;
+        private readonly IEmailSender _emailSender;
 
-        public UsuariosService(UserManager<ApplicationUser> userManager, Context context): base(context)
+        public UsuariosService(UserManager<ApplicationUser> userManager, Context context,
+            IEmailSender emailSender): base(context)
         {
             _userManager = userManager;
             _db = context;
+            _emailSender = emailSender;
         }
 
         public void CreateUser(Usuario user, string password, string initialRole = null)
@@ -55,6 +62,9 @@ namespace GestaoSindicatos.Services
             if (appUser == null)
                 throw new NotFoundException("Usuário não encontrado!");
 
+            _db.EmpresasUsuarios.Where(e => e.UserName == appUser.UserName)
+                .ToList().ForEach(x => _db.EmpresasUsuarios.Remove(x));
+
             _userManager.DeleteAsync(appUser).Wait();
 
             return base.Delete(key[0].ToString());
@@ -90,6 +100,66 @@ namespace GestaoSindicatos.Services
             _userManager.AddToRoleAsync(appUser, Roles.ADMIN).Wait();
             if (_userManager.IsInRoleAsync(appUser, Roles.PADRAO).Result)
                 _userManager.RemoveFromRoleAsync(appUser, Roles.PADRAO).Wait();
+        }
+
+        public string GetErrorAuthMessage(string messageError)
+        {
+            if (messageError == PasswordErros.NonAlphanumeric)
+            {
+                return "A senha deve ter pelo menos um caractere especial!";
+            }
+            else if (messageError == PasswordErros.Digit)
+            {
+                return "A senha deve ter pelo menos um dígito numérico!";
+            }
+            else if (messageError == PasswordErros.Upper)
+            {
+                return "A senha deve ter pelo menos um caractere maiúsculo!";
+            }
+            else if (messageError == PasswordErros.Lower)
+            {
+                return "A senha deve ter pelo menos um caractere minúsculo!";
+            }
+            else if (messageError == PasswordErros.TooShort)
+            {
+                return "A senha deve ter pelo menos 8 caracteres!";
+            }
+            else if (messageError == PasswordErros.PasswordIncorrect)
+            {
+                return "Senha incorreta!";
+            }
+            else if (messageError == PasswordErros.InvalidToken)
+            {
+                return "Código de Verificação Expirado! Solicite o envio novamente!";
+            }
+            return messageError;
+        }
+
+        public void SendRecoveryCode(string userName)
+        {
+
+            var appUser = _userManager.FindByNameAsync(userName).Result;
+            if (appUser == null)
+                throw new NotFoundException();
+
+            string code = _userManager.GeneratePasswordResetTokenAsync(appUser).Result;
+            _emailSender.SendEmailAsync(appUser.UserName, "[Gestão Sindical] Recuperação de Senha",
+                Resource.RecoveryPasswordTemplate.Replace("@CODIGO", code)).Wait();
+        }
+
+        public void ChangePassword(Usuario user)
+        {
+            var appUser = _userManager.FindByNameAsync(user.Login).Result;
+            if (appUser == null)
+                throw new NotFoundException();
+
+            var resultado = _userManager.ResetPasswordAsync(appUser, user.CodigoRecuperacao, user.Senha).Result;
+
+            if (!resultado.Succeeded)
+            {
+                throw new Exception(resultado.Errors.First().Code);
+            }
+
         }
 
         public void DownAdmin(string userName)

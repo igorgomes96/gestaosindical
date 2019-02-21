@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { SindicatoPatronal } from 'src/app/model/sindicato-patronal';
 import { take } from 'rxjs/operators';
-import { PatronaisApiService } from './../patronais-api.service';
+import { PatronaisApiService } from 'src/app/shared/api/patronais-api.service';
 
 declare var swal: any;
 

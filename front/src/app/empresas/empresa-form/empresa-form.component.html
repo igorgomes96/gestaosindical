@@ -119,13 +119,20 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-12">
                                     <app-custom-input formControlName="logradouro" [control]="form.get('endereco.logradouro')"
                                         id="logradouro" label="Logradouro" name="logradouro" placeholder="Rua / Avenida">
                                     </app-custom-input>
                                 </div>
+                            </div>
 
-                                <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <app-custom-input formControlName="bairro" [control]="form.get('endereco.bairro')"
+                                        id="bairro" label="Bairro" name="bairro" placeholder="Bairro">
+                                    </app-custom-input>
+                                </div>
+                                <div class="col-md-4">
                                     <app-custom-input formControlName="numero" [control]="form.get('endereco.numero')"
                                         id="numero" label="Número" name="numero" type="number">
                                     </app-custom-input>
@@ -151,6 +158,6 @@
         </div>
     </div>
     <div class="col-md-4">
-        <app-arquivos *ngIf="empresa" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+        <app-arquivos *ngIf="empresa" [spinner]="spinnerArquivos" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
     </div>
 </div>

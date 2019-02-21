@@ -1,3 +1,4 @@
+import { RecuperacaoComponent } from './login/recuperacao/recuperacao.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { ConcorrenteComponent } from './negociacoes/concorrente/concorrente.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -8,11 +9,14 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RegisterComponent } from './login/register/register.component';
+import { EnviaCodigoComponent } from './login/envia-codigo/envia-codigo.component';
 
 
 const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegisterComponent },
+    { path: 'envia-codigo', component: EnviaCodigoComponent },
+    { path: 'recuperacao', component: RecuperacaoComponent },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'concorrente/:id', component: ConcorrenteComponent, outlet: 'popup' },
     { path: 'not-found', component: PageNotFoundComponent },

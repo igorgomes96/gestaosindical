@@ -1,12 +1,14 @@
 import { Router } from '@angular/router';
 import { ToastsService } from 'src/app/shared/toasts.service';
-import { RodadasApiService } from './rodadas-api.service';
 import { RodadaNegociacao } from './../../../model/negociacao';
-import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { FormGroup} from '@angular/forms';
 import { Arquivo } from 'src/app/model/arquivo';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, finalize } from 'rxjs/operators';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { RodadasApiService } from 'src/app/shared/api/rodadas-api.service';
+import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
+import { PdfGeneratorService } from 'src/app/shared/pdf-generator.service';
 
 @Component({
   selector: 'app-rodada',
@@ -16,14 +18,17 @@ import { ToastType } from 'src/app/shared/toasts/toasts.component';
 export class RodadaComponent implements OnInit {
 
   @Input() rodada: RodadaNegociacao;
+  @Input() final: boolean;
   @Output() deleteRodada: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   arquivos: Arquivo[];
   form: FormGroup;
   data: Date;
+  spinnerArquivos = false;
 
   constructor(private service: RodadasApiService, private toast: ToastsService,
-    private router: Router) { }
+    private router: Router, private negociacoesApi: NegociacoesApiService,
+    private pdfGeneratorService: PdfGeneratorService) { }
 
   ngOnInit() {
     this.service.getArquivos(this.rodada.id)
@@ -38,9 +43,11 @@ export class RodadaComponent implements OnInit {
   }
 
   upload(files: FileList) {
+    this.spinnerArquivos = true;
     this.service.uploadFiles(this.rodada.id, files)
-      .pipe(switchMap(_ => this.service.getArquivos(this.rodada.id)))
-      .subscribe(d => this.arquivos = d);
+    .pipe(switchMap(_ => this.service.getArquivos(this.rodada.id)),
+      finalize(() => this.spinnerArquivos = false))
+    .subscribe(d => this.arquivos = d);
   }
 
   deleteFile(event: any) {
@@ -62,13 +69,17 @@ export class RodadaComponent implements OnInit {
     const de = new Date(new Date(this.rodada.data).setHours(0, 0, 0, 0)).toLocaleString('en-US');
     const ate = new Date(new Date(this.rodada.data).setHours(23, 59, 59, 99)).toLocaleString('en-US');
 
+    // this.negociacoesApi.get(this.rodada.negociacaoId)
+    //  .subscribe((neg: Negociacao) => {
     this.router.navigate(['/negociacoes/planosacao'],
       {
         queryParams: {
           de: de,
-          ate: ate
+          ate: ate,
+          // empresaId: neg.empresaId
         }
       });
+    // });
   }
 
   excluir() {
@@ -84,6 +95,18 @@ export class RodadaComponent implements OnInit {
         type: ToastType.success
       });
     }));
+  }
+
+  relatorioFinal() {
+    // this.negociacoesApi.postRelatorio(this.rodada.negociacaoId)
+    // .subscribe(() => {
+    //   this.toast.showMessage({
+    //     message: 'Relatório gerado com sucesso!',
+    //     title: 'Sucesso!',
+    //     type: ToastType.success
+    //   });
+    // });
+    this.pdfGeneratorService.htmltoPDF('.col-md-8.border-right', 'teste.pdf');
   }
 
 }

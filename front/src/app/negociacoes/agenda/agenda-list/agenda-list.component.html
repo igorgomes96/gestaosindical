@@ -1,5 +1,5 @@
-<app-list-container [list]="negociacoes" title="Agenda de Negociações" description="Relação de todas as negociações."
-  searchPlaceholder="Pesquisar Negociações" newLink="/negociacoes/agenda/nova" [referent]="referent" (onFilter)="onFilter($event)"
+<app-list-container [list]="negociacoes" title="Negociações" description="Relação de todas as negociações."
+  searchPlaceholder="Pesquisar Negociações" newLink="/negociacoes/gestao/nova" [referent]="referent" (onFilter)="onFilter($event)"
   [filterParams]="filterParams">
 
   <div class="hr-line-dashed"></div>
@@ -31,7 +31,7 @@
               <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(negociacao)">
                 <i class="fa fa-trash"></i>
               </button>
-              <a [routerLink]="['/negociacoes/agenda', negociacao.id]" class="btn btn-outline btn-success btn-xs">
+              <a [routerLink]="['/negociacoes/gestao', negociacao.id]" class="btn btn-outline btn-success btn-xs">
                 <i class="fa fa-pencil"></i>
               </a>
             </td>
@@ -40,7 +40,7 @@
             <td>{{ negociacao.empresa?.nome }}</td>
             <td>{{ negociacao.sindicatoLaboral?.nome }}</td>
             <td>{{ negociacao.sindicatoPatronal?.nome }}</td>
-            <td class="text-right">{{ negociacao.qtdaTrabalhadores }}</td>
+            <td class="text-right">{{ negociacao.qtdaTrabalhadores | number:'1.0' }}</td>
             <td class="text-right">{{ negociacao.massaSalarial | number:'1.2-2' }}</td>
             <td>{{ negociacao.qtdaRodadas }}</td>
             <td>

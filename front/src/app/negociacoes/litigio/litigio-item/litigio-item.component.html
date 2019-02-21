@@ -1,0 +1,105 @@
+<h2>Reclamação {{ index }}</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Assuntos</label>
+                    <textarea class="form-control" placeholder="Assuntos" name="assuntos" id="assuntos" rows="3"
+                        [(ngModel)]="item.assuntos"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label>
+                    <input type="checkbox" [(ngModel)]="item.possuiPlano">
+                    Possui plano de Ação?
+                </label>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-4">
+        <app-arquivos [spinner]="spinnerArquivos" dropzoneColor="#f3f3f4" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+    </div>
+</div>
+
+<div class="hr-line-dashed" *ngIf="item.possuiPlano"></div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="row" *ngIf="item.possuiPlano">
+            <div class="col-md-8">
+
+                <h4>Plano de Ação
+                    <span class="pull-right label" [ngClass]="classStatus(item.planoAcao.status)" style="font-size: 13px;">
+                        {{ StatusPlanoAcao[item.planoAcao.status] }}
+                    </span>
+                </h4>
+
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-custom-input [(ngModel)]="item.planoAcao.responsavelAcao" #control="ngModel" [control]="control"
+                            id="responsavelAcao" label="Responsável pela Ação" name="responsavelAcao">
+                        </app-custom-input>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <app-custom-input [(ngModel)]="item.planoAcao.data" control="ngModel" [control]="control" id="data" label="Data" required name="data" type="date">
+                        </app-custom-input>
+                    </div>
+                    <div class="col-md-4">
+                        <app-custom-input [(ngModel)]="item.planoAcao.dataPrevista" #control="ngModel" [control]="control" id="dataPrevista" label="Previsão de Solução"
+                            required name="dataPrevista" type="date">
+                        </app-custom-input>
+                    </div>
+                    <div class="col-md-4">
+                        <app-custom-input [(ngModel)]="item.planoAcao.dataSolucao" #control="ngModel" [control]="control" id="dataSolucao" label="Data de Solução" name="dataSolucao"
+                            type="date">
+                        </app-custom-input>
+                    </div>
+                </div>
+
+                <div class="row m-b-md">
+                    <div class="col-md-12">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="item.planoAcao.procedencia">
+                            Reclamação Procedente?
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <textarea class="form-control" [(ngModel)]="item.planoAcao.descricao" placeholder="Descrição do Plano"
+                                name="descricao" id="descricao" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-4">
+                <app-arquivos [spinner]="spinnerArquivosPlano" dropzoneColor="#f3f3f4" (upload)="uploadPlano($event)" (delete)="deleteFilePlano($event)" [arquivos]="arquivosPlano"></app-arquivos>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row m-t-sm">
+    <div class="col-md-12">
+        <button class="btn btn-primary m-r-sm" (click)="salvar()">Salvar</button>
+        <button class="btn btn-danger" (click)="excluir()">Excluir</button>
+    </div>
+</div>

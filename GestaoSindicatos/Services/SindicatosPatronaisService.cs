@@ -63,6 +63,11 @@ namespace GestaoSindicatos.Services
                     .ToList();
         }
 
+        public override void Delete(Expression<Func<SindicatoPatronal, bool>> query)
+        {
+            Query(query).ToList().ForEach(s => Delete(s.Id));
+        }
+
         public override SindicatoPatronal Delete(params object[] key)
         {
             if (_db.Empresas.Any(x => x.SindicatoPatronalId == (int)key[0]))
@@ -71,8 +76,8 @@ namespace GestaoSindicatos.Services
                 throw new Exception("Existem negociações relacionadas à esse sindicato!");
             if (_db.Litigios.Any(x => x.PatronalId == (int)key[0]))
                 throw new Exception("Existem litígios relacionados à esse sindicato!");
-            if (_db.PlanosAcao.Any(x => x.PatronalId == (int)key[0]))
-                throw new Exception("Existem planos de ações relacionados à esse sindicato!");
+            /*if (_db.PlanosAcao.Any(x => x.PatronalId == (int)key[0]))
+                throw new Exception("Existem planos de ações relacionados à esse sindicato!");*/
 
             _arquivosService.DeleteFiles(DependencyFileType.SindicatoPatronal, (int)key[0]);
             _contatosSindService.Query(x => x.SindicatoPatronalId == (int)key[0])

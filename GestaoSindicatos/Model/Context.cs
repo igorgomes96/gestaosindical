@@ -8,7 +8,7 @@ namespace GestaoSindicatos.Model
 {
     public class Context : DbContext
     {
-        
+
         public Context(DbContextOptions<Context> options)
             : base(options)
         {
@@ -16,6 +16,10 @@ namespace GestaoSindicatos.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ItemLitigio>()
+                .HasOne(a => a.PlanoAcao)
+                .WithOne(b => b.ItemLitigio)
+                .HasForeignKey<PlanoAcao>(b => b.ItemLitigioId);
 
             modelBuilder.Entity<Empresa>()
                 .HasIndex(e => e.Nome);
@@ -59,6 +63,9 @@ namespace GestaoSindicatos.Model
                 .HasIndex(e => new { e.Mes, e.ReajusteId, e.TipoReajuste })
                 .IsUnique();
 
+            modelBuilder.Entity<Arquivo>()
+                .HasIndex(e => new { e.DependencyId, e.DependencyType });
+
             var cascadeFKs = modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetForeignKeys())
                 .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
@@ -86,6 +93,12 @@ namespace GestaoSindicatos.Model
         public virtual DbSet<Usuario> Usuarios { get; set; }
         public virtual DbSet<EmpresaUsuario> EmpresasUsuarios { get; set; }
         public virtual DbSet<ParcelaReajuste> ParcelasReajustes { get; set; }
-
+        public virtual DbSet<Arquivo> Arquivos { get; set; }
+        public virtual DbSet<ItemLitigio> ItensLitigios { get; set; }
+        public virtual DbSet<Relatorio> Relatorios { get; set; }
+        public virtual DbSet<GrupoPergunta> GruposPerguntas { get; set; }
+        public virtual DbSet<GrupoPerguntaPadrao> GruposPerguntasPadrao { get; set; }
+        public virtual DbSet<PerguntaPadrao> PerguntasPadrao { get; set; }
+        public virtual DbSet<RespostaRelatorio> RespostasRelatorio { get; set; }
     }
 }

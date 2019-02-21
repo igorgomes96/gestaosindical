@@ -7,6 +7,18 @@
     <ng5-slider [(value)]="value" [options]="options" (userChangeEnd)="onUserChangeEnd($event)"></ng5-slider>
   </div>
 
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group m-t-md">
+        <label class="control-label" for="dataRange">Filtrar no Período</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          <input type="text" id="dataRange" class="form-control">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="clients-list">
     <div class="table-responsive">
       <table class="table table-striped table-hover">
@@ -18,6 +30,7 @@
             <th>Referente a</th>
             <th>Procedimento</th>
             <th>Data</th>
+            <th>Planos de Ação</th>
           </tr>
         </thead>
         <tbody>
@@ -45,6 +58,11 @@
             </td>
             <td>{{ ProcedimentoLitigio[litigio.procedimento] }}</td>
             <td>{{ litigio.data | date:'dd/MM/yyyy' }}</td>
+            <td>
+              <span class="label" [ngClass]="classStatus(litigio.statusPlanos)">
+                {{ litigio.statusPlanos ? StatusPlanoAcao[litigio.statusPlanos] : 'Nenhum plano' }}
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>

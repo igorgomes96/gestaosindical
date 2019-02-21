@@ -53,7 +53,7 @@ namespace GestaoSindicatos.Controllers
             }
             catch (NotFoundException)
             {
-                return NotFound("Rodada de Negociação não encontrada!");
+                return NotFound("Usuário não encontrado!");
             }
             catch (Exception e)
             {
@@ -71,13 +71,15 @@ namespace GestaoSindicatos.Controllers
             }
             catch (NotFoundException)
             {
-                return NotFound("Usuario não encontrado!");
+                return NotFound("Usuário não encontrado!");
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
+
+        
 
 
 

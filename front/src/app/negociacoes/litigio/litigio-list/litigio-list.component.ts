@@ -1,6 +1,6 @@
+import { StatusPlanoAcao } from './../../../model/plano-acao';
 import { Litigio, ProcedimentoLitigio, Referente } from './../../../model/litigio';
 import { Component, OnInit } from '@angular/core';
-import { LitigiosApiService } from '../litigios-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { tap, switchMap } from 'rxjs/operators';
 import { Options } from 'ng5-slider/options';
@@ -8,6 +8,7 @@ import { IntervalFilterService } from 'src/app/shared/interval-filter.service';
 import { ChangeContext } from 'ng5-slider';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { LitigiosApiService } from 'src/app/shared/api/litigios-api.service';
 
 declare var $: any;
 
@@ -28,6 +29,7 @@ export class LitigioListComponent implements OnInit {
   value: number;
   options: Options;
   ProcedimentoLitigio: typeof ProcedimentoLitigio = ProcedimentoLitigio;
+  StatusPlanoAcao: typeof StatusPlanoAcao = StatusPlanoAcao;
   Referente: typeof Referente = Referente;
   filterParams = (v: string) => ({ empresa: { nome: v } });
 
@@ -44,6 +46,7 @@ export class LitigioListComponent implements OnInit {
         } else {
           this.referent['ano'] = this.value = this.intervalService.value;
         }
+        this.updateDateRange();
       }),
       switchMap(_ => this.api.getAll(this.referent))
     ).subscribe(d => {
@@ -53,10 +56,101 @@ export class LitigioListComponent implements OnInit {
 
   }
 
+  classStatus(status: StatusPlanoAcao) {
+    if (!status) { return ''; }
+    switch (StatusPlanoAcao[status]) {
+      case StatusPlanoAcao.Vencido:
+        return 'label-danger';
+      case StatusPlanoAcao.AVencer:
+        return 'label-warning';
+      case StatusPlanoAcao.Solucionado:
+        return 'label-primary';
+      case StatusPlanoAcao.NoPrazo:
+        return 'label-success';
+    }
+    return '';
+  }
+
+  datestring(d: Date) {
+    return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' +
+      d.getFullYear();
+  }
+
+  updateDateRange(options: any = null) {
+    const startDate = new Date(this.referent ? this.referent['ano'] : new Date().getFullYear(), 0, 1);
+    const endDate = new Date(this.referent ? this.referent['ano'] : new Date().getFullYear(), 11, 31);
+
+    const opt = {
+      'locale': {
+        'format': 'DD/MM/YYYY',
+        'separator': ' - ',
+        'applyLabel': 'Aplicar',
+        'cancelLabel': 'Cancelar',
+        'fromLabel': 'De',
+        'toLabel': 'Até',
+        'customRangeLabel': 'Custom',
+        'weekLabel': 'S',
+        'daysOfWeek': [
+          'Dom',
+          'Seg',
+          'Ter',
+          'Qua',
+          'Qui',
+          'Sex',
+          'Sab'
+        ],
+        'monthNames': [
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outrubro',
+          'Novembro',
+          'Dezembro'
+        ],
+        'firstDay': 1
+      },
+      'showDropdowns': true,
+      'minYear': 2018,
+      'maxYear': 2018,
+      'startDate': startDate,
+      'endDate': endDate,
+      'minDate': this.datestring(startDate),
+      'maxDate': this.datestring(endDate),
+      'buttonClasses': 'btn btn-success'
+    };
+    if (options) {
+      Object.assign(opt, options);
+    }
+
+    this.updateReferent(startDate, endDate);
+
+    const self = this;
+    $('#dataRange').daterangepicker(opt, function (start, end, _) {
+      // tslint:disable-next-line:max-line-length
+      self.updateReferent(start.toDate(), end.toDate());
+    });
+
+  }
+
+  updateReferent(start, end) {
+    this.referent['de'] = new Date(new Date(start).setHours(0, 0, 0, 0)).toLocaleString('en-US');
+    this.referent['ate'] = new Date(new Date(end).setHours(23, 59, 59, 99)).toLocaleString('en-US');
+    this.api.getAll(this.referent).subscribe(d => {
+      this.litigios = d;
+      this.litigiosFiltrados = d;
+    });
+  }
+
   onUserChangeEnd(changeContext: ChangeContext): void {
     this.referent['ano'] = changeContext.value;
+    this.updateDateRange();
     this.intervalService.value = changeContext.value;
-
     this.load();
   }
 

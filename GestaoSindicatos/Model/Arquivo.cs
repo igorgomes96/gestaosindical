@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,29 +17,28 @@ namespace GestaoSindicatos.Model
         Negociacao,
         RodadaNegociacao,
         Litigio,
-        PlanoAcao
+        PlanoAcao,
+        ItemLitigio
     }
 
     public class Arquivo
     {
-        public ObjectId Id { get; set; }
-        [BsonElement("nome")]
+        public long Id { get; set; }
+        [Required]
+        [StringLength(255)]
         public string Nome { get; set; }
-        [BsonElement("dataUpdload")]
         public DateTime? DataUpload { get; set; }
-        [BsonElement("tamanho")]
         public long Tamanho { get; set; }
-        [BsonElement("content")]
-        public byte[] Content { get; set; }
-        [BsonElement("contentType")]
+        // public byte[] Content { get; set; }
+        [StringLength(255)]
         public string ContentType { get; set; }
+        [StringLength(255)]
+        public string Path { get; set; }        
 
         // Reference
         [JsonIgnore]
-        [BsonElement("dependencyType")]
         public DependencyFileType DependencyType { get; set; }
         [JsonIgnore]
-        [BsonElement("dependencyId")]
         public int DependencyId { get; set; }
 
 

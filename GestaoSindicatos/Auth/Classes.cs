@@ -12,6 +12,9 @@ namespace GestaoSindicatos.Auth
         public const string Upper = "PasswordRequiresUpper";
         public const string Lower = "PasswordRequiresLower";
         public const string TooShort = "PasswordTooShort";
+        public const string PasswordIncorrect = "PasswordMismatch";
+        public const string InvalidToken = "InvalidToken";
+
     }
 
     public class AuthInfo

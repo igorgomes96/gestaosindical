@@ -1,15 +1,15 @@
 import { ToastsService } from './../../shared/toasts.service';
-import { EmpresasApiService } from './../../empresas/empresas-api.service';
 import { Usuario } from 'src/app/model/usuario';
-import { UsuariosApiService } from './../usuarios-api.service';
-import { FormBuilder, FormGroup, FormArray, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter, map, switchMap, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { filter, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { endpoints } from 'src/environments/endpoints';
 import { environment } from 'src/environments/environment';
 import { Empresa } from 'src/app/model/empresa';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { UsuariosApiService } from 'src/app/shared/api/usuarios-api.service';
+import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
 
 @Component({
   selector: 'app-usuario-form',

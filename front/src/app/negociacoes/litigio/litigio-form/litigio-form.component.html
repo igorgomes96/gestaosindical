@@ -19,14 +19,24 @@
 
 
               <div class="col-md-6">
-                <div class="form-group">
-                  <label>Procedimento</label>
+                <div class="form-group" [class.has-error]="hasError(form.get('procedimento'))">
+                  <label class="control-label">Procedimento</label>
                   <select name="procedimento" id="procedimento" formControlName="procedimento" class="form-control">
+                    <option value="">(Selecione)</option>                    
                     <option value="MesaRedonda">Mesa Redonda</option>
                     <option value="Audiencia">Audiência</option>
                     <option value="ReclamacaoSindicato">Reclamação Sindicato</option>
+                    <option value="FiscalizacaoMPT">Fiscalização MPT</option>
+                    <option value="FiscalizacaoMTE">Fiscalização MTE</option>
                   </select>
+                  <app-validator-message [control]="form.get('procedimento')" controlName="Procedimento"></app-validator-message>
                 </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12">
+                <app-custom-input formControlName="data" [control]="form.get('data')" id="data" label="Data" name="data"
+                  type="date">
+                </app-custom-input>
               </div>
 
             </div>
@@ -35,7 +45,7 @@
 
               <div class="col-md-6">
                 <div class="form-group" [class.has-error]="hasError(form.get('empresa'))">
-                  <label>Empresa</label>
+                  <label class="control-label">Empresa</label>
                   <app-autocomplete formControlName="empresa" [urlSource]="urlEmpresaList" placeholder="Empresa">
                     <ng-template let-item>
                       <span class="fa fa-users m-r-sm"></span>
@@ -44,30 +54,40 @@
                   </app-autocomplete>
                 </div>
               </div>
-              <div class="col-md-4">
-                <app-custom-input formControlName="data" [control]="form.get('data')" id="data" label="Data" name="data"
-                  type="date">
-                </app-custom-input>
+
+              <div class="col-md-6">
+                <div class="form-group" [class.has-error]="hasError(form.get('estado'))">
+                  <label class="control-label">Estado</label>
+                  <select class="form-control" name="estado" id="estado" formControlName="estado">
+                    <option value="">(Selecione o Estado)</option>
+                    <option *ngFor="let estado of estados$ | async" [value]="estado.sigla">{{ estado.nome }}</option>
+                  </select>
+                  <app-validator-message [control]="form.get('estado')" controlName="Estado"></app-validator-message>
+                </div>
               </div>
+
             </div>
 
             <div class="row">
               <div class="col-md-6">
-                <div class="form-group">
-                  <label>Referente a</label>
+                <div class="form-group" [class.has-error]="hasError(form.get('referente'))">
+                  <label class="control-label">Referente a</label>
                   <select formControlName="referente" #referente class="form-control" name="referente" id="referent">
+                    <option value="">(Selecione)</option> 
                     <option value="MTE">MTE</option>
                     <option value="MPT">MPT</option>
                     <option value="Laboral">Sindicato Laboral</option>
                     <option value="Patronal">Sindicato Patronal</option>
                   </select>
+                  <app-validator-message [control]="form.get('referente')" controlName="Referência"></app-validator-message>
                 </div>
               </div>
 
               <div class="col-md-6" *ngIf="referente.value === 'Laboral'">
                 <div class="form-group" [class.has-error]="hasError(form.get('laboral'))">
                   <label class="control-label">Sindicato Laboral</label>
-                  <app-autocomplete formControlName="laboral" [linkFunction]="linkLaboral" [urlSource]="urlLaboralList" placeholder="Sindicato Laboral">
+                  <app-autocomplete formControlName="laboral" [linkFunction]="linkLaboral" [urlSource]="urlLaboralList"
+                    placeholder="Sindicato Laboral">
                     <ng-template let-item>
                       <span class="fa fa-building-o m-r-sm"></span>
                       <strong>#{{item.id}}</strong> {{item.nome}}
@@ -79,7 +99,8 @@
               <div class="col-md-6" *ngIf="referente.value === 'Patronal'">
                 <div class="form-group" [class.has-error]="hasError(form.get('patronal'))">
                   <label class="control-label">Sindicato Patronal</label>
-                  <app-autocomplete formControlName="patronal" [linkFunction]="linkPatronal" [urlSource]="urlPatronalList" placeholder="Sindicato Patronal">
+                  <app-autocomplete formControlName="patronal" [linkFunction]="linkPatronal" [urlSource]="urlPatronalList"
+                    placeholder="Sindicato Patronal">
                     <ng-template let-item>
                       <span class="fa fa-building m-r-sm"></span>
                       <strong>#{{item.id}}</strong> {{item.nome}}
@@ -92,19 +113,9 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label>Resumo dos Assuntos</label>
-                  <textarea class="form-control" formControlName="resumoAssuntos" placeholder="Resumo dos Assuntos"
+                  <label>Resumo</label>
+                  <textarea class="form-control" formControlName="resumoAssuntos" placeholder="Resumo do Litígio"
                     name="assuntos" id="assuntos" rows="3"></textarea>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label>Assuntos</label>
-                  <textarea class="form-control" formControlName="assuntos" placeholder="Assuntos" name="assuntos" id="assuntos"
-                    rows="7"></textarea>
                 </div>
               </div>
             </div>
@@ -119,15 +130,28 @@
               </div>
             </div>
 
+            <!-- [disabled]="form.invalid" -->
             <button class="btn btn-primary m-r-sm" (click)="salvar()" [disabled]="form.invalid">Salvar</button>
-            <a class="btn btn-default" [routerLink]="['/negociacoes/planosacao']" [hidden]="!litigio" [queryParams]="{ de: litigio?.data, ate: litigio?.data }">Planos de Ações nesta data</a>
+            <button class="btn btn-success" [hidden]="!litigio" (click)="addItem()">Adicionar Reclamação</button>
 
-          </form>
+          </form> 
         </app-panel>
       </div>
     </div>
   </div>
   <div class="col-md-4">
-    <app-arquivos *ngIf="litigio" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+    <app-arquivos *ngIf="litigio" [spinner]="spinnerArquivos" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+  </div>
+</div>
+
+<div class="row" *ngIf="litigio">
+  <div class="col-md-12">
+    <app-panel *ngFor="let item of litigio.itens;let i=index">
+      <div class="row">
+        <div class="col-md-12">
+          <app-litigio-item [item]="item" [index]="i + 1" (save)="salvarItem($event)" (delete)="deleteItem($event)"></app-litigio-item>
+        </div>
+      </div>
+    </app-panel>
   </div>
 </div>

@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 import { SindicatoLaboral } from './../../../model/sindicato-laboral';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { switchMap, filter } from 'rxjs/operators';
-import { LaboraisApiService } from '../laborais-api.service';
+import { switchMap, filter, finalize, tap } from 'rxjs/operators';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
 
 @Component({
   selector: 'app-laboral-form',
@@ -23,6 +23,7 @@ export class LaboralFormComponent implements OnInit {
   contatos$: Observable<Contato[]>;
   arquivos: Arquivo[];
   relatedLinks: RelatedLink[];
+  spinnerArquivos = false;
 
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -45,35 +46,35 @@ export class LaboralFormComponent implements OnInit {
     });
 
     this.route.data
-    .pipe(
-      filter(d => d.hasOwnProperty('sindicatoLaboral')),
-      switchMap(d => {
-        if (d.hasOwnProperty('sindicatoLaboral')) {
-          this.sindicatoLaboral = d['sindicatoLaboral'];
-          this.relatedLinks = [
-            {
-              label: 'Negociações',
-              link: '/negociacoes/agenda',
-              queryParams: { laboralId: this.sindicatoLaboral.id }
-            },
-            {
-              label: 'Litígios',
-              link: '/negociacoes/litigios',
-              queryParams: { laboralId: this.sindicatoLaboral.id }
-            },
-            {
-              label: 'Planos de Ação',
-              link: '/negociacoes/planosacao',
-              queryParams: { laboralId: this.sindicatoLaboral.id }
-            }
-          ];
-          this.contatos$ = this.service.getContatos(this.sindicatoLaboral.id);
-          this.updateForm(this.sindicatoLaboral);
-          return this.service.getArquivos(this.sindicatoLaboral.id);
-        }
-      })
-    )
-    .subscribe(d => this.arquivos = d);
+      .pipe(
+        filter(d => d.hasOwnProperty('sindicatoLaboral')),
+        switchMap(d => {
+          if (d.hasOwnProperty('sindicatoLaboral')) {
+            this.sindicatoLaboral = d['sindicatoLaboral'];
+            this.relatedLinks = [
+              {
+                label: 'Negociações',
+                link: '/negociacoes/gestao',
+                queryParams: { laboralId: this.sindicatoLaboral.id }
+              },
+              {
+                label: 'Litígios',
+                link: '/negociacoes/litigios',
+                queryParams: { laboralId: this.sindicatoLaboral.id }
+              },
+              // {
+              //   label: 'Planos de Ação',
+              //   link: '/negociacoes/planosacao',
+              //   queryParams: { laboralId: this.sindicatoLaboral.id }
+              // }
+            ];
+            this.contatos$ = this.service.getContatos(this.sindicatoLaboral.id);
+            this.updateForm(this.sindicatoLaboral);
+            return this.service.getArquivos(this.sindicatoLaboral.id);
+          }
+        })
+      )
+      .subscribe(d => this.arquivos = d);
   }
 
   hasError(control: AbstractControl) {
@@ -86,9 +87,9 @@ export class LaboralFormComponent implements OnInit {
 
   novoContato(contato: Contato) {
     this.contatos$ = this.service.addContato(this.sindicatoLaboral.id, contato)
-    .pipe(
-      switchMap(_ => this.service.getContatos(this.sindicatoLaboral.id))
-    );
+      .pipe(
+        switchMap(_ => this.service.getContatos(this.sindicatoLaboral.id))
+      );
   }
 
   removeContato(idContato: number) {
@@ -107,12 +108,13 @@ export class LaboralFormComponent implements OnInit {
   }
 
   upload(files: FileList) {
+    this.spinnerArquivos = true;
     this.service.uploadFiles(this.sindicatoLaboral.id, files)
-    .pipe(
-      switchMap(_ => this.service.getArquivos(this.sindicatoLaboral.id))
-    )
-    .subscribe(d => this.arquivos = d);
+      .pipe(switchMap(_ => this.service.getArquivos(this.sindicatoLaboral.id)),
+        finalize(() => this.spinnerArquivos = false))
+      .subscribe(d => this.arquivos = d);
   }
+
 
   deleteFile(event: any) {
     this.service.getArquivos(this.sindicatoLaboral.id).subscribe(d => this.arquivos = d);
@@ -120,12 +122,22 @@ export class LaboralFormComponent implements OnInit {
 
   post(sindicato: SindicatoLaboral) {
     this.service.post(sindicato)
-    .subscribe(s => this.router.navigate(['/sindicatos/laborais', s.id]));
+      .pipe(tap(_ => this.toast.showMessage({
+        message: 'Sindicato salvo com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      })))
+      .subscribe(s => this.router.navigate(['/sindicatos/laborais', s.id]));
   }
 
   put(sindicato: SindicatoLaboral) {
     this.service.put(sindicato.id, sindicato)
-    .subscribe(_ => this.router.navigate(['/sindicatos/laborais']));
+      .pipe(tap(_ => this.toast.showMessage({
+        message: 'Sindicato salvo com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      })))
+      .subscribe(_ => this.router.navigate(['/sindicatos/laborais', sindicato.id]));
   }
 
   salvar() {

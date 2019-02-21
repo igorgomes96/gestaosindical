@@ -15,8 +15,9 @@ declare var $: any;
 })
 export class AppComponent implements OnInit, AfterViewInit {
   exibeMenu = true;
-
+  urlSemMenu: string[] = [];
   constructor(private router: Router, public toastService: ToastsService) {
+    this.urlSemMenu = ['/login', '/registro', '/envia-codigo', '/recuperacao'];
   }
 
   ngOnInit() {
@@ -24,7 +25,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       filter(event => event instanceof NavigationEnd),
       distinctUntilChanged()
     ).subscribe(_ => {
-      this.exibeMenu = (this.router.url !== '/login' && this.router.url !== '/registro');
+      this.exibeMenu = !this.urlSemMenu.some(u => this.router.url.startsWith(u));
       if (!this.exibeMenu) {
         $('#page-wrapper').css('margin-left', '0px');
       } else {

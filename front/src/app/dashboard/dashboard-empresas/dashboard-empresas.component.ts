@@ -1,10 +1,6 @@
-import { Location } from '@angular/common';
-import { Concorrente } from './../../model/negociacao';
-import { NegociacoesApiService } from './../../negociacoes/negociacoes-api.service';
+import { Concorrente, TipoReajuste, Reajuste, ParcelaReajuste } from './../../model/negociacao';
 import { ChartsService } from './../charts.service';
-import { EmpresasApiService } from './../../empresas/empresas-api.service';
-import { DashboardApiService } from './../dashboard-api.service';
-import { distinctUntilChanged, switchMap, tap, filter } from 'rxjs/operators';
+import { distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Empresa } from 'src/app/model/empresa';
 import { Component, OnInit } from '@angular/core';
@@ -16,6 +12,11 @@ import { NegociacoesService } from 'src/app/negociacoes/negociacoes.service';
 import { of } from 'rxjs';
 import { Options, ChangeContext } from 'ng5-slider';
 import { IntervalFilterService } from 'src/app/shared/interval-filter.service';
+import { Mes } from 'src/app/model/sindicato-laboral';
+import { DashboardApiService } from 'src/app/shared/api/dashboard-api.service';
+import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
+import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
+import { formatNumber, formatCurrency } from '@angular/common';
 
 declare var $: any;
 
@@ -31,7 +32,9 @@ export class DashboardEmpresasComponent implements OnInit {
   form: FormGroup;
   negociacoes: Negociacao[];
   concorrentes: Concorrente[];
+  TipoReajuste: typeof TipoReajuste = TipoReajuste;
   StatusNegociacao: typeof StatusNegociacao = StatusNegociacao;
+  Mes: typeof Mes = Mes;
   ano: number;
   options: Options;
   charts: any[] = [];
@@ -104,6 +107,14 @@ export class DashboardEmpresasComponent implements OnInit {
       });
   }
 
+  private formatCurrencyCb = function (value: any) {
+    return formatCurrency(value, 'pt-BR', 'R$');
+  };
+
+  private formatPercentCb = function(value: any) {
+    return formatNumber(value, 'pt-BR', '1.0-2') + '%';
+  };
+
   loadConcorrentes() {
     if (this.chartConcorrentes) {
       this.chartConcorrentes.destroy();
@@ -148,14 +159,15 @@ export class DashboardEmpresasComponent implements OnInit {
         legend: {
           display: true
         },
+        maintainAspectRatio: false,
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              callback: this.formatPercentCb
             }
           }]
         },
-        maintainAspectRatio: false,
         tooltips: {
           callbacks: {
             label: this.chartsService.labelPercentSymbol
@@ -178,6 +190,16 @@ export class DashboardEmpresasComponent implements OnInit {
         legend: {
           display: false
         },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              callback: function (value: any) {
+                return formatNumber(value, 'pt-BR', '1.0');
+              }
+            }
+          }]
+        },
         title: {
           display: true,
           text: 'Qtda de Trabalhadores'
@@ -199,6 +221,14 @@ export class DashboardEmpresasComponent implements OnInit {
     }, {
         legend: {
           display: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              callback: this.formatCurrencyCb
+            }
+          }]
         },
         title: {
           display: true,
@@ -232,6 +262,14 @@ export class DashboardEmpresasComponent implements OnInit {
         title: {
           display: true,
           text: 'Custos em Viagens'
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              callback: this.formatCurrencyCb
+            }
+          }]
         },
         maintainAspectRatio: false,
         tooltips: {
@@ -268,6 +306,13 @@ export class DashboardEmpresasComponent implements OnInit {
         title: {
           display: true,
           text: 'Taxas Negociais'
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              callback: this.formatCurrencyCb
+            }
+          }]
         },
         maintainAspectRatio: false,
         tooltips: {
@@ -306,6 +351,13 @@ export class DashboardEmpresasComponent implements OnInit {
           text: 'Valores pagos em PLR'
         },
         maintainAspectRatio: false,
+        scales: {
+          yAxes: [{
+            ticks: {
+              callback: this.formatCurrencyCb
+            }
+          }]
+        },
         tooltips: {
           callbacks: {
             label: this.chartsService.labelRealSymbol
@@ -338,7 +390,8 @@ export class DashboardEmpresasComponent implements OnInit {
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              callback: this.formatPercentCb
             }
           }]
         },
@@ -394,7 +447,10 @@ export class DashboardEmpresasComponent implements OnInit {
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              callback: function (value: any) {
+                return formatNumber(value, 'pt-BR', '1.0-2') + '%';
+              }
             }
           }]
         },
@@ -409,6 +465,11 @@ export class DashboardEmpresasComponent implements OnInit {
           }
         }
       });
+  }
+
+  parcelasPorTipo(reajuste: Reajuste, tipo: TipoReajuste): ParcelaReajuste[] {
+    const parcelas = reajuste.parcelas.filter(p => p.tipoReajuste.toString() === TipoReajuste[tipo]);
+    return parcelas;
   }
 
   linkEmpresa(valor) {

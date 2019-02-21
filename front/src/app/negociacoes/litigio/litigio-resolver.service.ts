@@ -1,10 +1,10 @@
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 
-import { LitigiosApiService } from './litigios-api.service';
 import { Observable, of } from 'rxjs';
 import { Litigio } from './../../model/litigio';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { LitigiosApiService } from 'src/app/shared/api/litigios-api.service';
 
 @Injectable({
   providedIn: 'root'

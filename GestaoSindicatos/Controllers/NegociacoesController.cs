@@ -46,6 +46,20 @@ namespace GestaoSindicatos.Controllers
             return negociacoes.OrderBy(n => n.Empresa.Nome).ToList();
         }
 
+        [HttpGet("calendar/{mes}")]
+        public ActionResult<List<CalendarEvent>> GetCalendar(int mes)
+        {
+            try
+            {
+                return Ok(_rodadasService.GetCalendar(User, mes));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         [HttpGet("{id}")]
         public ActionResult<Negociacao> Get(int id)
         {
@@ -73,6 +87,10 @@ namespace GestaoSindicatos.Controllers
             }
             catch (Exception e)
             {
+                if (_service.Count(n => n.Ano == negociacao.Ano && n.EmpresaId == negociacao.EmpresaId) > 0)
+                {
+                    return BadRequest($"Já existe uma negociação cadastrada para esta empresa (cód. {negociacao.EmpresaId}) para o ano de {negociacao.Ano}!");
+                }
                 return BadRequest(e.Message);
             }
         }
@@ -146,6 +164,7 @@ namespace GestaoSindicatos.Controllers
             }
 
         }
+        
 
         [HttpGet("{id}/concorrentes")]
         public ActionResult<List<Concorrente>> GetConcorrentes(int id)
@@ -243,6 +262,51 @@ namespace GestaoSindicatos.Controllers
                     floor = range.Item1,
                     ceil = range.Item2
                 });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("{id}/parcelas")]
+        [Authorize(Roles = Roles.ADMIN)]
+        public ActionResult<Concorrente> PostParcela(int id, ParcelaReajuste parcela)
+        {
+            try
+            {
+                return Ok(_service.AdicionarParcela(parcela));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{negociacaoId}/parcelas/{id}")]
+        [Authorize(Roles = Roles.ADMIN)]
+        public ActionResult<Concorrente> DeleteParcela(int negociacaoId, int id)
+        {
+            try
+            {
+                return Ok(_service.RemoveParcela(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("{negociacaoId}/relatorio")]
+        public ActionResult<Relatorio> PostRelatorioFinal(int negociacaoId)
+        {
+            try
+            {
+                return Ok(_service.RelatorioFinal(negociacaoId));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("Negociação não encontrada!");
             }
             catch (Exception e)
             {

@@ -1,7 +1,6 @@
 import { Referente, ProcedimentoLitigio } from './../../model/litigio';
 import { StatusPlanoAcao } from './../../model/plano-acao';
 import { Mes } from './../../model/sindicato-laboral';
-import { DashboardApiService } from './../dashboard-api.service';
 import { StatusNegociacao, RodadaNegociacao } from 'src/app/model/negociacao';
 import { Component, OnInit } from '@angular/core';
 import { ChartsService } from '../charts.service';
@@ -9,6 +8,8 @@ import { tap, map } from 'rxjs/operators';
 import { Options, ChangeContext } from 'ng5-slider';
 import { IntervalFilterService } from 'src/app/shared/interval-filter.service';
 import { ActivatedRoute } from '@angular/router';
+import { DashboardApiService } from 'src/app/shared/api/dashboard-api.service';
+import { formatNumber, formatCurrency } from '@angular/common';
 
 declare var Chart: any;
 declare var $: any;
@@ -52,6 +53,14 @@ export class DashboardNegociacoesComponent implements OnInit {
       });
 
   }
+
+  private formatPercentCb = function(value: any) {
+    return formatNumber(value, 'pt-BR', '1.0-2') + '%';
+  };
+
+  private formatCurrencyCb = function(value: any) {
+    return formatCurrency(value, 'pt-BR', 'R$');
+  };
 
   onUserChangeEnd(changeContext: ChangeContext): void {
     this.referent['ano'] = changeContext.value;
@@ -135,6 +144,13 @@ export class DashboardNegociacoesComponent implements OnInit {
               display: false
             },
             maintainAspectRatio: false,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: this.formatCurrencyCb
+                }
+              }],
+            },
             tooltips: {
               callbacks: {
                 label: this.chartsService.labelRealSymbol
@@ -142,6 +158,7 @@ export class DashboardNegociacoesComponent implements OnInit {
             }
           }));
       });
+
 
     this.api.getProximasReunioes()
       .subscribe(d => this.reunioes = d);
@@ -164,7 +181,8 @@ export class DashboardNegociacoesComponent implements OnInit {
               scales: {
                 yAxes: [{
                   ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    callback: this.formatPercentCb
                   }
                 }]
               },
@@ -227,7 +245,7 @@ export class DashboardNegociacoesComponent implements OnInit {
         map(d => d.map(x => Object.assign(x, { label: ProcedimentoLitigio[x['label']] }))),
         map(d => this.chartsService.mapChartData(d, this.chartsService.mapColorProcedimentoLitigio))
       ).subscribe(d => this.charts.push(this.chartsService
-        .chart('pie', litigiosProcedimento, d, this.getOptionsPieChart(null, true, 'left', false)))
+        .chart('pie', litigiosProcedimento, d, this.getOptionsPieChart(null, true, 'top', false)))
       );
 
     this.api.getLitigiosEmpresa(this.ano)
@@ -249,7 +267,15 @@ export class DashboardNegociacoesComponent implements OnInit {
             legend: {
               display: false
             },
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                  stepSize: 1
+                }
+              }]
+            }
           }));
       });
 
@@ -272,10 +298,12 @@ export class DashboardNegociacoesComponent implements OnInit {
           display: false
         },
         maintainAspectRatio: false,
+        responsive: true,
         scales: {
           xAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              stepSize: 1
             }
           }]
         }

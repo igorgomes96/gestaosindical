@@ -3,8 +3,8 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@a
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { UsuariosApiService } from './usuarios-api.service';
 import { Usuario } from './../model/usuario';
+import { UsuariosApiService } from '../shared/api/usuarios-api.service';
 
 
 @Injectable({

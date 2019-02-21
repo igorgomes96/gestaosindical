@@ -7,22 +7,15 @@
 
       <div class="row">
         <div class="col-md-4">
-          <div class="form-group">
-            <label class="form-label">Data</label>
-            <input type="date" class="form-control" [ngModel]="rodada.data | date:'yyyy-MM-dd'" (ngModelChange)="setData($event)"
-              [ngModelOptions]="{standalone: true}" id="data" name="data">
-          </div>
+          <app-custom-input #data="ngModel" [control]="data" id="data" label="Data" name="data" type="date"
+          [(ngModel)]="rodada.data">
+          </app-custom-input>
         </div>
 
         <div class="col-md-4">
-          <div class="form-group">
-            <label class="form-label">Custos em Viagem</label>
-            <div class="input-group">
-              <span class="input-group-addon">R$</span>
-              <input type="number" class="form-control" [(ngModel)]="rodada.custosViagens" [ngModelOptions]="{standalone: true}"
-                id="data" name="data">
-            </div>
-          </div>
+          <app-custom-input type="number" appOnlyNumber [(ngModel)]="rodada.custosViagens" #control="ngModel" [control]="control"
+            id="custosViagens" label="Custos em Viagens" name="custosViagens" addOnBefore="R$">
+          </app-custom-input>
         </div>
       </div>
 
@@ -30,21 +23,22 @@
         <div class="col-md-12">
           <div class="form-group">
             <label class="control-label">Resumo</label>
-            <textarea name="resumo" id="resumo" rows="3" class="form-control" [(ngModel)]="rodada.resumo"
-              [ngModelOptions]="{standalone: true}"></textarea>
+            <textarea name="resumo" id="resumo" rows="3" class="form-control" [(ngModel)]="rodada.resumo"></textarea>
           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="col-md-4">
-    <app-arquivos dropzoneColor="#f3f3f4" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+    <app-arquivos [spinner]="spinnerArquivos" dropzoneColor="#f3f3f4" (upload)="upload($event)" (delete)="deleteFile($event)"
+      [arquivos]="arquivos"></app-arquivos>
   </div>
 </div>
 <div class="row">
   <div class="col-md-12">
     <button type="submit" class="btn btn-primary m-r-sm" (click)="salvar()" [disabled]="!rodada.data">Salvar</button>
     <button class="btn btn-danger m-r-sm" (click)="excluir()">Excluir</button>
-    <a class="btn btn-default" (click)="navigatePlanosAcao()">Planos de Ações nesta data</a>
+    <a class="btn btn-success m-r-sm" *ngIf="final" (click)="relatorioFinal()">Relatório Final</a>
+    <!-- <a class="btn btn-default" (click)="navigatePlanosAcao()">Planos de Ações nesta data</a> -->
   </div>
 </div>

@@ -28,7 +28,7 @@ export class UtilService {
       return v1 === v2;
     }
   }
-  
+
   private containsAny = (v1, v2) => {
     if (typeof v2 === 'object') {
       return Object.keys(v2).some(prop => {
@@ -60,6 +60,5 @@ export class UtilService {
     return lista.filter(v => {
       return containsFunc(v, filtro);
     });
-    
   }
 }

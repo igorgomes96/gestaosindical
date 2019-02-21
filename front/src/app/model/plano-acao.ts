@@ -1,6 +1,4 @@
-import { SindicatoPatronal } from './sindicato-patronal';
-import { Referente } from './litigio';
-import { SindicatoLaboral } from './sindicato-laboral';
+import { ItemLitigio } from "./litigio";
 
 export enum StatusPlanoAcao {
     NoPrazo = 'No Prazo',
@@ -11,18 +9,13 @@ export enum StatusPlanoAcao {
 
 export class PlanoAcao {
     id: number;
-    referente: Referente;
-    laboralId: number;
-    patronalId: number;
-    data: string;
-    estado: string;
-    reclamacoes: string;
-    reclamante: string;
+    data: Date;
     procedencia: boolean;
     responsavelAcao: string;
-    dataSolucao: string;
+    dataPrevista: Date;
+    dataSolucao: Date;
     status: StatusPlanoAcao;
+    itemLitigioId: number;
 
-    laboral: SindicatoLaboral;
-    patronal: SindicatoPatronal;
+    ItemLitigio: ItemLitigio;
 }

@@ -1,10 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { PatronaisApiService } from './patronais-api.service';
-import { Observable, throwError, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { SindicatoPatronal } from 'src/app/model/sindicato-patronal';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { tap, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { PatronaisApiService } from 'src/app/shared/api/patronais-api.service';
 
 
 @Injectable({

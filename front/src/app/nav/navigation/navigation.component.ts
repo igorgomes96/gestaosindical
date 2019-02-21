@@ -62,22 +62,35 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       },
       {
         label: 'Negociações',
-        link: '/negociacoes/agenda',
+        link: '',
         icon: 'fa fa-handshake-o',
-        children: null
+        children: [
+          {
+            label: 'Gestão',
+            link: '/negociacoes/gestao',
+            children: null,
+            icon: null
+          },
+          {
+            label: 'Agenda',
+            link: '/negociacoes/agenda',
+            children: null,
+            icon: null
+          }
+        ]
       },
       {
         label: 'Litígios',
         link: '/negociacoes/litigios',
         icon: 'fa fa-book',
         children: null
-      },
+      }/*,
       {
         label: 'Planos de Ação',
         link: '/negociacoes/planosacao',
         icon: 'fa fa-bullseye',
         children: null
-      }
+      }*/
     ];
   }
 

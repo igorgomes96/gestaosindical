@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using GestaoSindicatos.Auth;
+using GestaoSindicatos.Exceptions;
 using GestaoSindicatos.Model;
 using GestaoSindicatos.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -124,26 +125,46 @@ namespace GestaoSindicatos.Controllers
                 return Ok();
             } catch (Exception e)
             {
-                if (e.Message == PasswordErros.NonAlphanumeric)
-                {
-                    return BadRequest("A senha deve ter pelo menos um caractere especial!");
-                } else if (e.Message == PasswordErros.Digit)
-                {
-                    return BadRequest("A senha deve ter pelo menos um dígito numérico!");
-                } else if (e.Message == PasswordErros.Upper)
-                {
-                    return BadRequest("A senha deve ter pelo menos um caractere maiúsculo!");
-                } else if (e.Message == PasswordErros.Lower)
-                {
-                    return BadRequest("A senha deve ter pelo menos um caractere minúsculo!");
-                } else if (e.Message == PasswordErros.TooShort)
-                {
-                    return BadRequest("A senha deve ter pelo menos 8 caracteres!");
-                }
+                return BadRequest(_usuariosService.GetErrorAuthMessage(e.Message));
+            }
+        }
+
+        [HttpPost("changepassword")]
+        public ActionResult ChangePassword(Usuario usuario)
+        {
+            try
+            {
+                _usuariosService.ChangePassword(usuario);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("Usuário não encontrado!");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(_usuariosService.GetErrorAuthMessage(e.Message));
+            }
+        }
+
+        [HttpPost("{userName}/sendcode")]
+        public ActionResult SendRecoveryCode(string userName)
+        {
+            try
+            {
+                _usuariosService.SendRecoveryCode(userName);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("Usuário não encontrado!");
+            }
+            catch (Exception e)
+            {
                 return BadRequest(e.Message);
             }
         }
 
-        
+
     }
 }

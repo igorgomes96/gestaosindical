@@ -1,8 +1,30 @@
 label.dropzone input[type=file] {
     display: none;
 }
-
 label.dropzone {
     text-align: center;
     cursor: pointer;
+}
+.dropzone > .sk-spinner {
+    display: none;
+}
+.dropzone.sk-loading {
+    position: relative;
+}
+.dropzone.sk-loading:after {
+    content: '';
+    background-color: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.dropzone.sk-loading > .sk-spinner {
+    display: block;
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    z-index: 2000;
 }

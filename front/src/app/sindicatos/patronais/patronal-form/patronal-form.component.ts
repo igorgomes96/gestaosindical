@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
 
 import { Contato } from 'src/app/model/contato';
 import { SindicatoPatronal } from 'src/app/model/sindicato-patronal';
-import { PatronaisApiService } from './../patronais-api.service';
-import { switchMap, filter } from 'rxjs/operators';
+import { switchMap, filter, finalize, tap } from 'rxjs/operators';
 import { Arquivo } from 'src/app/model/arquivo';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { PatronaisApiService } from 'src/app/shared/api/patronais-api.service';
 
 
 @Component({
@@ -26,6 +26,7 @@ export class PatronalFormComponent implements OnInit {
   contatos$: Observable<Contato[]>;
   arquivos: Arquivo[];
   relatedLinks: RelatedLink[];
+  spinnerArquivos = false;
 
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -53,7 +54,7 @@ export class PatronalFormComponent implements OnInit {
             this.relatedLinks = [
               {
                 label: 'Negociações',
-                link: '/negociacoes/agenda',
+                link: '/negociacoes/gestao',
                 queryParams: { patronalId: this.sindicatoPatronal.id }
               },
               {
@@ -61,11 +62,11 @@ export class PatronalFormComponent implements OnInit {
                 link: '/negociacoes/litigios',
                 queryParams: { patronalId: this.sindicatoPatronal.id }
               },
-              {
-                label: 'Planos de Ação',
-                link: '/negociacoes/planosacao',
-                queryParams: { patronalId: this.sindicatoPatronal.id }
-              }
+              // {
+              //   label: 'Planos de Ação',
+              //   link: '/negociacoes/planosacao',
+              //   queryParams: { patronalId: this.sindicatoPatronal.id }
+              // }
             ];
             this.contatos$ = this.service.getContatos(this.sindicatoPatronal.id);
             this.updateForm(this.sindicatoPatronal);
@@ -107,10 +108,10 @@ export class PatronalFormComponent implements OnInit {
   }
 
   upload(files: FileList) {
+    this.spinnerArquivos = true;
     this.service.uploadFiles(this.sindicatoPatronal.id, files)
-      .pipe(
-        switchMap(_ => this.service.getArquivos(this.sindicatoPatronal.id))
-      )
+      .pipe(switchMap(_ => this.service.getArquivos(this.sindicatoPatronal.id)),
+        finalize(() => this.spinnerArquivos = false))
       .subscribe(d => this.arquivos = d);
   }
 
@@ -120,12 +121,22 @@ export class PatronalFormComponent implements OnInit {
 
   post(patronal: SindicatoPatronal) {
     this.service.post(patronal)
+      .pipe(tap(_ => this.toast.showMessage({
+        message: 'Sindicato salvo com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      })))
       .subscribe((s: SindicatoPatronal) => this.router.navigate(['/sindicatos/patronais', s.id]));
   }
 
   put(patronal: SindicatoPatronal) {
     this.service.put(patronal.id, patronal)
-      .subscribe(_ => this.router.navigate(['/sindicatos/patronais']));
+      .pipe(tap(_ => this.toast.showMessage({
+        message: 'Sindicato salvo com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      })))
+      .subscribe(_ => this.router.navigate(['/sindicatos/patronais', patronal.id]));
   }
 
   salvar() {

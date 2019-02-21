@@ -1,8 +1,8 @@
 import { map } from 'rxjs/operators';
-import { NegociacoesApiService } from './../negociacoes/negociacoes-api.service';
 import { Injectable } from '@angular/core';
 import { Options } from 'ng5-slider/options';
 import { Observable, of } from 'rxjs';
+import { NegociacoesApiService } from './api/negociacoes-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,9 @@ export class IntervalFilterService {
   value: number = new Date().getFullYear();
   private _options: Options;
 
-  constructor(private api: NegociacoesApiService) { }
+  constructor(private api: NegociacoesApiService) {
 
+  }
   get options(): Observable<Options> {
     if (!this._options) {
       return this.api.getIntervalYears()

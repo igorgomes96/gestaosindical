@@ -4,5 +4,6 @@ export class Endereco {
     uf: string;
     logradouro: string;
     numero: number;
+    bairro: string;
     complemento: string;
 }

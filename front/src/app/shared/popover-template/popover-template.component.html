@@ -1,0 +1,8 @@
+<popover-content #myPopover title="Parcelas" [closeOnClickOutside]="false">
+  <div *ngFor="let p of parcelasPopover" [hidden]="!parcelasPopover || !parcelasPopover.length">
+    <strong>{{ Mes[p.mes] }}: </strong>{{ p.valor | number:'1.2-2' }}%
+  </div>
+  <div *ngIf="!parcelasPopover || !parcelasPopover.length">
+    Click aqui para adicionar parcelas
+  </div>
+</popover-content>

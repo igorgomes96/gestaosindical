@@ -19,5 +19,7 @@ namespace GestaoSindicatos.Model
         public string Logradouro { get; set; }
         [MaxLength(6)]
         public string Numero { get; set; }
+        [StringLength(150)]
+        public string Bairro { get; set; }
     }
 }

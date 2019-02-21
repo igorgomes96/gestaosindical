@@ -2,14 +2,24 @@
   <label class="control-label">{{ label }}</label>
   <div class="input-group" *ngIf="addOnBefore != null || addOnAfter != null">
     <span class="input-group-addon" *ngIf="addOnBefore != null">{{ addOnBefore }}</span>
-    <input [type]="type" [readOnly]="!!readOnly" [(ngModel)]="value" [placeholder]="placeholder" [name]="name" [id]="id"
+    <input [type]="innerType" (input)="pushChanges($event.target.value)" [readOnly]="!!readOnly" [(ngModel)]="value" [placeholder]="placeholder" [name]="name" [id]="id"
       class="form-control">
     <span class="input-group-addon" *ngIf="addOnAfter != null">{{ addOnAfter }}</span>
     <span class="input-group-btn" *ngIf="parcelasReajuste">
-      <button type="button" class="btn btn-success" (click)="showParcelasClick()"><i class="fa fa-calendar"></i></button>
+      <button type="button" class="btn btn-success" (click)="showParcelasClick()" [popover]="myPopover"
+        [popoverOnHover]="true"><i class="fa fa-calendar"></i></button>
+      <popover-content #myPopover title="Parcelas" [closeOnClickOutside]="false">
+        <div *ngFor="let p of parcelasPopover" [hidden]="!parcelasPopover || !parcelasPopover.length">
+          <strong>{{ Mes[p.mes] }}: </strong>{{ p.valor | number:'1.2-2' }}%
+        </div>
+        <div *ngIf="!parcelasPopover || !parcelasPopover.length">
+          Click aqui para adicionar parcelas
+        </div>
+      </popover-content>
     </span>
+
   </div>
-  <input [type]="type" *ngIf="addOnBefore == null && addOnAfter == null" [readOnly]="!!readOnly" [(ngModel)]="value"
+  <input [type]="innerType" (input)="pushChanges($event.target.value)" *ngIf="addOnBefore == null && addOnAfter == null" [readOnly]="!!readOnly" [(ngModel)]="value"
     [placeholder]="placeholder" [name]="name" [id]="id" class="form-control">
   <app-validator-message [control]="control" [controlName]="label"></app-validator-message>
 </div>

@@ -1,10 +1,9 @@
 import { ToastsService } from './../toasts.service';
-import { ArquivosApiService } from './arquivos-api.service';
-import { Observable } from 'rxjs';
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Arquivo } from './../../model/arquivo';
 import { ToastType } from '../toasts/toasts.component';
+import { ArquivosApiService } from '../api/arquivos-api.service';
 
 @Component({
   selector: 'app-arquivos',
@@ -17,6 +16,7 @@ export class ArquivosComponent implements OnInit {
   @Output() upload = new EventEmitter<FileList>();
   @Output() delete = new EventEmitter<number>();
   @Input() dropzoneColor = 'white';
+  @Input() spinner = false;
 
   constructor(private service: ArquivosApiService, private toast: ToastsService) { }
 

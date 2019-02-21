@@ -9,6 +9,15 @@ export enum StatusNegociacao {
     Dissidio = 'Dissídio'
 }
 
+export enum TipoReajuste {
+    Salario,
+    Piso,
+    Creche,
+    VaVr,
+    VaVrFerias,
+    VT
+}
+
 export class Negociacao {
     id: number;
     ano: number;
@@ -65,6 +74,8 @@ export class ParcelaReajuste {
     reajusteId: number;
     mes: Mes;
     valor: number;
+    tipoReajuste: TipoReajuste;
+
 }
 
 export class Concorrente {

@@ -65,7 +65,7 @@
             <td>{{ reuniao.empresa?.nome }}</td>
             <td>{{ reuniao.empresa?.endereco?.cidade }} - {{ reuniao.empresa?.endereco?.uf }}</td>
             <td>
-              <a class="btn btn-success btn-xs" [routerLink]="['/negociacoes/agenda', reuniao.negociacaoId]"><i class="fa fa-info"></i></a>
+              <a class="btn btn-success btn-xs" [routerLink]="['/negociacoes/gestao', reuniao.negociacaoId]"><i class="fa fa-info"></i></a>
             </td>
           </tr>
         </tbody>
@@ -120,7 +120,7 @@
 </div>
 <div class="row">
   <div class="col-md-8">
-    <app-panel title="Ltigíos por Empresa" [collapsible]="true">
+    <app-panel title="Litigíos por Empresa" [collapsible]="true">
       <div class="row">
         <div class="col-xs-12">
           <canvas id="litigiosEmpresa"></canvas>
@@ -130,7 +130,7 @@
   </div>
 
   <div class="col-md-4">
-    <app-panel title="Ltigíos por Procedimento" [collapsible]="true">
+    <app-panel title="Litigíos por Procedimento" [collapsible]="true">
       <div class="row">
         <div class="col-xs-12">
           <canvas id="litigiosProcedimento"></canvas>
@@ -149,7 +149,7 @@
     <app-panel title="Status" [collapsible]="true">
       <div class="row">
         <div class="col-xs-12">
-          <canvas id="statusPlanos" height="180px"></canvas>
+          <canvas id="statusPlanos" height="190px"></canvas>
         </div>
       </div>
     </app-panel>
@@ -159,7 +159,7 @@
     <app-panel title="Referência" [collapsible]="true">
       <div class="row">
         <div class="col-xs-12">
-          <canvas id="referenciaPlanos" height="180px"></canvas>
+          <canvas id="referenciaPlanos" height="190px"></canvas>
         </div>
       </div>
     </app-panel>
@@ -169,9 +169,7 @@
     <app-panel title="Procedência" [collapsible]="true">
       <div class="row">
         <div class="col-xs-12">
-          <canvas id="procedenciaPlanos" height="152px"></canvas>
-          <br>
-          <small>* Considera somente os planos de ação solucionados</small>
+          <canvas id="procedenciaPlanos" height="190px"></canvas>
         </div>
       </div>
     </app-panel>

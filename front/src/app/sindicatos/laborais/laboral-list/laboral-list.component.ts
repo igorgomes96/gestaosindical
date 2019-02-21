@@ -1,10 +1,10 @@
 import { ToastsService } from './../../../shared/toasts.service';
 import { tap, switchMap } from 'rxjs/operators';
-import { LaboraisApiService } from './../laborais-api.service';
 import { SindicatoLaboral, Mes } from './../../../model/sindicato-laboral';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
 
 @Component({
   selector: 'app-laboral-list',

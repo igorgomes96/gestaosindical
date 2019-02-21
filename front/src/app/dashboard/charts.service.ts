@@ -1,6 +1,7 @@
 import { Reajuste } from './../model/negociacao';
 import { Injectable } from '@angular/core';
 import { StatusNegociacao } from '../model/negociacao';
+import { formatNumber } from '@angular/common';
 
 declare var $: any;
 declare var Chart: any;
@@ -40,7 +41,9 @@ export class ChartsService {
     const colorStatus = {
       'Mesa Redonda': '#1c84c6',
       'Audiência': '#f8ac59',
-      'Reclamação Sindicato': '#1ab394'
+      'Reclamação Sindicato': '#1ab394',
+      'Fiscalização MPT': '#ed5565',
+      'Fiscalização MTE': '#23c6c8'
     };
     return colorStatus[data['label']];
   }
@@ -73,21 +76,21 @@ export class ChartsService {
       .reduce((p, c) => p + c, 0);
     const valor: number = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
     label += `${Math.round((valor / total) * 100)}%`;
-    label += ` (${valor})`;
+    label += ` (${formatNumber(valor, 'pt-BR', '1.0-2')})`;
     return label;
   }
 
   labelPercentSymbol(tooltipItem, data) {
     let label = data.labels[tooltipItem.index] || '';
     const valor: number = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-    label += `: ${valor}%`;
+    label += `: ${formatNumber(valor, 'pt-BR', '1.0-2')}%`;
     return label;
   }
 
   labelRealSymbol(tooltipItem, data) {
-    let label = data.labels[tooltipItem.index] || '';
+    // let label = data.labels[tooltipItem.index] || '';
     const valor: number = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-    label += `: R$ ${valor.toFixed(2)}`;
+    const label = `R$ ${formatNumber(valor, 'pt-BR', '1.2')}`;
     return label;
   }
 

@@ -19,6 +19,36 @@ namespace GestaoSindicatos.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("GestaoSindicatos.Model.Arquivo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Content");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime?>("DataUpload");
+
+                    b.Property<int>("DependencyId");
+
+                    b.Property<int>("DependencyType");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<long>("Tamanho");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DependencyId", "DependencyType");
+
+                    b.ToTable("Arquivos");
+                });
+
             modelBuilder.Entity("GestaoSindicatos.Model.Concorrente", b =>
                 {
                     b.Property<int>("Id")
@@ -192,6 +222,9 @@ namespace GestaoSindicatos.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Bairro")
+                        .HasMaxLength(150);
+
                     b.Property<string>("Cidade")
                         .IsRequired();
 
@@ -211,6 +244,65 @@ namespace GestaoSindicatos.Migrations
                     b.ToTable("Enderecos");
                 });
 
+            modelBuilder.Entity("GestaoSindicatos.Model.GrupoPergunta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Ordem");
+
+                    b.Property<int>("RelatorioId");
+
+                    b.Property<string>("Texto")
+                        .IsRequired()
+                        .HasMaxLength(400);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelatorioId");
+
+                    b.ToTable("GruposPerguntas");
+                });
+
+            modelBuilder.Entity("GestaoSindicatos.Model.GrupoPerguntaPadrao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Ordem");
+
+                    b.Property<string>("Texto")
+                        .IsRequired()
+                        .HasMaxLength(400);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GruposPerguntasPadrao");
+                });
+
+            modelBuilder.Entity("GestaoSindicatos.Model.ItemLitigio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Assuntos");
+
+                    b.Property<int>("LitigioId");
+
+                    b.Property<int>("PlanoAcaoId");
+
+                    b.Property<bool>("PossuiPlano");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LitigioId");
+
+                    b.ToTable("ItensLitigios");
+                });
+
             modelBuilder.Entity("GestaoSindicatos.Model.Litigio", b =>
                 {
                     b.Property<int>("Id")
@@ -222,6 +314,9 @@ namespace GestaoSindicatos.Migrations
                     b.Property<DateTime>("Data");
 
                     b.Property<int>("EmpresaId");
+
+                    b.Property<string>("Estado")
+                        .HasMaxLength(2);
 
                     b.Property<int?>("LaboralId");
 
@@ -327,6 +422,27 @@ namespace GestaoSindicatos.Migrations
                     b.ToTable("ParcelasReajustes");
                 });
 
+            modelBuilder.Entity("GestaoSindicatos.Model.PerguntaPadrao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("GrupoPerguntaId");
+
+                    b.Property<int>("Ordem");
+
+                    b.Property<string>("Texto")
+                        .IsRequired()
+                        .HasMaxLength(1000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GrupoPerguntaId");
+
+                    b.ToTable("PerguntasPadrao");
+                });
+
             modelBuilder.Entity("GestaoSindicatos.Model.PlanoAcao", b =>
                 {
                     b.Property<int>("Id")
@@ -335,24 +451,15 @@ namespace GestaoSindicatos.Migrations
 
                     b.Property<DateTime>("Data");
 
+                    b.Property<DateTime>("DataPrevista");
+
                     b.Property<DateTime?>("DataSolucao");
 
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasMaxLength(2);
+                    b.Property<string>("Descricao");
 
-                    b.Property<int?>("LaboralId");
-
-                    b.Property<int?>("PatronalId");
+                    b.Property<int>("ItemLitigioId");
 
                     b.Property<bool>("Procedencia");
-
-                    b.Property<string>("Reclamacoes");
-
-                    b.Property<string>("Reclamante")
-                        .HasMaxLength(256);
-
-                    b.Property<int>("Referente");
 
                     b.Property<string>("ResponsavelAcao")
                         .HasMaxLength(256);
@@ -361,9 +468,8 @@ namespace GestaoSindicatos.Migrations
 
                     b.HasIndex("Data");
 
-                    b.HasIndex("LaboralId");
-
-                    b.HasIndex("PatronalId");
+                    b.HasIndex("ItemLitigioId")
+                        .IsUnique();
 
                     b.ToTable("PlanosAcao");
                 });
@@ -389,6 +495,45 @@ namespace GestaoSindicatos.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Reajustes");
+                });
+
+            modelBuilder.Entity("GestaoSindicatos.Model.Relatorio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("NegociacaoId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NegociacaoId");
+
+                    b.ToTable("Relatorios");
+                });
+
+            modelBuilder.Entity("GestaoSindicatos.Model.RespostaRelatorio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GrupoPerguntaId");
+
+                    b.Property<int>("Ordem");
+
+                    b.Property<string>("Pergunta")
+                        .IsRequired()
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("Resposta")
+                        .HasMaxLength(4000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GrupoPerguntaId");
+
+                    b.ToTable("RespostasRelatorio");
                 });
 
             modelBuilder.Entity("GestaoSindicatos.Model.RodadaNegociacao", b =>
@@ -583,6 +728,22 @@ namespace GestaoSindicatos.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("GestaoSindicatos.Model.GrupoPergunta", b =>
+                {
+                    b.HasOne("GestaoSindicatos.Model.Relatorio", "Relatorio")
+                        .WithMany("GruposPerguntas")
+                        .HasForeignKey("RelatorioId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("GestaoSindicatos.Model.ItemLitigio", b =>
+                {
+                    b.HasOne("GestaoSindicatos.Model.Litigio", "Litigio")
+                        .WithMany("Itens")
+                        .HasForeignKey("LitigioId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("GestaoSindicatos.Model.Litigio", b =>
                 {
                     b.HasOne("GestaoSindicatos.Model.Empresa", "Empresa")
@@ -630,15 +791,35 @@ namespace GestaoSindicatos.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("GestaoSindicatos.Model.PerguntaPadrao", b =>
+                {
+                    b.HasOne("GestaoSindicatos.Model.GrupoPerguntaPadrao", "GrupoPergunta")
+                        .WithMany("Perguntas")
+                        .HasForeignKey("GrupoPerguntaId");
+                });
+
             modelBuilder.Entity("GestaoSindicatos.Model.PlanoAcao", b =>
                 {
-                    b.HasOne("GestaoSindicatos.Model.SindicatoLaboral", "Laboral")
-                        .WithMany()
-                        .HasForeignKey("LaboralId");
+                    b.HasOne("GestaoSindicatos.Model.ItemLitigio", "ItemLitigio")
+                        .WithOne("PlanoAcao")
+                        .HasForeignKey("GestaoSindicatos.Model.PlanoAcao", "ItemLitigioId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
 
-                    b.HasOne("GestaoSindicatos.Model.SindicatoPatronal", "Patronal")
+            modelBuilder.Entity("GestaoSindicatos.Model.Relatorio", b =>
+                {
+                    b.HasOne("GestaoSindicatos.Model.Negociacao", "Negociacao")
                         .WithMany()
-                        .HasForeignKey("PatronalId");
+                        .HasForeignKey("NegociacaoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("GestaoSindicatos.Model.RespostaRelatorio", b =>
+                {
+                    b.HasOne("GestaoSindicatos.Model.GrupoPergunta", "GrupoPergunta")
+                        .WithMany("Respostas")
+                        .HasForeignKey("GrupoPerguntaId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("GestaoSindicatos.Model.RodadaNegociacao", b =>

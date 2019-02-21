@@ -14,7 +14,11 @@ import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { RelatedLinkComponent } from './related-link/related-link.component';
 import { ToastsComponent } from './toasts/toasts.component';
 import { NgxMaskModule } from 'ngx-mask';
-
+import { PopoverModule } from 'ngx-popover';
+import { PopoverTemplateComponent } from './popover-template/popover-template.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { OnlyNumberDirective } from './directives/only-number.directive';
 
 @NgModule({
   imports: [
@@ -22,7 +26,12 @@ import { NgxMaskModule } from 'ngx-mask';
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
-    NgxMaskModule.forRoot()
+    PopoverModule,
+    NgxMaskModule.forRoot(),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    })
   ],
   declarations: [
     PanelComponent,
@@ -34,7 +43,9 @@ import { NgxMaskModule } from 'ngx-mask';
     AutocompleteComponent,
     ListContainerComponent,
     RelatedLinkComponent,
-    ToastsComponent
+    ToastsComponent,
+    PopoverTemplateComponent,
+    OnlyNumberDirective
   ],
   exports: [
     PanelComponent,
@@ -46,7 +57,11 @@ import { NgxMaskModule } from 'ngx-mask';
     AutocompleteComponent,
     ListContainerComponent,
     RelatedLinkComponent,
-    ToastsComponent
+    ToastsComponent,
+    PopoverModule,
+    PopoverTemplateComponent,
+    CalendarModule,
+    OnlyNumberDirective
   ]
 })
 export class SharedModule { }

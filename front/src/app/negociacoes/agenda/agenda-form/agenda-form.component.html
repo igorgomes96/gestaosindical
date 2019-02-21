@@ -21,8 +21,8 @@
 
             <div class="row">
               <div class="col-md-3">
-                <app-custom-input formControlName="ano" type="number" [control]="form.get('ano')" id="ano" label="Ano"
-                  name="ano">
+                <app-custom-input formControlName="ano" type="text" appOnlyNumber [control]="form.get('ano')" id="ano"
+                  label="Ano" name="ano">
                 </app-custom-input>
               </div>
               <div class="col-md-9">
@@ -44,7 +44,7 @@
                 <div class="form-group">
                   <label>Sindicato Laboral</label>
                   <app-autocomplete formControlName="sindicatoLaboral" [mapValueFunction]="mapValue" [linkFunction]="linkLaboral"
-                    [urlSource]="urlLaboralList" placeholder="Sindicato Laboral" readOnly="true">
+                    [urlSource]="urlLaboralList" placeholder="Sindicato Laboral">
                     <ng-template let-item>
                       <span class="fa fa-building m-r-sm"></span>
                       <strong>#{{item.id}}</strong> {{item.nome}}
@@ -57,7 +57,7 @@
                 <div class="form-group">
                   <label>Sindicato Patronal</label>
                   <app-autocomplete formControlName="sindicatoPatronal" [mapValueFunction]="mapValue" [linkFunction]="linkPatronal"
-                    [urlSource]="urlPatronalList" placeholder="Sindicato Patronal" readOnly="true">
+                    [urlSource]="urlPatronalList" placeholder="Sindicato Patronal">
                     <ng-template let-item>
                       <span class="fa fa-building m-r-sm"></span>
                       <strong>#{{item.id}}</strong> {{item.nome}}
@@ -72,7 +72,7 @@
                 <div class="row">
                   <div class="col-sm-12">
                     <app-custom-input formControlName="qtdaTrabalhadores" [control]="form.get('qtdaTrabalhadores')" id="qtdaTrabalhadores"
-                      label="Qtda. de Trabalhadores" name="qtdaTrabalhadores" type="number">
+                      label="Qtda. de Trabalhadores" name="qtdaTrabalhadores" type="number" appOnlyNumber>
                     </app-custom-input>
                   </div>
                 </div>
@@ -80,7 +80,7 @@
 
               <div class="col-md-6">
                 <app-custom-input formControlName="massaSalarial" [control]="form.get('massaSalarial')" id="massaSalarial"
-                  label="Massa Salarial" name="massaSalarial" type="number" addOnBefore="R$">
+                  label="Massa Salarial" name="massaSalarial" type="number" appOnlyNumber addOnBefore="R$">
                 </app-custom-input>
               </div>
             </div>
@@ -118,14 +118,14 @@
             <div class="row">
 
               <div class="col-md-4">
-                <app-custom-input formControlName="plr1Sem" type="number" [control]="form.get('plr1Sem')" id="plr1Sem"
-                  label="1º Semestre" name="plr1Sem" addOnBefore="R$">
+                <app-custom-input formControlName="plr1Sem" type="number" appOnlyNumber [control]="form.get('plr1Sem')"
+                  id="plr1Sem" label="1º Semestre" name="plr1Sem" addOnBefore="R$">
                 </app-custom-input>
               </div>
 
               <div class="col-md-4">
-                <app-custom-input formControlName="plr2Sem" type="number" [control]="form.get('plr2Sem')" id="plr2Sem"
-                  label="2º Semestre" name="plr2Sem" addOnBefore="R$">
+                <app-custom-input formControlName="plr2Sem" type="number" appOnlyNumber [control]="form.get('plr2Sem')"
+                  id="plr2Sem" label="2º Semestre" name="plr2Sem" addOnBefore="R$">
                 </app-custom-input>
               </div>
             </div>
@@ -138,14 +138,14 @@
             <div class="row">
 
               <div class="col-md-4">
-                <app-custom-input formControlName="taxaPatronal" type="number" [control]="form.get('taxaPatronal')" id="taxaPatronal"
-                  label="Taxa Neg. Patronal" name="taxaPatronal" addOnBefore="R$">
+                <app-custom-input formControlName="taxaPatronal" type="number" appOnlyNumber [control]="form.get('taxaPatronal')"
+                  id="taxaPatronal" label="Taxa Neg. Patronal" name="taxaPatronal" addOnBefore="R$">
                 </app-custom-input>
               </div>
 
               <div class="col-md-4">
-                <app-custom-input formControlName="taxaLaboral" type="number" [control]="form.get('taxaLaboral')" id="taxaLaboral"
-                  label="Taxa Neg. Laboral" name="taxaLaboral" addOnBefore="R$">
+                <app-custom-input formControlName="taxaLaboral" type="number" appOnlyNumber [control]="form.get('taxaLaboral')"
+                  id="taxaLaboral" label="Taxa Neg. Laboral" name="taxaLaboral" addOnBefore="R$">
                 </app-custom-input>
               </div>
             </div>
@@ -159,35 +159,40 @@
                     <h4>Reajustes Orçados</h4>
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="salario" type="number" [control]="form.get('orcado.salario')"
-                          id="salarioOrcado" label="Salário" name="salarioOrcado" addOnAfter="%" [parcelasReajuste]="true"
-                          (parcelasClick)="showModal($event, 'Salário')">
+                        <app-custom-input formControlName="salario" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('orcado.salario')" id="salarioOrcado" label="Salário" name="salarioOrcado"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'Salário', 'orcado')"
+                          [parcelasPopover]="parcelasPorTipo('orcado', TipoReajuste.Salario)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="piso" type="number" [control]="form.get('orcado.piso')" id="pisoOrcado"
-                          label="Piso" name="pisoOrcado" addOnAfter="%" [parcelasReajuste]="true">
+                        <app-custom-input formControlName="piso" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('orcado.piso')" id="pisoOrcado" label="Piso" name="pisoOrcado" addOnAfter="%"
+                          [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'Piso', 'orcado')"
+                          [parcelasPopover]="parcelasPorTipo('orcado', TipoReajuste.Piso)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="auxCreche" type="number" [control]="form.get('orcado.auxCreche')"
-                          id="auxCrecheOrcado" label="Auxílio Creche" name="auxCrecheOrcado" addOnAfter="%"
-                          [parcelasReajuste]="true">
+                        <app-custom-input formControlName="auxCreche" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('orcado.auxCreche')" id="auxCrecheOrcado" label="Auxílio Creche" name="auxCrecheOrcado"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'Creche', 'orcado')"
+                          [parcelasPopover]="parcelasPorTipo('orcado', TipoReajuste.Creche)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="descontoVt" type="number" [control]="form.get('orcado.descontoVt')"
-                          id="descontoVtOrcado" label="Desconto VT" name="descontoVtOrcado" addOnAfter="%"
-                          [parcelasReajuste]="true">
+                        <app-custom-input formControlName="descontoVt" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('orcado.descontoVt')" id="descontoVtOrcado" label="Desconto VT" name="descontoVtOrcado"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'VT', 'orcado')"
+                          [parcelasPopover]="parcelasPorTipo('orcado', TipoReajuste.VT)">
                         </app-custom-input>
                       </div>
                     </div>
@@ -195,17 +200,20 @@
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="vaVr" type="number" [control]="form.get('orcado.vaVr')" id="vaVrOrcado"
-                          label="VA/VR" name="vaVrOrcado" addOnAfter="%" [parcelasReajuste]="true">
+                        <app-custom-input formControlName="vaVr" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('orcado.vaVr')" id="vaVrOrcado" label="VA/VR" name="vaVrOrcado"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'VA/VR', 'orcado')"
+                          [parcelasPopover]="parcelasPorTipo('orcado', TipoReajuste.VaVr)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="vaVrFerias" type="number" [control]="form.get('orcado.vaVrFerias')"
-                          id="vaVrFeriasOrcado" label="VA/VR nas Férias" name="vaVrFeriasOrcado" addOnAfter="%"
-                          [parcelasReajuste]="true">
+                        <app-custom-input formControlName="vaVrFerias" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('orcado.vaVrFerias')" id="vaVrFeriasOrcado" label="VA/VR nas Férias" name="vaVrFeriasOrcado"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'VA/VR Férias', 'orcado')"
+                          [parcelasPopover]="parcelasPorTipo('orcado', TipoReajuste.VaVrFerias)">
                         </app-custom-input>
                       </div>
                     </div>
@@ -220,101 +228,66 @@
                     <h4>Reajustes Negociados</h4>
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="salario" type="number" [control]="form.get('negociado.salario')"
-                          id="salario" label="Salário" name="salario" addOnAfter="%" [parcelasReajuste]="true">
+                        <app-custom-input formControlName="salario" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('negociado.salario')" id="salario" label="Salário" name="salario"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'Salário', 'negociado')"
+                          [parcelasPopover]="parcelasPorTipo('negociado', TipoReajuste.Salario)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="piso" type="number" [control]="form.get('negociado.piso')"
-                          id="piso" label="Piso" name="piso" addOnAfter="%" [parcelasReajuste]="true">
+                        <app-custom-input formControlName="piso" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('negociado.piso')" id="piso" label="Piso" name="piso" addOnAfter="%"
+                          [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'Piso', 'negociado')"
+                          [parcelasPopover]="parcelasPorTipo('negociado', TipoReajuste.Piso)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="auxCreche" type="number" [control]="form.get('negociado.auxCreche')"
-                          id="auxCreche" label="Auxílio Creche" name="auxCreche" addOnAfter="%" [parcelasReajuste]="true">
+                        <app-custom-input formControlName="auxCreche" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('negociado.auxCreche')" id="auxCreche" label="Auxílio Creche" name="auxCreche"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'Creche', 'negociado')"
+                          [parcelasPopover]="parcelasPorTipo('negociado', TipoReajuste.Creche)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="descontoVt" type="number" [control]="form.get('negociado.descontoVt')"
-                          id="descontoVt" label="Desconto VT" name="descontoVt" addOnAfter="%" [parcelasReajuste]="true">
+                        <app-custom-input formControlName="descontoVt" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('negociado.descontoVt')" id="descontoVt" label="Desconto VT" name="descontoVt"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'VT', 'negociado')"
+                          [parcelasPopover]="parcelasPorTipo('negociado', TipoReajuste.VT)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="vaVr" type="number" [control]="form.get('negociado.vaVr')"
-                          id="vaVr" label="VA/VR" name="vaVr" addOnAfter="%" [parcelasReajuste]="true">
+                        <app-custom-input formControlName="vaVr" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('negociado.vaVr')" id="vaVr" label="VA/VR" name="vaVr" addOnAfter="%"
+                          [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'VA/VR', 'negociado')"
+                          [parcelasPopover]="parcelasPorTipo('negociado', TipoReajuste.VaVr)">
                         </app-custom-input>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-12">
-                        <app-custom-input formControlName="vaVrFerias" type="number" [control]="form.get('negociado.vaVrFerias')"
-                          id="vaVrFerias" label="VA/VR nas Férias" name="vaVrFerias" addOnAfter="%" [parcelasReajuste]="true">
+                        <app-custom-input formControlName="vaVrFerias" type="number" formatNumber="1.2-2" appOnlyNumber
+                          [control]="form.get('negociado.vaVrFerias')" id="vaVrFerias" label="VA/VR nas Férias" name="vaVrFerias"
+                          addOnAfter="%" [parcelasReajuste]="true" (parcelasClick)="showModal($event, 'VA/VR Férias', 'negociado')"
+                          [parcelasPopover]="parcelasPorTipo('negociado', TipoReajuste.VaVrFerias)">
                         </app-custom-input>
                       </div>
                     </div>
 
                   </div>
 
-                </div>
-              </div>
-
-
-              <div class="hr-line-dashed"></div>
-
-              <h4>Negociações de Concorrentes</h4>
-              <button class="btn btn-primary m-t-sm" [routerLink]="['', { outlets: {popup: ['concorrente', negociacao.id] }}]">Novo</button>
-
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="clients-list">
-                    <div class="table-responsive">
-                      <table class="table table-striped table-hover">
-                        <thead>
-                          <tr>
-                            <th></th>
-                            <th>#</th>
-                            <th>Nome</th>
-                            <th class="text-right">Salário</th>
-                            <th class="text-right">Piso</th>
-                            <th class="text-right">Aux. Creche</th>
-                            <th class="text-right">Desc. VT</th>
-                            <th class="text-right">VA/VR</th>
-                            <th class="text-right">VA/VR nas férias</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let concorrente of concorrentes">
-                            <td>
-                              <button class="btn btn-outline btn-danger btn-xs" (click)="deleteConcorrente(concorrente.id)">
-                                <i class="fa fa-trash"></i>
-                              </button>
-                            </td>
-                            <td>#{{ concorrente.id }}</td>
-                            <td>{{ concorrente.nome }}</td>
-                            <td class="text-right">{{ concorrente.reajuste?.salario }}%</td>
-                            <td class="text-right">{{ concorrente.reajuste?.piso }}%</td>
-                            <td class="text-right">{{ concorrente.reajuste?.auxCreche }}%</td>
-                            <td class="text-right">{{ concorrente.reajuste?.descontoVt }}%</td>
-                            <td class="text-right">{{ concorrente.reajuste?.vaVr }}%</td>
-                            <td class="text-right">{{ concorrente.reajuste?.vaVrFerias }}%</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -326,7 +299,8 @@
           </form>
         </div>
         <div class="col-md-4" *ngIf="negociacao">
-          <app-arquivos dropzoneColor="#f3f3f4" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+          <app-arquivos [spinner]="spinnerArquivos" dropzoneColor="#f3f3f4" (upload)="upload($event)" (delete)="deleteFile($event)"
+            [arquivos]="arquivos"></app-arquivos>
         </div>
       </div>
       <div class="row">
@@ -339,17 +313,72 @@
 
     <div class="hr-line-dashed"></div>
 
-    <app-panel *ngFor="let rodada of rodadas;let i=index">
+    <app-panel *ngIf="negociacao">
       <div class="row">
         <div class="col-md-12">
-          <app-rodada [rodada]="rodada" (deleteRodada)="deleteRodada()"></app-rodada>
+          <h2>Negociações de Concorrentes</h2>
+          <p>
+            Cadastre os reajustes aplicados pelas empresas concorrentes
+          </p>
+          <button class="btn btn-primary m-t-sm" [routerLink]="['', { outlets: {popup: ['concorrente', negociacao.id] }}]">Novo</button>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="clients-list">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th class="text-right">Salário</th>
+                        <th class="text-right">Piso</th>
+                        <th class="text-right">Aux. Creche</th>
+                        <th class="text-right">Desc. VT</th>
+                        <th class="text-right">VA/VR</th>
+                        <th class="text-right">VA/VR nas férias</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let concorrente of concorrentes">
+                        <td>
+                          <button class="btn btn-outline btn-danger btn-xs" (click)="deleteConcorrente(concorrente.id)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                        <td>#{{ concorrente.id }}</td>
+                        <td>{{ concorrente.nome }}</td>
+                        <td class="text-right">{{ concorrente.reajuste?.salario }}%</td>
+                        <td class="text-right">{{ concorrente.reajuste?.piso }}%</td>
+                        <td class="text-right">{{ concorrente.reajuste?.auxCreche }}%</td>
+                        <td class="text-right">{{ concorrente.reajuste?.descontoVt }}%</td>
+                        <td class="text-right">{{ concorrente.reajuste?.vaVr }}%</td>
+                        <td class="text-right">{{ concorrente.reajuste?.vaVrFerias }}%</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-panel>
+
+    <div class="hr-line-dashed"></div>
+
+    <app-panel *ngFor="let rodada of rodadas;let i=index;let last = last">
+      <div class="row" [id]="'rodada' + (i + 1)">
+        <div class="col-md-12">
+          <app-rodada [rodada]="rodada" (deleteRodada)="deleteRodada()" [final]="last"></app-rodada>
         </div>
       </div>
     </app-panel>
   </div>
 </div>
 
-<app-modal title="Parcelas do reajuste" *ngIf="parcelas" (close)="closeModal($event)">
+<app-modal title="Parcelas do reajuste" *ngIf="tipoReajuste != null" (close)="closeModal($event)">
 
   <div body>
     <div class="row">
@@ -357,7 +386,9 @@
         <form [formGroup]="parcelasForm">
           <input type="hidden" id="id" name="id" formControlName="id" />
 
-          <input type="hidden" id="referencia" name="referencia" formControlName="referencia" />
+          <input type="hidden" id="tipoReajuste" name="tipoReajuste" formControlName="tipoReajuste" />
+
+          <input type="hidden" id="reajusteId" name="reajusteId" formControlName="reajusteId" />
 
           <div class="row">
             <div class="col-md-6">
@@ -382,8 +413,8 @@
             </div>
 
             <div class="col-md-6">
-              <app-custom-input formControlName="valor" type="number" [control]="parcelasForm.get('valor')" id="valor"
-                label="Valor" name="valor" addOnAfter="%">
+              <app-custom-input formControlName="valor" type="number" appOnlyNumber [control]="parcelasForm.get('valor')"
+                id="valor" label="Valor" name="valor" addOnAfter="%">
               </app-custom-input>
             </div>
 
@@ -392,21 +423,27 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-12 table-responsive">
-        <table class="table table-striped">
+    <div class="clients-list">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
           <thead>
             <tr>
+              <th></th>
               <th>Id</th>
               <th>Mês</th>
               <th>Valor</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Janeiro</td>
-              <td>5.0%</td>
+            <tr *ngFor="let p of parcelas">
+              <td>
+                <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluirParcela(p)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>{{ p.id }}</td>
+              <td>{{ Mes[p?.mes] }}</td>
+              <td>{{ p.valor }}%</td>
             </tr>
           </tbody>
         </table>
@@ -414,9 +451,11 @@
     </div>
   </div>
 
-  <div class="row" footer>
-    <div class="col-md-12">
-      Footer
+  <div footer>
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn btn-primary" (click)="adicionarParcela()" [disabled]="parcelasForm.invalid">Adicionar</button>
+      </div>
     </div>
   </div>
 </app-modal>

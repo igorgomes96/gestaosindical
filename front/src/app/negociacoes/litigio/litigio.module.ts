@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { LitigioListComponent } from './litigio-list/litigio-list.component';
 import { LitigioFormComponent } from './litigio-form/litigio-form.component';
 import { SharedModule } from './../../shared/shared.module';
+import { LitigioItemComponent } from './litigio-item/litigio-item.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { SharedModule } from './../../shared/shared.module';
     RouterModule,
     Ng5SliderModule
   ],
-  declarations: [LitigioListComponent, LitigioFormComponent]
+  declarations: [LitigioListComponent, LitigioFormComponent, LitigioItemComponent]
 })
 export class LitigioModule { }

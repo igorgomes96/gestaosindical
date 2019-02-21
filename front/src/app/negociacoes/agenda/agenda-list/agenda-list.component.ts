@@ -1,6 +1,5 @@
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { IntervalFilterService } from './../../../shared/interval-filter.service';
-import { NegociacoesApiService } from './../../negociacoes-api.service';
 import { Component, OnInit } from '@angular/core';
 import { Negociacao, StatusNegociacao } from 'src/app/model/negociacao';
 import { ActivatedRoute } from '@angular/router';
@@ -8,6 +7,7 @@ import { switchMap, tap } from 'rxjs/operators';
 import { Options, ChangeContext } from 'ng5-slider';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { NegociacoesService } from '../../negociacoes.service';
+import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
 
 declare var $: any;
 

@@ -1,8 +1,8 @@
-import { NegociacoesApiService } from './../negociacoes-api.service';
-import { Reajuste, Concorrente } from './../../model/negociacao';
+import { Concorrente } from './../../model/negociacao';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
 
 @Component({
   selector: 'app-concorrente',
@@ -25,7 +25,7 @@ export class ConcorrenteComponent implements OnInit {
         piso: [''],
         auxCreche: [''],
         vaVr: [''],
-        vaVrFerias: ['false'],
+        vaVrFerias: [''],
         descontoVt: ['']
       })
     });

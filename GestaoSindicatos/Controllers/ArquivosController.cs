@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using GestaoSindicatos.Auth;
 using GestaoSindicatos.Model;
@@ -9,7 +10,6 @@ using GestaoSindicatos.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 
 namespace GestaoSindicatos.Controllers
 {
@@ -18,27 +18,29 @@ namespace GestaoSindicatos.Controllers
     [Authorize("Bearer")]
     public class ArquivosController : ControllerBase
     {
-        private readonly ArquivosRepository _arquivosRepository;
+        private readonly ArquivosService _arquivosService;
 
-        public ArquivosController(ArquivosRepository arquivosRepositoy)
+        public ArquivosController(ArquivosService arquivosRepositoy)
         {
-            _arquivosRepository = arquivosRepositoy;
+            _arquivosService = arquivosRepositoy;
         }
 
 
         [HttpGet("{id}/download")]
-        public FileResult Donwload(string id)
+        public FileResult Donwload(long id)
         {
-            Arquivo arquivo = _arquivosRepository.Find(new ObjectId(id));
-            Stream stream = new MemoryStream(arquivo.Content);
+            Arquivo arquivo = _arquivosService.Find(id);
+            Stream stream = new FileStream(
+                Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), arquivo.Path),
+                FileMode.Open);
             return File(stream, arquivo.ContentType);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = Roles.ADMIN)]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(long id)
         {
-            _arquivosRepository.Delete(new ObjectId(id));
+            _arquivosService.Delete(id);
             return Ok();
         }
     }

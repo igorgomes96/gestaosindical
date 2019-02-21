@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Linq.Expressions;
 using GestaoSindicatos.Auth;
 using GestaoSindicatos.Model.Dashboard;
+using GestaoSindicatos.Exceptions;
 
 namespace GestaoSindicatos.Services
 {
@@ -14,16 +15,21 @@ namespace GestaoSindicatos.Services
     {
         private readonly Context _db;
         private readonly RodadasService _rodadasService;
-        private readonly CrudService<Reajuste> _reajustesService;
+        private readonly ReajustesService _reajustesService;
         private readonly EmpresasService _empresasService;
+        private readonly CrudService<ParcelaReajuste> _parcelasService;
+        private readonly ArquivosService _arquivosService;
 
-        public NegociacoesService(Context db, RodadasService rodadasService, CrudService<Reajuste> reajustesService,
-            EmpresasService empresasService) : base(db)
+        public NegociacoesService(Context db, RodadasService rodadasService, ReajustesService reajustesService,
+            EmpresasService empresasService, CrudService<ParcelaReajuste> parcelasService,
+            ArquivosService arquivosService) : base(db)
         {
             _db = db;
             _rodadasService = rodadasService;
             _reajustesService = reajustesService;
             _empresasService = empresasService;
+            _parcelasService = parcelasService;
+            _arquivosService = arquivosService;
         }
 
         private Expression<Func<Negociacao, bool>> QueryUser(ClaimsPrincipal claims)
@@ -56,9 +62,11 @@ namespace GestaoSindicatos.Services
             _db.Entry(negociacao).Reference(n => n.SindicatoLaboral).Load();
             _db.Entry(negociacao).Reference(n => n.SindicatoPatronal).Load();
             _db.Entry(negociacao).Reference(n => n.Orcado).Load();
-            _db.Entry(negociacao.Orcado).Collection(n => n.Parcelas).Load();
+            if (negociacao.Orcado != null)
+                _db.Entry(negociacao.Orcado).Collection(n => n.Parcelas).Load();
             _db.Entry(negociacao).Reference(n => n.Negociado).Load();
-            _db.Entry(negociacao.Negociado).Collection(n => n.Parcelas).Load();
+            if (negociacao.Negociado != null)
+                _db.Entry(negociacao.Negociado).Collection(n => n.Parcelas).Load();
             return negociacao;
         }
 
@@ -107,8 +115,18 @@ namespace GestaoSindicatos.Services
             return neg;
         }
 
+        public override void Delete(Expression<Func<Negociacao, bool>> query)
+        {
+            Query(query).ToList().ForEach(n => Delete(n.Id));
+        }
+
         public override Negociacao Delete(params object[] key)
         {
+
+            Negociacao negociacao = Find(key);
+
+            if (negociacao == null) throw new NotFoundException();
+
             // Remove os concorrentes e seus reajustes
             _db.Concorrentes.Where(c => c.NegociacaoId == (int)key[0])
                 .ToList().ForEach(c =>
@@ -120,17 +138,16 @@ namespace GestaoSindicatos.Services
             // Remove as rodadas
             _rodadasService.Delete(r => r.NegociacaoId == (int)key[0]);
 
-            Negociacao neg = base.Delete(key);
-            if (neg != null) {
-                if (neg.OrcadoId.HasValue) {
-                    _reajustesService.Delete(neg.OrcadoId.Value);
-                }
-                if (neg.NegociadoId.HasValue)
-                {
-                    _reajustesService.Delete(neg.NegociadoId.Value);
-                }
-            }
-            return neg;
+            // Remove os reajustes
+            if (negociacao.OrcadoId.HasValue)
+                _reajustesService.Delete(negociacao.OrcadoId.Value);
+
+            if (negociacao.NegociadoId.HasValue)
+                _reajustesService.Delete(negociacao.NegociadoId.Value);
+
+            _arquivosService.DeleteFiles(DependencyFileType.Negociacao, (int)key[0]);
+
+            return base.Delete((int)key[0]);
         }
 
         public RodadaNegociacao AbrirRodada(int idNegociacao)
@@ -140,7 +157,7 @@ namespace GestaoSindicatos.Services
 
             RodadaNegociacao rodada = new RodadaNegociacao
             {
-                Data = DateTime.Now,
+                Data = DateTime.Today,
                 NegociacaoId = idNegociacao
             };
 
@@ -200,6 +217,98 @@ namespace GestaoSindicatos.Services
                 .ToList();
         }
 
+        public ParcelaReajuste AdicionarParcela(ParcelaReajuste parcela)
+        {
+            return _parcelasService.Add(parcela);
+        }
+
+        public ParcelaReajuste RemoveParcela(int id)
+        {
+            return _parcelasService.Delete(id);
+        }
+        
+        public Relatorio RelatorioFinal (int negociacaoId)
+        {
+            Negociacao negociacao = Find(negociacaoId);
+            if (negociacao == null) throw new NotFoundException();
+
+            Relatorio relatorio = _db.Relatorios.FirstOrDefault(r => r.NegociacaoId == negociacaoId);
+            if (relatorio == null)
+            {
+                using (var transaction = _db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        relatorio = new Relatorio
+                        {
+                            NegociacaoId = negociacaoId
+                        };
+                        _db.Relatorios.Add(relatorio);
+                        _db.SaveChanges();
+
+                        List<GrupoPerguntaPadrao> gruposPerguntasPadrao = _db.GruposPerguntasPadrao
+                            .Include(g => g.Perguntas).ToList();
+
+                        foreach (GrupoPerguntaPadrao grupoPadrao in gruposPerguntasPadrao)
+                        {
+                            GrupoPergunta grupo = new GrupoPergunta
+                            {
+                                RelatorioId = relatorio.Id,
+                                Ordem = grupoPadrao.Ordem,
+                                Texto = grupoPadrao.Texto
+                            };
+                            _db.GruposPerguntas.Add(grupo);
+                            _db.SaveChanges();
+
+                            foreach (PerguntaPadrao perguntaPadrao in grupoPadrao.Perguntas)
+                            {
+                                RespostaRelatorio resposta = new RespostaRelatorio
+                                {
+                                    GrupoPerguntaId = grupo.Id,
+                                    Ordem = perguntaPadrao.Ordem,
+                                    Pergunta = perguntaPadrao.Texto,
+                                    Resposta = RespostaPadrao(perguntaPadrao.Texto, negociacao)
+                                };
+                                _db.RespostasRelatorio.Add(resposta);
+                            }
+                            _db.SaveChanges();
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw e;
+                    }
+                }
+            }
+            return relatorio;
+        }
+
+        private string RespostaPadrao(string pergunta, Negociacao negociacao)
+        {
+            switch (pergunta)
+            {
+                case "Nome da Empresa":
+                    return negociacao.Empresa?.Nome ?? "";
+                case "CNPJ":
+                    return negociacao.Empresa?.Cnpj;
+                case "UF":
+                    return negociacao.Empresa.Endereco?.UF ?? "";
+                case "Nome Sindicato Laboral":
+                    return negociacao.SindicatoLaboral?.Nome ?? "";
+                case "Nome Sindicato Patronal":
+                    return negociacao.SindicatoPatronal?.Nome ?? "";
+                case "Instrumento Coletivo (ACT/CCT)":
+                    return negociacao.SindicatoLaboral == null ? "" : (negociacao.SindicatoLaboral.Cct_act == CCT_ACT.ACT ? "ACT" : "CCT");
+                case "Data Base":
+                    return negociacao.SindicatoLaboral == null ? "" :
+                        (negociacao.SindicatoLaboral.Database == Mes.Marco ? "Março" : negociacao.SindicatoLaboral.Database.ToString());
+                default:
+                    return "";
+            }
+        }
 
     }
 }

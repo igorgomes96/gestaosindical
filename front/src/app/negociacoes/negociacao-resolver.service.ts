@@ -1,10 +1,10 @@
-import { NegociacoesApiService } from './negociacoes-api.service';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { Negociacao } from 'src/app/model/negociacao';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { NegociacoesApiService } from '../shared/api/negociacoes-api.service';
 
 @Injectable({
   providedIn: 'root'

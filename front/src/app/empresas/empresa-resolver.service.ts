@@ -1,9 +1,9 @@
-import { EmpresasApiService } from './empresas-api.service';
 import { Empresa } from './../model/empresa';
 import { Injectable } from '@angular/core';
 import { Resolve, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { EmpresasApiService } from '../shared/api/empresas-api.service';
 
 @Injectable({
   providedIn: 'root'

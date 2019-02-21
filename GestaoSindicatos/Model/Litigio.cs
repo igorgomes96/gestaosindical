@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestaoSindicatos.Model
 {
@@ -10,7 +9,9 @@ namespace GestaoSindicatos.Model
     {
         MesaRedonda = 1,
         Audiencia = 2,
-        ReclamacaoSindicato = 3
+        ReclamacaoSindicato = 3,
+        FiscalizacaoMPT = 4,
+        FiscalizacaoMTE = 5
     }
 
     public enum Referente
@@ -34,13 +35,20 @@ namespace GestaoSindicatos.Model
         public ProcedimentoLitigio Procedimento { get; set; }
         [Required]
         public DateTime Data { get; set; }
-        public string Assuntos { get; set; }
+        [MaxLength(2), MinLength(2)]
+        public string Estado { get; set; }
         public string ResumoAssuntos { get; set; }
+        public string Assuntos { get; set; }
         public string Participantes { get; set; }
 
         public virtual Empresa Empresa { get; set; }
         public virtual SindicatoLaboral Laboral { get; set; }
         public virtual SindicatoPatronal Patronal { get; set; }
+
+        public virtual ICollection<ItemLitigio> Itens { get; set; }
+
+        [NotMapped]
+        public StatusPlanoAcao? StatusPlanos { get; set; }
 
 
     }

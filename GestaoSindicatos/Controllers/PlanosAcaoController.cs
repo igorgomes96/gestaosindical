@@ -29,7 +29,7 @@ namespace GestaoSindicatos.Controllers
             _empresasService = empresasService;
         }
 
-        public ActionResult<List<PlanoAcao>> Get(int? laboralId = null, int? patronalId = null, int? empresaId = null, int? ano = null, DateTime? de = null, DateTime? ate = null)
+        /*public ActionResult<List<PlanoAcao>> Get(int? laboralId = null, int? patronalId = null, int? empresaId = null, int? ano = null, DateTime? de = null, DateTime? ate = null)
         {
             if (empresaId.HasValue)
             {
@@ -60,7 +60,7 @@ namespace GestaoSindicatos.Controllers
                 return planos.Where(p => p.Data >= de.Value && p.Data <= ate.Value).ToList();
 
             return planos.ToList();
-        }
+        }*/
 
         [HttpGet("{id}")]
         public ActionResult<PlanoAcao> Get(int id)

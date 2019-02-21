@@ -22,6 +22,9 @@ namespace GestaoSindicatos.Model
         public string Senha { get; set; }
         [StringLength(50)]
         public string Perfil { get; set; }
+
+        [NotMapped]
+        public string CodigoRecuperacao { get; set; }
         
 
     }

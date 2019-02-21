@@ -68,8 +68,8 @@
   <div class="row">
     <div class="col-md-12">
       <app-panel title="Negociações">
-        <button class="btn btn-primary m-r-sm" routerLink="/negociacoes/agenda/nova">Nova Negociação</button>
-        <button class="btn btn-success" routerLink="/negociacoes/agenda">Todas as Negociações</button>
+        <button class="btn btn-primary m-r-sm" routerLink="/negociacoes/gestao/nova">Nova Negociação</button>
+        <button class="btn btn-success" routerLink="/negociacoes/gestao">Todas as Negociações</button>
         <div class="clients-list">
           <div class="table-responsive">
             <table class="table table-striped table-hover">
@@ -85,6 +85,7 @@
                   <th class="text-right">% VA/VR</th>
                   <th class="text-right">% VA/VR Férias</th>
                   <th class="text-right">% Aux. Creche</th>
+                  <th class="text-right">% Desc. VT</th>
                   <th class="text-right">Tx. Neg. Patronal</th>
                   <th class="text-right">Tx. Neg. Laboral</th>
                   <th class="text-right">Viagens</th>
@@ -97,19 +98,67 @@
                     <!-- <button class="btn btn-outline btn-danger btn-xs m-r-xs" (click)="excluir(negociacao)">
                     <i class="fa fa-trash"></i>
                   </button> -->
-                    <a [routerLink]="['/negociacoes/agenda', negociacao.id]" class="btn btn-outline btn-success btn-xs">
+                    <a [routerLink]="['/negociacoes/gestao', negociacao.id]" class="btn btn-outline btn-success btn-xs">
                       <i class="fa fa-pencil"></i>
                     </a>
                   </td>
                   <td class="text-right">{{ negociacao.ano }}</td>
-                  <td class="text-right">{{ negociacao.qtdaTrabalhadores }}</td>
+                  <td class="text-right">{{ negociacao.qtdaTrabalhadores | number:'1.0' }}</td>
                   <td class="text-right">{{ negociacao.massaSalarial | number:'1.2-2' }}</td>
                   <td class="text-right">{{ negociacao.qtdaRodadas }}</td>
-                  <td class="text-right">{{ negociacao.negociado.salario | number:'1.2-2' }}%</td>
-                  <td class="text-right">{{ negociacao.negociado.piso | number:'1.2-2' }}%</td>
-                  <td class="text-right">{{ negociacao.negociado.vaVr | number:'1.2-2' }}%</td>
-                  <td class="text-right">{{ negociacao.negociado.vaVrFerias | number:'1.2-2' }}%</td>
-                  <td class="text-right">{{ negociacao.negociado.auxCreche | number:'1.2-2' }}%</td>
+                  <td class="text-right">
+                    <a [popover]="popNegSalario" [popoverOnHover]="true">{{ negociacao.negociado.salario |
+                      number:'1.2-2'
+                      }}%</a>
+                    <popover-content #popNegSalario title="Parcelas" [closeOnClickOutside]="false">
+                      <div *ngFor="let p of parcelasPorTipo(negociacao.negociado, TipoReajuste.Salario)">
+                        <strong>{{ Mes[p.mes] }}: </strong>{{ p.valor | number:'1.2-2' }}%
+                      </div>
+                    </popover-content>
+                  </td>
+                  <td class="text-right">
+                    <a [popover]="popNegPiso" [popoverOnHover]="true">{{ negociacao.negociado.piso | number:'1.2-2' }}%</a>
+                    <popover-content #popNegPiso title="Parcelas" [closeOnClickOutside]="false">
+                      <div *ngFor="let p of parcelasPorTipo(negociacao.negociado, TipoReajuste.Piso)">
+                        <strong>{{ Mes[p.mes] }}: </strong>{{ p.valor | number:'1.2-2' }}%
+                      </div>
+                    </popover-content>
+                  </td>
+                  <td class="text-right">
+                    <a [popover]="popNegVaVr" [popoverOnHover]="true">{{ negociacao.negociado.vaVr | number:'1.2-2' }}%</a>
+                    <popover-content #popNegVaVr title="Parcelas" [closeOnClickOutside]="false">
+                      <div *ngFor="let p of parcelasPorTipo(negociacao.negociado, TipoReajuste.VaVr)">
+                        <strong>{{ Mes[p.mes] }}: </strong>{{ p.valor | number:'1.2-2' }}%
+                      </div>
+                    </popover-content>
+                  </td>
+                  <td class="text-right">
+                    <a [popover]="popNegVaVrFerias" [popoverOnHover]="true">{{ negociacao.negociado.vaVrFerias |
+                      number:'1.2-2' }}%</a>
+                    <popover-content #popNegVaVrFerias title="Parcelas" [closeOnClickOutside]="false">
+                      <div *ngFor="let p of parcelasPorTipo(negociacao.negociado, TipoReajuste.VaVrFerias)">
+                        <strong>{{ Mes[p.mes] }}: </strong>{{ p.valor | number:'1.2-2' }}%
+                      </div>
+                    </popover-content>
+                  </td>
+                  <td class="text-right">
+                    <a [popover]="popNegCreche" [popoverOnHover]="true">{{ negociacao.negociado.auxCreche |
+                      number:'1.2-2' }}%</a>
+                    <popover-content #popNegCreche title="Parcelas" [closeOnClickOutside]="false">
+                      <div *ngFor="let p of parcelasPorTipo(negociacao.negociado, TipoReajuste.Creche)">
+                        <strong>{{ Mes[p.mes] }}: </strong>{{ p.valor | number:'1.2-2' }}%
+                      </div>
+                    </popover-content>
+                  </td>
+                  <td class="text-right">
+                    <a [popover]="popVt" [popoverOnHover]="true">{{ negociacao.negociado.descontoVt |
+                      number:'1.2-2' }}%</a>
+                    <popover-content #popVt title="Parcelas" [closeOnClickOutside]="false">
+                      <div *ngFor="let p of parcelasPorTipo(negociacao.negociado, TipoReajuste.VT)">
+                        <strong>{{ Mes[p.mes] }}: </strong>{{ p.valor | number:'1.2-2' }}%
+                      </div>
+                    </popover-content>
+                  </td>
                   <td class="text-right">R$ {{ negociacao.taxaPatronal | number:'1.2-2' }}</td>
                   <td class="text-right">R$ {{ negociacao.taxaLaboral | number:'1.2-2' }}</td>
                   <td class="text-right">R$ {{ negociacao.custosViagens | number:'1.2-2' }}</td>
@@ -126,13 +175,16 @@
         </div>
 
         <div class="row m-t-md">
-          <div class="col-lg-6">
+          <div class="col-md-12">
             <canvas id="reajustesNegociados" height="200px"></canvas>
           </div>
-          <div class="col-lg-3 col-md-6">
+        </div>
+
+        <div class="row m-t-md">
+          <div class="col-md-6">
             <canvas id="evolucaoTrabalhadores" height="200px"></canvas>
           </div>
-          <div class="col-lg-3 col-md-6">
+          <div class="col-md-6">
             <canvas id="evolucaoSalario" height="200px"></canvas>
           </div>
         </div>

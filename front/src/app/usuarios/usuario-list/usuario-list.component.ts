@@ -1,9 +1,9 @@
-import { UsuariosApiService } from './../usuarios-api.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { Usuario } from 'src/app/model/usuario';
 import { take } from 'rxjs/operators';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { UsuariosApiService } from 'src/app/shared/api/usuarios-api.service';
 
 declare var swal: any;
 

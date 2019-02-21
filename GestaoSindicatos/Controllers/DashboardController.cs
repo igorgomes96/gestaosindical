@@ -187,7 +187,7 @@ namespace GestaoSindicatos.Controllers
         {
             try
             {
-                return _service.QtdaReunioes(User, ano, r => r.Negociacao.SindicatoLaboral.Nome)
+                return _service.QtdaReunioes(User, ano, r => r.Negociacao.SindicatoLaboral.Nome, r => r.Negociacao.SindicatoLaboralId.HasValue)
                     .ToList();
             }
             catch (Exception e)
@@ -201,7 +201,7 @@ namespace GestaoSindicatos.Controllers
         {
             try
             {
-                return _service.QtdaReunioes(User, ano, r => r.Negociacao.SindicatoPatronal.Nome)
+                return _service.QtdaReunioes(User, ano, r => r.Negociacao.SindicatoPatronal.Nome, r => r.Negociacao.SindicatoPatronalId.HasValue)
                     .ToList();
             }
             catch (Exception e)
@@ -252,30 +252,30 @@ namespace GestaoSindicatos.Controllers
         }
 
         [HttpGet("planosacao/{ano}/referente")]
-        public ActionResult<List<ChartData>> GetPlanosAcaoReferente(int ano)
-        {
-            try
-            {
-                return _service.PlanosReferenteA(User, ano).ToList();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
+         public ActionResult<List<ChartData>> GetPlanosAcaoReferente(int ano)
+         {
+             try
+             {
+                 return _service.PlanosReferenteA(User, ano).ToList();
+             }
+             catch (Exception e)
+             {
+                 return BadRequest(e);
+             }
+         }
 
-        [HttpGet("planosacao/{ano}/procedencia")]
-        public ActionResult<List<ChartData>> GetPlanosAcaoProcedencia(int ano)
-        {
-            try
-            {
-                return _service.PlanosProcedencia(User, ano).ToList();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
+         [HttpGet("planosacao/{ano}/procedencia")]
+         public ActionResult<List<ChartData>> GetPlanosAcaoProcedencia(int ano)
+         {
+             try
+             {
+                 return _service.PlanosProcedencia(User, ano).ToList();
+             }
+             catch (Exception e)
+             {
+                 return BadRequest(e);
+             }
+         }
 
         [HttpGet("negociacoes/{empresaId}")]
         public ActionResult<List<Negociacao>> GetNegociacoes(int empresaId)
@@ -283,8 +283,8 @@ namespace GestaoSindicatos.Controllers
             try
             {
                 return _negociacoesService.Query(x => x.EmpresaId == empresaId)
-                    .Include(x => x.Negociado)
-                    .Include(x => x.Orcado)
+                    .Include(x => x.Negociado).ThenInclude(x => x.Parcelas)
+                    .Include(x => x.Orcado).ThenInclude(x => x.Parcelas)
                     .Include(x => x.RodadasNegociacoes)
                     .ToList();
 

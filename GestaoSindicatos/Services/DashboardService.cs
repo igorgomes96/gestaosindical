@@ -66,14 +66,15 @@ namespace GestaoSindicatos.Services
             if (claims.IsInRole(Roles.ADMIN))
                 return planos;
 
-            IQueryable<Empresa> empresas = _empresasService.Query(claims);
-            return planos.Where(x => empresas.Any(y => y.SindicatoLaboralId == x.LaboralId || y.SindicatoPatronalId == x.PatronalId));
+            IQueryable<Litigio> litigios = LitigiosByClaims(planos.Select(p => p.ItemLitigio.Litigio), claims);
+            return planos.Where(p => litigios.Any(l => l.Id == p.ItemLitigio.LitigioId));
 
         }
 
         public ICollection<ChartData> StatusPorPlanosAcao(ClaimsPrincipal claims, int ano)
         {
             IQueryable<PlanoAcao> planos = _db.PlanosAcao
+                    .Include(p => p.ItemLitigio.Litigio)
                     .Where(x => x.Data.Year == ano);
 
             return PlanosByClaims(planos, claims)
@@ -88,10 +89,11 @@ namespace GestaoSindicatos.Services
         public ICollection<ChartData> PlanosReferenteA(ClaimsPrincipal claims, int ano)
         {
             IQueryable<PlanoAcao> planos = _db.PlanosAcao
+                    .Include(p => p.ItemLitigio.Litigio)
                     .Where(x => x.Data.Year == ano);
 
             return PlanosByClaims(planos, claims)
-                .GroupBy(x => x.Referente)
+                .GroupBy(x => x.ItemLitigio.Litigio.Referente)
                 .Select(x => new ChartData
                 {
                     Y = x.Count(),
@@ -103,7 +105,8 @@ namespace GestaoSindicatos.Services
         public ICollection<ChartData> PlanosProcedencia(ClaimsPrincipal claims, int ano)
         {
             IQueryable<PlanoAcao> planos = _db.PlanosAcao
-                    .Where(x => x.Data.Year == ano && x.Status == StatusPlanoAcao.Solucionado);
+                .Include(p => p.ItemLitigio.Litigio)
+                .Where(x => x.Data.Year == ano && x.Status == StatusPlanoAcao.Solucionado);
 
             return PlanosByClaims(planos, claims)
                 .GroupBy(x => x.Procedencia ? "Procedente" : "Improcedente")
@@ -171,15 +174,15 @@ namespace GestaoSindicatos.Services
 
         }
 
-        public ICollection<ChartData> QtdaReunioes<TKey>(ClaimsPrincipal claims, int ano, Expression<Func<RodadaNegociacao, TKey>> groupByKey)
+        public ICollection<ChartData> QtdaReunioes<TKey>(ClaimsPrincipal claims, int ano, Expression<Func<RodadaNegociacao, TKey>> groupByKey, Expression<Func<RodadaNegociacao, bool>> query = null)
         {
             return QtdaReunioes(_empresasService.Query(claims)
-                .Select(x => x.Id).ToList(), ano, groupByKey);
+                .Select(x => x.Id).ToList(), ano, groupByKey, query);
         }
 
-        public ICollection<ChartData> QtdaReunioes<TKey>(List<int> empresasIds, int ano, Expression<Func<RodadaNegociacao, TKey>> groupByKey)
+        public ICollection<ChartData> QtdaReunioes<TKey>(List<int> empresasIds, int ano, Expression<Func<RodadaNegociacao, TKey>> groupByKey, Expression<Func<RodadaNegociacao, bool>> query)
         {
-            return _db.RodadasNegociacoes
+            IQueryable<RodadaNegociacao> rodadas = _db.RodadasNegociacoes
                 .Include(x => x.Negociacao)
                     .ThenInclude(x => x.SindicatoLaboral)
                 .Include(x => x.Negociacao)
@@ -187,8 +190,14 @@ namespace GestaoSindicatos.Services
                 .Include(x => x.Negociacao)
                     .ThenInclude(x => x.Empresa)
                         .ThenInclude(x => x.Endereco)
-                .Where(x => x.Data.Year == ano && x.Negociacao.EmpresaId.HasValue && empresasIds.Contains(x.Negociacao.EmpresaId.Value))
-                .GroupBy(groupByKey)
+                .Where(x => x.Data != null && x.Data.Year == ano 
+                    && x.Negociacao.EmpresaId.HasValue 
+                    && empresasIds.Contains(x.Negociacao.EmpresaId.Value));
+
+            if (query != null)
+                rodadas = rodadas.Where(query);
+
+            return rodadas.GroupBy(groupByKey)
                 .Select(x => new ChartData
                 {
                     Y = x.Count(),

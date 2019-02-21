@@ -1,24 +1,24 @@
 import { ToastsService } from 'src/app/shared/toasts.service';
-import { EstadosApiService } from './../../shared/estados-api.service';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
-import { switchMap, tap, filter, flatMap, map } from 'rxjs/operators';
-import { Observable, forkJoin } from 'rxjs';
+import { switchMap, tap, filter, flatMap, map, finalize } from 'rxjs/operators';
+import { Observable, forkJoin, of } from 'rxjs';
 import { Contato } from './../../model/contato';
 import { Arquivo } from './../../model/arquivo';
 import { SindicatoLaboral } from './../../model/sindicato-laboral';
 import { SindicatoPatronal } from './../../model/sindicato-patronal';
 import { endpoints } from '../../../environments/endpoints';
 import { environment } from './../../../environments/environment';
-import { EmpresasApiService } from './../empresas-api.service';
 import { Empresa } from './../../model/empresa';
-import { LaboraisApiService } from 'src/app/sindicatos/laborais/laborais-api.service';
-import { PatronaisApiService } from './../../sindicatos/patronais/patronais-api.service';
 import { RelatedLink } from 'src/app/shared/related-link/related-link';
 import { Estado } from 'src/app/model/estado';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
+import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
+import { PatronaisApiService } from 'src/app/shared/api/patronais-api.service';
+import { EstadosApiService } from 'src/app/shared/api/estados-api.service';
 
 
 @Component({
@@ -36,6 +36,7 @@ export class EmpresaFormComponent implements OnInit {
   laboral: SindicatoLaboral;
   relatedLinks: RelatedLink[];
   estados$: Observable<Estado[]>;
+  spinnerArquivos = false;
   urlPatronalList = environment.api + endpoints.sindicatosPatronais;
   urlLaboralList = environment.api + endpoints.sindicatosLaborais;
 
@@ -57,12 +58,13 @@ export class EmpresaFormComponent implements OnInit {
         cidade: ['', Validators.required],
         uf: ['', Validators.required],
         logradouro: ['', Validators.required],
+        bairro: [''],
         numero: ['']
       }),
       qtdaTrabalhadores: [''],
       massaSalarial: [''],
-      sindicatoLaboral: ['', Validators.required],
-      sindicatoPatronal: ['', Validators.required]
+      sindicatoLaboral: [''],
+      sindicatoPatronal: ['']
     });
 
     this.estados$ = this.estadosApi.getEstados();
@@ -75,7 +77,7 @@ export class EmpresaFormComponent implements OnInit {
           this.relatedLinks = [
             {
               label: 'Negociações',
-              link: '/negociacoes/agenda',
+              link: '/negociacoes/gestao',
               queryParams: { empresaId: this.empresa.id }
             },
             {
@@ -83,21 +85,21 @@ export class EmpresaFormComponent implements OnInit {
               link: '/negociacoes/litigios',
               queryParams: { empresaId: this.empresa.id }
             },
-            {
-              label: 'Planos de Ação',
-              link: '/negociacoes/planosacao',
-              queryParams: { empresaId: this.empresa.id }
-            }
+            // {
+            //   label: 'Planos de Ação',
+            //   link: '/negociacoes/planosacao',
+            //   queryParams: { empresaId: this.empresa.id }
+            // }
           ];
           this.form.patchValue(this.empresa);
           this.contatos$ = this.empresasApi.getContatos(this.empresa.id);
         }),
         flatMap(d => {
           return forkJoin(
-            this.patronaisApi.get(this.empresa.sindicatoPatronalId),
-            this.laboraisApi.get(this.empresa.sindicatoLaboralId),
+            this.empresa.sindicatoPatronalId ? this.patronaisApi.get(this.empresa.sindicatoPatronalId) : of(null),
+            this.empresa.sindicatoLaboralId ? this.laboraisApi.get(this.empresa.sindicatoLaboralId) : of(null),
             this.empresasApi.getArquivos(this.empresa.id),
-            );
+          );
         })
       ).subscribe(d => {
         this.form.get('sindicatoPatronal').setValue(d[0]);
@@ -126,18 +128,28 @@ export class EmpresaFormComponent implements OnInit {
 
   put(empresa: Empresa) {
     this.empresasApi.put(empresa.id, empresa)
-      .subscribe(_ => this.router.navigate(['/empresas']));
+      .pipe(tap(_ => this.toast.showMessage({
+        message: 'Empresa salva com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      })))
+      .subscribe(_ => this.router.navigate(['/empresas', empresa.id]));
   }
 
   post(empresa: Empresa) {
     this.empresasApi.post(empresa)
+      .pipe(tap(_ => this.toast.showMessage({
+        message: 'Empresa salva com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      })))
       .subscribe((e: Empresa) => this.router.navigate(['/empresas', e.id]));
   }
 
   salvar() {
     const empresa: Empresa = this.form.getRawValue();
-    empresa.sindicatoLaboralId = empresa.sindicatoLaboral.id;
-    empresa.sindicatoPatronalId = empresa.sindicatoPatronal.id;
+    empresa.sindicatoLaboralId = empresa.sindicatoLaboral ? empresa.sindicatoLaboral.id : null;
+    empresa.sindicatoPatronalId = empresa.sindicatoPatronal ? empresa.sindicatoPatronal.id : null;
     empresa.sindicatoLaboral = null;
     empresa.sindicatoPatronal = null;
     if (this.empresa) {
@@ -168,8 +180,10 @@ export class EmpresaFormComponent implements OnInit {
   }
 
   upload(files: FileList) {
+    this.spinnerArquivos = true;
     this.empresasApi.uploadFiles(this.empresa.id, files)
-      .pipe(switchMap(_ => this.empresasApi.getArquivos(this.empresa.id)))
+      .pipe(switchMap(_ => this.empresasApi.getArquivos(this.empresa.id)),
+        finalize(() => this.spinnerArquivos = false))
       .subscribe(d => this.arquivos = d);
   }
 
@@ -178,7 +192,7 @@ export class EmpresaFormComponent implements OnInit {
   }
 
   mapShow(value: any) {
-    return value['nome'];
+    return value ? value['nome'] : null;
   }
 
   mapValue(value: any) {
