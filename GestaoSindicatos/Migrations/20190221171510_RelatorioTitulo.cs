@@ -2,22 +2,22 @@
 
 namespace GestaoSindicatos.Migrations
 {
-    public partial class BairroEndereco : Migration
+    public partial class RelatorioTitulo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Bairro",
-                table: "Enderecos",
-                maxLength: 150,
+                name: "Titulo",
+                table: "Relatorios",
+                maxLength: 100,
                 nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Bairro",
-                table: "Enderecos");
+                name: "Titulo",
+                table: "Relatorios");
         }
     }
 }

@@ -9,6 +9,7 @@ import { Negociacao, RodadaNegociacao, Concorrente, ParcelaReajuste } from 'src/
 import { ArquivosApiService } from './arquivos-api.service';
 import { endpoints } from 'src/environments/endpoints';
 import { Arquivo } from 'src/app/model/arquivo';
+import { Relatorio } from 'src/app/model/relatorio';
 
 @Injectable({
   providedIn: 'root'
@@ -65,8 +66,13 @@ export class NegociacoesApiService extends GenericApi<Negociacao> {
     return this.http.delete<ParcelaReajuste>(`${this.url}${idNegociacao}/parcelas/${id}`).pipe(take(1));
   }
 
-  postRelatorio(idNegociacao: number): Observable<void> {
-    return this.http.post<void>(`${this.url}${idNegociacao}/relatorio`, null).pipe(take(1));
+  postRelatorio(idNegociacao: number): Observable<Relatorio> {
+    return this.http.post<Relatorio>(`${this.url}${idNegociacao}/relatorio`, null).pipe(take(1));
+  }
+
+  getRelatorio(idNegociacao: number): Observable<Relatorio> {
+    console.log('called')
+    return this.http.get<Relatorio>(`${this.url}${idNegociacao}/relatorio`).pipe(take(1));
   }
 
 }

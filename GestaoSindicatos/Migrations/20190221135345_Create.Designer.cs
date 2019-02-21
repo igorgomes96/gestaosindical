@@ -3,31 +3,26 @@ using System;
 using GestaoSindicatos.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestaoSindicatos.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20190211230638_RelatorioGrupoPadrao")]
-    partial class RelatorioGrupoPadrao
+    [Migration("20190221135345_Create")]
+    partial class Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("GestaoSindicatos.Model.Arquivo", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<byte[]>("Content");
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ContentType")
                         .HasMaxLength(255);
@@ -42,6 +37,9 @@ namespace GestaoSindicatos.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
+                    b.Property<string>("Path")
+                        .HasMaxLength(255);
+
                     b.Property<long>("Tamanho");
 
                     b.HasKey("Id");
@@ -54,8 +52,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.Concorrente", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("NegociacaoId");
 
@@ -76,8 +73,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.Contato", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email")
                         .HasMaxLength(150);
@@ -102,8 +98,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.ContatoEmpresa", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("ContatoId");
 
@@ -122,8 +117,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.ContatoSindicatoLaboral", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("ContatoId");
 
@@ -142,8 +136,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.ContatoSindicatoPatronal", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("ContatoId");
 
@@ -162,8 +155,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.Empresa", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Cnpj")
                         .IsRequired()
@@ -199,8 +191,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.EmpresaUsuario", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("EmpresaId");
 
@@ -221,8 +212,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.Endereco", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Bairro")
                         .HasMaxLength(150);
@@ -249,8 +239,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.GrupoPergunta", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("Ordem");
 
@@ -270,8 +259,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.GrupoPerguntaPadrao", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("Ordem");
 
@@ -287,8 +275,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.ItemLitigio", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Assuntos");
 
@@ -308,8 +295,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.Litigio", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Assuntos");
 
@@ -348,8 +334,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.Negociacao", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("Ano");
 
@@ -394,8 +379,7 @@ namespace GestaoSindicatos.Migrations
                     b.HasIndex("SindicatoPatronalId");
 
                     b.HasIndex("Ano", "EmpresaId")
-                        .IsUnique()
-                        .HasFilter("[EmpresaId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Negociacoes");
                 });
@@ -403,8 +387,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.ParcelaReajuste", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("Mes");
 
@@ -427,8 +410,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.PerguntaPadrao", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int?>("GrupoPerguntaId");
 
@@ -448,8 +430,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.PlanoAcao", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Data");
 
@@ -479,8 +460,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.Reajuste", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<float>("AuxCreche");
 
@@ -502,8 +482,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.Relatorio", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("NegociacaoId");
 
@@ -517,8 +496,9 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.RespostaRelatorio", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AplicacaoResposta");
 
                     b.Property<int>("GrupoPerguntaId");
 
@@ -541,8 +521,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.RodadaNegociacao", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<float?>("CustosViagens");
 
@@ -566,8 +545,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.SindicatoLaboral", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("Cct_act");
 
@@ -605,8 +583,7 @@ namespace GestaoSindicatos.Migrations
             modelBuilder.Entity("GestaoSindicatos.Model.SindicatoPatronal", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Cnpj")
                         .IsRequired()

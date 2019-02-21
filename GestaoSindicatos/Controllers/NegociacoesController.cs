@@ -297,12 +297,29 @@ namespace GestaoSindicatos.Controllers
             }
         }
 
+        [HttpGet("{negociacaoId}/relatorio")]
+        public ActionResult<Relatorio> GetRelatorioFinal(int negociacaoId)
+        {
+            try
+            {
+                return Ok(_service.GetRelatorioFinal(negociacaoId));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("Negociação não encontrada!");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("{negociacaoId}/relatorio")]
         public ActionResult<Relatorio> PostRelatorioFinal(int negociacaoId)
         {
             try
             {
-                return Ok(_service.RelatorioFinal(negociacaoId));
+                return Ok(_service.GenerateRelatorioFinal(negociacaoId));
             }
             catch (NotFoundException)
             {

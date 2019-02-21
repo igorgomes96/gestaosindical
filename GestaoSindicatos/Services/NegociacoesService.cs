@@ -226,8 +226,24 @@ namespace GestaoSindicatos.Services
         {
             return _parcelasService.Delete(id);
         }
+
+        public Relatorio GetRelatorioFinal(int negociacaoId) {
+            Negociacao negociacao = Find(negociacaoId);
+            if (negociacao == null) throw new NotFoundException();
+
+            Relatorio relatorio = _db.Relatorios.Where(r => r.NegociacaoId == negociacaoId)
+                .Include(r => r.GruposPerguntas)
+                    .ThenInclude(g => g.Respostas)
+                .FirstOrDefault();
+
+            relatorio.GruposPerguntas = relatorio.GruposPerguntas.OrderBy(g => g.Ordem).ToList();
+            foreach (GrupoPergunta grupo in relatorio.GruposPerguntas) {
+                grupo.Respostas = grupo.Respostas.OrderBy(r => r.Ordem).ToList();
+            }
+            return relatorio;
+        }
         
-        public Relatorio RelatorioFinal (int negociacaoId)
+        public Relatorio GenerateRelatorioFinal (int negociacaoId)
         {
             Negociacao negociacao = Find(negociacaoId);
             if (negociacao == null) throw new NotFoundException();
@@ -241,7 +257,8 @@ namespace GestaoSindicatos.Services
                     {
                         relatorio = new Relatorio
                         {
-                            NegociacaoId = negociacaoId
+                            NegociacaoId = negociacaoId,
+                            Titulo = "Relatório - Acordo Coletivo Algar"
                         };
                         _db.Relatorios.Add(relatorio);
                         _db.SaveChanges();
@@ -288,21 +305,21 @@ namespace GestaoSindicatos.Services
 
         private string RespostaPadrao(string pergunta, Negociacao negociacao)
         {
-            switch (pergunta)
+            switch (pergunta.Trim().ToLower())
             {
-                case "Nome da Empresa":
+                case "nome da empresa":
                     return negociacao.Empresa?.Nome ?? "";
-                case "CNPJ":
+                case "cnpj":
                     return negociacao.Empresa?.Cnpj;
-                case "UF":
+                case "uf":
                     return negociacao.Empresa.Endereco?.UF ?? "";
-                case "Nome Sindicato Laboral":
+                case "nome sindicato laboral":
                     return negociacao.SindicatoLaboral?.Nome ?? "";
-                case "Nome Sindicato Patronal":
+                case "nome sindicato patronal":
                     return negociacao.SindicatoPatronal?.Nome ?? "";
-                case "Instrumento Coletivo (ACT/CCT)":
+                case "instrumento coletivo (ACT/CCT)":
                     return negociacao.SindicatoLaboral == null ? "" : (negociacao.SindicatoLaboral.Cct_act == CCT_ACT.ACT ? "ACT" : "CCT");
-                case "Data Base":
+                case "data base":
                     return negociacao.SindicatoLaboral == null ? "" :
                         (negociacao.SindicatoLaboral.Database == Mes.Marco ? "Março" : negociacao.SindicatoLaboral.Database.ToString());
                 default:

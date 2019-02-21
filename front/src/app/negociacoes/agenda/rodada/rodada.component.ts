@@ -8,7 +8,6 @@ import { switchMap, finalize } from 'rxjs/operators';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { RodadasApiService } from 'src/app/shared/api/rodadas-api.service';
 import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
-import { PdfGeneratorService } from 'src/app/shared/pdf-generator.service';
 
 @Component({
   selector: 'app-rodada',
@@ -27,8 +26,7 @@ export class RodadaComponent implements OnInit {
   spinnerArquivos = false;
 
   constructor(private service: RodadasApiService, private toast: ToastsService,
-    private router: Router, private negociacoesApi: NegociacoesApiService,
-    private pdfGeneratorService: PdfGeneratorService) { }
+    private router: Router, private negociacoesApi: NegociacoesApiService) { }
 
   ngOnInit() {
     this.service.getArquivos(this.rodada.id)
@@ -98,15 +96,15 @@ export class RodadaComponent implements OnInit {
   }
 
   relatorioFinal() {
-    // this.negociacoesApi.postRelatorio(this.rodada.negociacaoId)
-    // .subscribe(() => {
-    //   this.toast.showMessage({
-    //     message: 'Relatório gerado com sucesso!',
-    //     title: 'Sucesso!',
-    //     type: ToastType.success
-    //   });
-    // });
-    this.pdfGeneratorService.htmltoPDF('.col-md-8.border-right', 'teste.pdf');
+    this.negociacoesApi.postRelatorio(this.rodada.negociacaoId)
+    .subscribe(() => {
+      this.router.navigate([`${this.rodada.negociacaoId}/relatorio`]);
+      this.toast.showMessage({
+        message: 'Relatório gerado com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      });
+    });
   }
 
 }

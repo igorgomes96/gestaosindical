@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GestaoSindicatos.Migrations
 {
-    public partial class Creation : Migration
+    public partial class Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,12 +13,12 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(maxLength: 255, nullable: false),
                     DataUpload = table.Column<DateTime>(nullable: true),
                     Tamanho = table.Column<long>(nullable: false),
-                    Content = table.Column<byte[]>(nullable: true),
                     ContentType = table.Column<string>(maxLength: 255, nullable: true),
+                    Path = table.Column<string>(maxLength: 255, nullable: true),
                     DependencyType = table.Column<int>(nullable: false),
                     DependencyId = table.Column<int>(nullable: false)
                 },
@@ -32,7 +32,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(maxLength: 150, nullable: false),
                     TipoContato = table.Column<int>(nullable: false),
                     Telefone1 = table.Column<string>(maxLength: 30, nullable: true),
@@ -49,11 +49,12 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Cidade = table.Column<string>(nullable: false),
                     UF = table.Column<string>(maxLength: 2, nullable: false),
                     Logradouro = table.Column<string>(maxLength: 400, nullable: false),
-                    Numero = table.Column<string>(maxLength: 6, nullable: true)
+                    Numero = table.Column<string>(maxLength: 6, nullable: true),
+                    Bairro = table.Column<string>(maxLength: 150, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,11 +62,25 @@ namespace GestaoSindicatos.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GruposPerguntasPadrao",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Ordem = table.Column<int>(nullable: false),
+                    Texto = table.Column<string>(maxLength: 400, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GruposPerguntasPadrao", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reajustes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Salario = table.Column<float>(nullable: false),
                     Piso = table.Column<float>(nullable: false),
                     AuxCreche = table.Column<float>(nullable: false),
@@ -83,7 +98,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(nullable: false),
                     Cnpj = table.Column<string>(maxLength: 14, nullable: false),
                     Telefone1 = table.Column<string>(maxLength: 30, nullable: true),
@@ -104,7 +119,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(nullable: false),
                     Cnpj = table.Column<string>(maxLength: 14, nullable: false),
                     Telefone1 = table.Column<string>(maxLength: 30, nullable: true),
@@ -132,11 +147,32 @@ namespace GestaoSindicatos.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PerguntasPadrao",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Ordem = table.Column<int>(nullable: false),
+                    Texto = table.Column<string>(maxLength: 1000, nullable: false),
+                    GrupoPerguntaId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PerguntasPadrao", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PerguntasPadrao_GruposPerguntasPadrao_GrupoPerguntaId",
+                        column: x => x.GrupoPerguntaId,
+                        principalTable: "GruposPerguntasPadrao",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ParcelasReajustes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Mes = table.Column<int>(nullable: false),
                     Valor = table.Column<float>(nullable: false),
                     ReajusteId = table.Column<int>(nullable: false),
@@ -158,7 +194,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ContatoId = table.Column<int>(nullable: false),
                     SindicatoLaboralId = table.Column<int>(nullable: false)
                 },
@@ -172,7 +208,7 @@ namespace GestaoSindicatos.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ContatosSindicatosLaborais_SindicatosLaborais_SindicatoLaboralId",
+                        name: "FK_ContatosSindicatosLaborais_SindicatosLaborais_SindicatoLabor~",
                         column: x => x.SindicatoLaboralId,
                         principalTable: "SindicatosLaborais",
                         principalColumn: "Id",
@@ -184,7 +220,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ContatoId = table.Column<int>(nullable: false),
                     SindicatoPatronalId = table.Column<int>(nullable: false)
                 },
@@ -198,7 +234,7 @@ namespace GestaoSindicatos.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ContatosSindicatosPatronais_SindicatosPatronais_SindicatoPatronalId",
+                        name: "FK_ContatosSindicatosPatronais_SindicatosPatronais_SindicatoPat~",
                         column: x => x.SindicatoPatronalId,
                         principalTable: "SindicatosPatronais",
                         principalColumn: "Id",
@@ -210,7 +246,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Cnpj = table.Column<string>(maxLength: 14, nullable: false),
                     Nome = table.Column<string>(maxLength: 200, nullable: false),
                     EnderecoId = table.Column<int>(nullable: false),
@@ -247,7 +283,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ContatoId = table.Column<int>(nullable: false),
                     EmpresaId = table.Column<int>(nullable: false)
                 },
@@ -273,7 +309,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     EmpresaId = table.Column<int>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: false)
                 },
@@ -293,7 +329,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     EmpresaId = table.Column<int>(nullable: false),
                     LaboralId = table.Column<int>(nullable: true),
                     PatronalId = table.Column<int>(nullable: true),
@@ -333,7 +369,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Ano = table.Column<int>(nullable: false),
                     EmpresaId = table.Column<int>(nullable: true),
                     SindicatoLaboralId = table.Column<int>(nullable: true),
@@ -390,10 +426,9 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     LitigioId = table.Column<int>(nullable: false),
                     Assuntos = table.Column<string>(nullable: true),
-                    Participantes = table.Column<string>(nullable: true),
                     PlanoAcaoId = table.Column<int>(nullable: false),
                     PossuiPlano = table.Column<bool>(nullable: false)
                 },
@@ -413,7 +448,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(maxLength: 200, nullable: true),
                     NegociacaoId = table.Column<int>(nullable: false),
                     ReajusteId = table.Column<int>(nullable: false)
@@ -436,11 +471,30 @@ namespace GestaoSindicatos.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Relatorios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NegociacaoId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Relatorios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Relatorios_Negociacoes_NegociacaoId",
+                        column: x => x.NegociacaoId,
+                        principalTable: "Negociacoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RodadasNegociacoes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     NegociacaoId = table.Column<int>(nullable: false),
                     Numero = table.Column<int>(nullable: false),
                     Data = table.Column<DateTime>(nullable: false),
@@ -463,7 +517,7 @@ namespace GestaoSindicatos.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Data = table.Column<DateTime>(nullable: false),
                     Procedencia = table.Column<bool>(nullable: false),
                     ResponsavelAcao = table.Column<string>(maxLength: 256, nullable: true),
@@ -479,6 +533,50 @@ namespace GestaoSindicatos.Migrations
                         name: "FK_PlanosAcao_ItensLitigios_ItemLitigioId",
                         column: x => x.ItemLitigioId,
                         principalTable: "ItensLitigios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GruposPerguntas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RelatorioId = table.Column<int>(nullable: false),
+                    Ordem = table.Column<int>(nullable: false),
+                    Texto = table.Column<string>(maxLength: 400, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GruposPerguntas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GruposPerguntas_Relatorios_RelatorioId",
+                        column: x => x.RelatorioId,
+                        principalTable: "Relatorios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RespostasRelatorio",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Ordem = table.Column<int>(nullable: false),
+                    Pergunta = table.Column<string>(maxLength: 1000, nullable: false),
+                    Resposta = table.Column<string>(maxLength: 4000, nullable: true),
+                    AplicacaoResposta = table.Column<int>(nullable: false),
+                    GrupoPerguntaId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RespostasRelatorio", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RespostasRelatorio_GruposPerguntas_GrupoPerguntaId",
+                        column: x => x.GrupoPerguntaId,
+                        principalTable: "GruposPerguntas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -563,6 +661,11 @@ namespace GestaoSindicatos.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_GruposPerguntas_RelatorioId",
+                table: "GruposPerguntas",
+                column: "RelatorioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ItensLitigios_LitigioId",
                 table: "ItensLitigios",
                 column: "LitigioId");
@@ -616,8 +719,7 @@ namespace GestaoSindicatos.Migrations
                 name: "IX_Negociacoes_Ano_EmpresaId",
                 table: "Negociacoes",
                 columns: new[] { "Ano", "EmpresaId" },
-                unique: true,
-                filter: "[EmpresaId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParcelasReajustes_ReajusteId",
@@ -631,6 +733,11 @@ namespace GestaoSindicatos.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_PerguntasPadrao_GrupoPerguntaId",
+                table: "PerguntasPadrao",
+                column: "GrupoPerguntaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PlanosAcao_Data",
                 table: "PlanosAcao",
                 column: "Data");
@@ -640,6 +747,16 @@ namespace GestaoSindicatos.Migrations
                 table: "PlanosAcao",
                 column: "ItemLitigioId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Relatorios_NegociacaoId",
+                table: "Relatorios",
+                column: "NegociacaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RespostasRelatorio_GrupoPerguntaId",
+                table: "RespostasRelatorio",
+                column: "GrupoPerguntaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RodadasNegociacoes_NegociacaoId",
@@ -686,7 +803,13 @@ namespace GestaoSindicatos.Migrations
                 name: "ParcelasReajustes");
 
             migrationBuilder.DropTable(
+                name: "PerguntasPadrao");
+
+            migrationBuilder.DropTable(
                 name: "PlanosAcao");
+
+            migrationBuilder.DropTable(
+                name: "RespostasRelatorio");
 
             migrationBuilder.DropTable(
                 name: "RodadasNegociacoes");
@@ -698,19 +821,28 @@ namespace GestaoSindicatos.Migrations
                 name: "Contatos");
 
             migrationBuilder.DropTable(
+                name: "GruposPerguntasPadrao");
+
+            migrationBuilder.DropTable(
                 name: "ItensLitigios");
 
             migrationBuilder.DropTable(
-                name: "Negociacoes");
+                name: "GruposPerguntas");
 
             migrationBuilder.DropTable(
                 name: "Litigios");
 
             migrationBuilder.DropTable(
-                name: "Reajustes");
+                name: "Relatorios");
+
+            migrationBuilder.DropTable(
+                name: "Negociacoes");
 
             migrationBuilder.DropTable(
                 name: "Empresas");
+
+            migrationBuilder.DropTable(
+                name: "Reajustes");
 
             migrationBuilder.DropTable(
                 name: "Enderecos");

@@ -1,3 +1,51 @@
-<p>
-  relatorio works!
-</p>
+<app-panel>
+
+  <div id="relatorio-container">
+    <div id="relatorio">
+
+      <div id="header">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="img">
+                <img src="assets/img/Logo-Algar.jpg" alt="Logo Algar">
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="title">
+              <h2>{{ relatorio.titulo }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group" *ngFor="let grupo of relatorio.gruposPerguntas">
+        <div class="group-title">
+          <h4>{{ grupo.texto }}</h4>
+        </div>
+
+        <div class="group-content">
+          <div class="row">
+            <div class="col-md-6" *ngFor="let resposta of grupo.respostas">
+              <div class="row pergunta">
+                <div class="col-md-6">
+                  <label class="control-label">{{ resposta.pergunta }}</label>
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" [(ngModel)]="resposta.resposta">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row m-t-sm">
+        <div class="col-md-12">
+          <button class="btn btn-primary m-r-sm">Salvar</button>
+          <button class="btn btn-success" (click)="download()">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</app-panel>

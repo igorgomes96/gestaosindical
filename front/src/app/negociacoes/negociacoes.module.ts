@@ -1,4 +1,4 @@
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 // import { PlanoAcaoModule } from './plano-acao/plano-acao.module';
 import { LitigioModule } from './litigio/litigio.module';
 import { CustosModule } from './custos/custos.module';
@@ -18,9 +18,9 @@ import { RelatorioComponent } from './relatorio/relatorio.component';
     AgendaModule,
     CustosModule,
     LitigioModule,
-    // PlanoAcaoModule,
     NegociacoesRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     SharedModule
   ],
   declarations: [ConcorrenteComponent, CalendarComponent, RelatorioComponent]

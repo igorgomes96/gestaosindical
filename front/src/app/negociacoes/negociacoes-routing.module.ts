@@ -12,6 +12,7 @@ import { NegociacaoResolverService } from './negociacao-resolver.service';
 // import { PlanoAcaoResolverService } from './plano-acao/plano-acao-resolver.service';
 import { CalendarComponent } from './calendar/calendar.component';
 import { RelatorioComponent } from './relatorio/relatorio.component';
+import { RelatorioResolverService } from './relatorio/relatorio-resolver.service';
 
 const routes: Routes = [
   {
@@ -30,21 +31,21 @@ const routes: Routes = [
         component: AgendaFormComponent,
       },
       {
-        path: ':id',
-        component: AgendaFormComponent,
-        resolve: {
-          negociacao: NegociacaoResolverService
-        }
-      },
-      {
         path: ':id/relatorio',
         component: RelatorioComponent,
         resolve: {
-          negociacao: NegociacaoResolverService
+          relatorio: RelatorioResolverService
         },
         data: {
           breadcrumb: 'Relatório',
           title: 'Relatório'
+        }
+      },
+      {
+        path: ':id',
+        component: AgendaFormComponent,
+        resolve: {
+          negociacao: NegociacaoResolverService
         }
       }
     ]

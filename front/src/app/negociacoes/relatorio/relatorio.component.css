@@ -1,0 +1,53 @@
+#relatorio {
+    padding: 30px;
+}
+
+#header {
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+#header .img {
+    text-align: center;
+    padding: 5px;
+}
+
+#header .img img {
+    width: 80%;
+}
+
+#header .title {
+    background: #DCE6F1;
+    font-weight: 500px;
+    color: initial;
+    text-align: center;
+    padding: 20px;
+    border-left: 1px solid black;
+}
+
+.group {
+    border: 1px solid black;
+    background: #DCE6F1;
+    color: initial;
+}
+
+.group-title {
+    text-align: center;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    background: #002060;
+    color: white;
+}
+
+.group-content {
+    padding: 10px;
+}
+
+.pergunta {
+    margin-bottom: 5px;
+}
+
+.pergunta input {
+    border: 1px solid #333;
+    padding: 5px;
+}

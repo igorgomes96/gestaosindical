@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GestaoSindicatos.Model
 {
-    public enum AplicacaoReposta
+    public enum AplicacaoResposta
     {
         Sim,
         Nao,
@@ -25,7 +25,7 @@ namespace GestaoSindicatos.Model
         [StringLength(4000)]
         public string Resposta { get; set; }
         [Required]
-        public AplicacaoReposta AplicacaoResposta { get; set; }
+        public AplicacaoResposta AplicacaoResposta { get; set; }
         [Required]
         public int GrupoPerguntaId { get; set; }
 
