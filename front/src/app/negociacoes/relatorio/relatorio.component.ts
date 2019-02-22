@@ -12,7 +12,7 @@ import { PdfGeneratorService } from 'src/app/shared/pdf-generator.service';
 export class RelatorioComponent implements OnInit {
 
   relatorio: Relatorio;
-  
+
   constructor(private route: ActivatedRoute, private router: Router,
     private pdfGeneratorService: PdfGeneratorService) { }
 
@@ -21,7 +21,6 @@ export class RelatorioComponent implements OnInit {
       .pipe(filter(d => d.hasOwnProperty('relatorio')))
       .subscribe(d => {
         this.relatorio = d['relatorio'];
-        console.log(this.relatorio);
       });
   }
 

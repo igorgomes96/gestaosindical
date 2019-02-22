@@ -71,7 +71,6 @@ export class NegociacoesApiService extends GenericApi<Negociacao> {
   }
 
   getRelatorio(idNegociacao: number): Observable<Relatorio> {
-    console.log('called')
     return this.http.get<Relatorio>(`${this.url}${idNegociacao}/relatorio`).pipe(take(1));
   }
 
