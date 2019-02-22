@@ -331,5 +331,23 @@ namespace GestaoSindicatos.Controllers
             }
         }
 
+        [HttpPut("{negociacaoId}/relatorio")]
+        public ActionResult PutRelatorioFinal(int negociacaoId, Relatorio relatorio)
+        {
+            try
+            {
+                _service.SaveRelatorio(negociacaoId, relatorio);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("Negociação não encontrada!");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }

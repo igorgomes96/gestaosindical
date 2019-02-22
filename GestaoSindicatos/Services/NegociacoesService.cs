@@ -284,7 +284,8 @@ namespace GestaoSindicatos.Services
                                     GrupoPerguntaId = grupo.Id,
                                     Ordem = perguntaPadrao.Ordem,
                                     Pergunta = perguntaPadrao.Texto,
-                                    Resposta = RespostaPadrao(perguntaPadrao.Texto, negociacao)
+                                    Resposta = RespostaPadrao(perguntaPadrao.Texto, negociacao),
+                                    NumColunas = perguntaPadrao.NumColunas
                                 };
                                 _db.RespostasRelatorio.Add(resposta);
                             }
@@ -301,6 +302,36 @@ namespace GestaoSindicatos.Services
                 }
             }
             return relatorio;
+        }
+
+        public void SaveRelatorio(int negociacaoId, Relatorio relatorio) {
+            relatorio.NegociacaoId = negociacaoId;
+            Relatorio oldRelatorio = _db.Relatorios.Find(relatorio.Id);
+            if (oldRelatorio != null) {
+                foreach (GrupoPergunta grupo in relatorio.GruposPerguntas) {
+                    IEnumerable<RespostaRelatorio> respostas = grupo.Respostas;
+                    grupo.Respostas = null;
+                    GrupoPergunta oldGrupo = _db.GruposPerguntas.Find(grupo.Id);
+                    if (oldGrupo == null) {
+                        _db.GruposPerguntas.Add(grupo);
+                        _db.SaveChanges();
+                    } else {
+                        _db.Entry(oldGrupo).CurrentValues.SetValues(grupo);
+                    }
+                    foreach (RespostaRelatorio resposta in respostas) {
+                        resposta.GrupoPerguntaId = grupo.Id;
+                        RespostaRelatorio oldResposta = _db.RespostasRelatorio.Find(resposta.Id);
+                        if (oldResposta == null) {
+                            _db.RespostasRelatorio.Add(resposta);
+                        } else {
+                            _db.Entry(oldResposta).CurrentValues.SetValues(resposta);
+                        }
+                    }
+                }
+                relatorio.GruposPerguntas = null;
+                _db.Entry(oldRelatorio).CurrentValues.SetValues(relatorio);
+                _db.SaveChanges();
+            }
         }
 
         private string RespostaPadrao(string pergunta, Negociacao negociacao)

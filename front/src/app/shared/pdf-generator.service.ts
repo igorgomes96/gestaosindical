@@ -13,11 +13,10 @@ export class PdfGeneratorService {
     // parentdiv is the html element which has to be converted to PDF
     html2canvas(document.querySelector(querySelector)).then((canvas: any) => {
 
-      console.log(canvas.width, canvas.height);
-      const pdf = new jsPDF('p', 'pt', [1000, canvas.height]);
+      const pdf = new jsPDF('p', 'pt', [canvas.width, canvas.height]);
 
       const imgData = canvas.toDataURL('image/jpeg', 1.0);
-      pdf.addImage(imgData, 0, 0, 1000, canvas.height);
+      pdf.addImage(imgData, 0, 0, canvas.width, canvas.height);
       pdf.save(filename);
 
     });

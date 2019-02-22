@@ -267,147 +267,510 @@ namespace GestaoSindicatos
                     Resumo = "Rodada de teste"
                 });
 
+            context.PerguntasPadrao.RemoveRange(context.PerguntasPadrao);
+            context.GruposPerguntasPadrao.RemoveRange(context.GruposPerguntasPadrao);
+
             context.SaveChanges();
 
-            if (context.GruposPerguntasPadrao.Count() == 0) {
-                GrupoPerguntaPadrao grupo1 = new GrupoPerguntaPadrao {
-                    Ordem = 1,
-                    Texto = "Dados Gerais"
-                };
-                GrupoPerguntaPadrao grupo2 = new GrupoPerguntaPadrao {
-                    Ordem = 2,
-                    Texto = "Informações Aplicação de Reajustes do Instrumento Coletivo"
-                };
-                GrupoPerguntaPadrao grupo3 = new GrupoPerguntaPadrao {
-                    Ordem = 3,
-                    Texto = "Benefícios"
-                };
-                GrupoPerguntaPadrao grupo4 = new GrupoPerguntaPadrao {
-                    Ordem = 4,
-                    Texto = "Reajuste Por Tempo De Empresa"
-                };
-                GrupoPerguntaPadrao grupo5 = new GrupoPerguntaPadrao {
-                    Ordem = 5,
-                    Texto = "Taxas Negociais"
-                };
-                GrupoPerguntaPadrao grupo6 = new GrupoPerguntaPadrao {
-                    Ordem = 6,
-                    Texto = "Jornada De Trabalho E Banco De Horas"
-                };
-                GrupoPerguntaPadrao grupo7 = new GrupoPerguntaPadrao {
-                    Ordem = 7,
-                    Texto = "Adicionais Legais"
-                };
-                GrupoPerguntaPadrao grupo8 = new GrupoPerguntaPadrao {
-                    Ordem = 8,
-                    Texto = "Faltas Justificadas E Licenças Remuneradas"
-                };
-                GrupoPerguntaPadrao grupo9 = new GrupoPerguntaPadrao {
-                    Ordem = 9,
-                    Texto = "Estabilidades Provisórias"
-                };
-                GrupoPerguntaPadrao grupo10 = new GrupoPerguntaPadrao {
-                    Ordem = 10,
-                    Texto = "Férias"
-                };
-                GrupoPerguntaPadrao grupo11 = new GrupoPerguntaPadrao {
-                    Ordem = 11,
-                    Texto = "Ponto"
-                };
 
-                context.GruposPerguntasPadrao.AddRange(new List<GrupoPerguntaPadrao> {
+            GrupoPerguntaPadrao grupo1 = new GrupoPerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "Dados Gerais"
+            };
+            GrupoPerguntaPadrao grupo2 = new GrupoPerguntaPadrao
+            {
+                Ordem = 2,
+                Texto = "Informações Aplicação de Reajustes do Instrumento Coletivo"
+            };
+            GrupoPerguntaPadrao grupo3 = new GrupoPerguntaPadrao
+            {
+                Ordem = 3,
+                Texto = "Benefícios"
+            };
+            GrupoPerguntaPadrao grupo4 = new GrupoPerguntaPadrao
+            {
+                Ordem = 4,
+                Texto = "Reajuste Por Tempo De Empresa"
+            };
+            GrupoPerguntaPadrao grupo5 = new GrupoPerguntaPadrao
+            {
+                Ordem = 5,
+                Texto = "Taxas Negociais"
+            };
+            GrupoPerguntaPadrao grupo6 = new GrupoPerguntaPadrao
+            {
+                Ordem = 6,
+                Texto = "Jornada De Trabalho E Banco De Horas"
+            };
+            GrupoPerguntaPadrao grupo7 = new GrupoPerguntaPadrao
+            {
+                Ordem = 7,
+                Texto = "Adicionais Legais"
+            };
+            GrupoPerguntaPadrao grupo8 = new GrupoPerguntaPadrao
+            {
+                Ordem = 8,
+                Texto = "Faltas Justificadas E Licenças Remuneradas"
+            };
+            GrupoPerguntaPadrao grupo9 = new GrupoPerguntaPadrao
+            {
+                Ordem = 9,
+                Texto = "Estabilidades Provisórias"
+            };
+            GrupoPerguntaPadrao grupo10 = new GrupoPerguntaPadrao
+            {
+                Ordem = 10,
+                Texto = "Férias"
+            };
+            GrupoPerguntaPadrao grupo11 = new GrupoPerguntaPadrao
+            {
+                Ordem = 11,
+                Texto = "Ponto"
+            };
+
+            context.GruposPerguntasPadrao.AddRange(new List<GrupoPerguntaPadrao> {
                     grupo1, grupo2, grupo3, grupo4, grupo5, grupo6, grupo7, grupo8,
-                    grupo9, grupo10, grupo11  
+                    grupo9, grupo10, grupo11
                 });
-                context.SaveChanges();
+            context.SaveChanges();
 
-                PerguntaPadrao p1 = new PerguntaPadrao {
-                    Ordem = 1,
-                    Texto = "Nome da Empresa",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p2 = new PerguntaPadrao {
-                    Ordem = 2,
-                    Texto = "Nome Sindicato Laboral",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p3 = new PerguntaPadrao {
-                    Ordem = 3,
-                    Texto = "CNPJ",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p4 = new PerguntaPadrao {
-                    Ordem = 4,
-                    Texto = "Código do Sindicato",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p5 = new PerguntaPadrao {
-                    Ordem = 5,
-                    Texto = "Região Abrangida pelo Sindicato",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p6 = new PerguntaPadrao {
-                    Ordem = 6,
-                    Texto = "Nome Sindicato Patronal",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p7 = new PerguntaPadrao {
-                    Ordem = 7,
-                    Texto = "UF",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p8 = new PerguntaPadrao {
-                    Ordem = 8,
-                    Texto = "Instrum. Col. (ACT/CCT)",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p9 = new PerguntaPadrao {
-                    Ordem = 9,
-                    Texto = "Nome Responsável TH",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p10 = new PerguntaPadrao {
-                    Ordem = 10,
-                    Texto = "Data base",
-                    GrupoPerguntaId = grupo1.Id
-                };
-                PerguntaPadrao p11 = new PerguntaPadrao {
-                    Ordem = 11,
-                    Texto = "Data da Assembléia ou oficialização da aprovação?",
-                    GrupoPerguntaId = grupo1.Id
-                };
+            PerguntaPadrao p1 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "Nome da Empresa",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p2 = new PerguntaPadrao
+            {
+                Ordem = 2,
+                Texto = "Nome Sindicato Laboral",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p3 = new PerguntaPadrao
+            {
+                Ordem = 3,
+                Texto = "CNPJ",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p4 = new PerguntaPadrao
+            {
+                Ordem = 4,
+                Texto = "Código do Sindicato",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p5 = new PerguntaPadrao
+            {
+                Ordem = 5,
+                Texto = "Região Abrangida pelo Sindicato",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p6 = new PerguntaPadrao
+            {
+                Ordem = 6,
+                Texto = "Nome Sindicato Patronal",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p7 = new PerguntaPadrao
+            {
+                Ordem = 7,
+                Texto = "UF",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p8 = new PerguntaPadrao
+            {
+                Ordem = 8,
+                Texto = "Instrum. Col. (ACT/CCT)",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p9 = new PerguntaPadrao
+            {
+                Ordem = 9,
+                Texto = "Nome Responsável TH",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p10 = new PerguntaPadrao
+            {
+                Ordem = 10,
+                Texto = "Data base",
+                GrupoPerguntaId = grupo1.Id
+            };
+            PerguntaPadrao p11 = new PerguntaPadrao
+            {
+                Ordem = 11,
+                Texto = "Data da Assembléia ou oficialização da aprovação?",
+                GrupoPerguntaId = grupo1.Id
+            };
 
-                PerguntaPadrao p12 = new PerguntaPadrao {
-                    Ordem = 12,
-                    Texto = "Categorias exluídas da convenção/acordo?",
-                    GrupoPerguntaId = grupo2.Id
-                };
-                PerguntaPadrao p13 = new PerguntaPadrao {
-                    Ordem = 13,
-                    Texto = "Pagamento retroativo à data Base?",
-                    GrupoPerguntaId = grupo2.Id
-                };
-                PerguntaPadrao p14 = new PerguntaPadrao {
-                    Ordem = 14,
-                    Texto = "Aplicar Rejuste para admitidos até qual data?",
-                    GrupoPerguntaId = grupo2.Id
-                };
-                PerguntaPadrao p15 = new PerguntaPadrao {
-                    Ordem = 15,
-                    Texto = "Desligados durante período de experiência terão direito a aplicação?",
-                    GrupoPerguntaId = grupo2.Id
-                };
-                PerguntaPadrao p16 = new PerguntaPadrao {
-                    Ordem = 16,
-                    Texto = "Competência de aplicação do reajuste único",
-                    GrupoPerguntaId = grupo2.Id
-                };
+            PerguntaPadrao p12 = new PerguntaPadrao
+            {
+                Ordem = 12,
+                Texto = "Categorias exluídas da convenção/acordo?",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p13 = new PerguntaPadrao
+            {
+                Ordem = 13,
+                Texto = "Pagamento retroativo à data Base?",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p14 = new PerguntaPadrao
+            {
+                Ordem = 14,
+                Texto = "Aplicar Rejuste para admitidos até qual data?",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p15 = new PerguntaPadrao
+            {
+                Ordem = 15,
+                Texto = "Desligados durante período de experiência terão direito a aplicação?",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p16 = new PerguntaPadrao
+            {
+                Ordem = 16,
+                Texto = "Competência de aplicação do reajuste único",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p17 = new PerguntaPadrao
+            {
+                Ordem = 17,
+                Texto = "Competência reajuste fracionado 1ª Parcela",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p18 = new PerguntaPadrao
+            {
+                Ordem = 18,
+                Texto = "Competência reajuste fracionado 1ª Parcela",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p19 = new PerguntaPadrao
+            {
+                Ordem = 19,
+                Texto = "Parcelar para demitidos?",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p20 = new PerguntaPadrao
+            {
+                Ordem = 20,
+                Texto = "Competência reajuste fracionado 2ª Parcela",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p21 = new PerguntaPadrao
+            {
+                Ordem = 21,
+                Texto = "Competência reajuste fracionado 3ª Parcela",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p22 = new PerguntaPadrao
+            {
+                Ordem = 22,
+                Texto = "O Reajuste será aplicado proporcional à admissão após a data base?",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p23 = new PerguntaPadrao
+            {
+                Ordem = 23,
+                Texto = "Reajuste será aplicado para empregados desligados após data base?",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p24 = new PerguntaPadrao
+            {
+                Ordem = 24,
+                Texto = "Regra de aplicação de Abono CCT",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p25 = new PerguntaPadrao
+            {
+                Ordem = 25,
+                Texto = "Os empregados que tiverem promoção, mérito ou enquadramento após a data base devem ter o reajuste individual compensado no percentual do reajuste coletivo?",
+                GrupoPerguntaId = grupo2.Id
+            };
+            PerguntaPadrao p26 = new PerguntaPadrao
+            {
+                Ordem = 26,
+                Texto = "Pisos Salariais",
+                GrupoPerguntaId = grupo2.Id
+            };
 
-                context.PerguntasPadrao.AddRange(new List<PerguntaPadrao> {
-                    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16
+            PerguntaPadrao p27 = new PerguntaPadrao
+            {
+                Ordem = 27,
+                Texto = "Vale Alimentação/Refeição",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p28 = new PerguntaPadrao
+            {
+                Ordem = 28,
+                Texto = "Vale Alimentação/Refeição nas férias ",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p29 = new PerguntaPadrao
+            {
+                Ordem = 29,
+                Texto = "Vale Alimentação/Refeição horas extras",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p30 = new PerguntaPadrao
+            {
+                Ordem = 30,
+                Texto = "Cesta Básica",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p31 = new PerguntaPadrao
+            {
+                Ordem = 31,
+                Texto = "Auxílio Creche",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p32 = new PerguntaPadrao
+            {
+                Ordem = 32,
+                Texto = "Auxílio a Filho Excepcional",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p33 = new PerguntaPadrao
+            {
+                Ordem = 33,
+                Texto = "Auxlílio Babá",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p34 = new PerguntaPadrao
+            {
+                Ordem = 34,
+                Texto = "Complemento Auxílio Doença",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p35 = new PerguntaPadrao
+            {
+                Ordem = 35,
+                Texto = "Auxílio Funeral",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p36 = new PerguntaPadrao
+            {
+                Ordem = 36,
+                Texto = "Plano odontológico",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p37 = new PerguntaPadrao
+            {
+                Ordem = 37,
+                Texto = "Plano médico",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p38 = new PerguntaPadrao
+            {
+                Ordem = 38,
+                Texto = "Percentual desconto do Vale Transporte",
+                GrupoPerguntaId = grupo3.Id
+            };
+            PerguntaPadrao p39 = new PerguntaPadrao
+            {
+                Ordem = 39,
+                Texto = "Seguro de vida",
+                GrupoPerguntaId = grupo3.Id
+            };
+
+            PerguntaPadrao p40 = new PerguntaPadrao
+            {
+                Ordem = 40,
+                Texto = "Anuênio",
+                GrupoPerguntaId = grupo4.Id
+            };
+            PerguntaPadrao p41 = new PerguntaPadrao
+            {
+                Ordem = 41,
+                Texto = "Triênio",
+                GrupoPerguntaId = grupo4.Id
+            };
+            PerguntaPadrao p42 = new PerguntaPadrao
+            {
+                Ordem = 42,
+                Texto = "Biênio",
+                GrupoPerguntaId = grupo4.Id
+            };
+            PerguntaPadrao p43 = new PerguntaPadrao
+            {
+                Ordem = 43,
+                Texto = "Quinquênio",
+                GrupoPerguntaId = grupo4.Id
+            };
+
+            PerguntaPadrao p44 = new PerguntaPadrao
+            {
+                Ordem = 44,
+                Texto = "Sindicato Laboral - Desconto de taxa de fortalecimento/Negociação/Confederativa, dos empregados.",
+                GrupoPerguntaId = grupo5.Id
+            };
+            PerguntaPadrao p45 = new PerguntaPadrao
+            {
+                Ordem = 45,
+                Texto = "Sindicato Laboral - Desconto de taxa de associação/Mensal dos empregados",
+                GrupoPerguntaId = grupo5.Id
+            };
+            PerguntaPadrao p46 = new PerguntaPadrao
+            {
+                Ordem = 46,
+                Texto = "Sindicato Patronal - Taxas de fortalecimento",
+                GrupoPerguntaId = grupo5.Id
+            };
+
+            PerguntaPadrao p47 = new PerguntaPadrao
+            {
+                Ordem = 47,
+                Texto = "Horas Extras",
+                GrupoPerguntaId = grupo6.Id
+            };
+            PerguntaPadrao p48 = new PerguntaPadrao
+            {
+                Ordem = 48,
+                Texto = "Sobreaviso",
+                GrupoPerguntaId = grupo6.Id
+            };
+            PerguntaPadrao p49 = new PerguntaPadrao
+            {
+                Ordem = 49,
+                Texto = "Banco de Horas",
+                GrupoPerguntaId = grupo6.Id
+            };
+            PerguntaPadrao p50 = new PerguntaPadrao
+            {
+                Ordem = 50,
+                Texto = "Horas Extras 50%",
+                GrupoPerguntaId = grupo6.Id
+            };
+            PerguntaPadrao p51 = new PerguntaPadrao
+            {
+                Ordem = 51,
+                Texto = "Horas Extras 60%",
+                GrupoPerguntaId = grupo6.Id
+            };
+            PerguntaPadrao p52 = new PerguntaPadrao
+            {
+                Ordem = 52,
+                Texto = "Horas Extras 100%",
+                GrupoPerguntaId = grupo6.Id
+            };
+            PerguntaPadrao p53 = new PerguntaPadrao
+            {
+                Ordem = 53,
+                Texto = "Horas Extras 150%",
+                GrupoPerguntaId = grupo6.Id
+            };
+
+            PerguntaPadrao p54 = new PerguntaPadrao
+            {
+                Ordem = 54,
+                Texto = "Adicional Noturno",
+                GrupoPerguntaId = grupo7.Id
+            };
+            PerguntaPadrao p55 = new PerguntaPadrao
+            {
+                Ordem = 55,
+                Texto = "Adicional de Periculosidade",
+                GrupoPerguntaId = grupo7.Id
+            };
+            PerguntaPadrao p56 = new PerguntaPadrao
+            {
+                Ordem = 56,
+                Texto = "Adicional de Insalubridade",
+                GrupoPerguntaId = grupo7.Id
+            };
+
+            PerguntaPadrao p57 = new PerguntaPadrao
+            {
+                Ordem = 57,
+                Texto = "Licença Maternidade 180 dias",
+                GrupoPerguntaId = grupo8.Id
+            };
+            PerguntaPadrao p58 = new PerguntaPadrao
+            {
+                Ordem = 58,
+                Texto = "Folgas negociadas",
+                GrupoPerguntaId = grupo8.Id
+            };
+            PerguntaPadrao p59 = new PerguntaPadrao
+            {
+                Ordem = 59,
+                Texto = "Licença Paternidade acima do prazo legal do Art. 473 da CLT",
+                GrupoPerguntaId = grupo8.Id
+            };
+            PerguntaPadrao p60 = new PerguntaPadrao
+            {
+                Ordem = 60,
+                Texto = "Licença Adotante",
+                GrupoPerguntaId = grupo8.Id
+            };
+            PerguntaPadrao p61 = new PerguntaPadrao
+            {
+                Ordem = 61,
+                Texto = "Licença Militar",
+                GrupoPerguntaId = grupo8.Id
+            };
+            PerguntaPadrao p62 = new PerguntaPadrao
+            {
+                Ordem = 62,
+                Texto = "Liberação para amamentação",
+                GrupoPerguntaId = grupo8.Id
+            };
+
+            PerguntaPadrao p63 = new PerguntaPadrao
+            {
+                Ordem = 63,
+                Texto = "Pré-Aposentadoria",
+                GrupoPerguntaId = grupo8.Id
+            };
+            PerguntaPadrao p64 = new PerguntaPadrao
+            {
+                Ordem = 64,
+                Texto = "Retorno de Férias",
+                GrupoPerguntaId = grupo8.Id
+            };
+            PerguntaPadrao p65 = new PerguntaPadrao
+            {
+                Ordem = 65,
+                Texto = "Cipa",
+                GrupoPerguntaId = grupo8.Id
+            };
+            PerguntaPadrao p66 = new PerguntaPadrao
+            {
+                Ordem = 66,
+                Texto = "Mandado sindical",
+                GrupoPerguntaId = grupo8.Id,
+                NumColunas = 6
+            };
+            PerguntaPadrao p67 = new PerguntaPadrao
+            {
+                Ordem = 67,
+                Texto = "Auxílio doença",
+                GrupoPerguntaId = grupo8.Id,
+                NumColunas = 6
+            };
+            PerguntaPadrao p68 = new PerguntaPadrao
+            {
+                Ordem = 68,
+                Texto = "Periodo de Trindidio",
+                GrupoPerguntaId = grupo8.Id,
+                NumColunas = 6
+            };
+            PerguntaPadrao p69 = new PerguntaPadrao
+            {
+                Ordem = 69,
+                Texto = "Licença maternidade",
+                GrupoPerguntaId = grupo8.Id
+            };
+            
+            context.PerguntasPadrao.AddRange(new List<PerguntaPadrao> {
+                    p1, p2, p3, p4, p5, p6, p7, p8, p9, 
+                    p10, p11, p12, p13, p14, p15, p16, p17, p18, p19,
+                    p20, p21, p22, p23, p24, p25, p26, p27, p28, p29,
+                    p30, p31, p32, p33, p34, p35, p36, p37, p38, p39,
+                    p40, p41, p42, p43, p44, p45, p46, p47, p48, p49,
+                    p50, p51, p52, p53, p54, p55, p56, p57, p58, p59,
+                    p60, p61, p62, p63, p64, p65, p66, p67, p68, p69
                 });
-                context.SaveChanges();
-            }
+            context.SaveChanges();
 
         }
 

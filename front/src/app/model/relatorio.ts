@@ -31,6 +31,7 @@ export class RespostaRelatorio {
     resposta: string;
     aplicacaoResposta: AplicacaoResposta;
     grupoPerguntaId: number;
+    numColunas: number;
 
     grupoPergunta: GrupoPergunta;
 

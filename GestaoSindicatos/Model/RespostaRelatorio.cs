@@ -28,6 +28,8 @@ namespace GestaoSindicatos.Model
         public AplicacaoResposta AplicacaoResposta { get; set; }
         [Required]
         public int GrupoPerguntaId { get; set; }
+        [Required]
+        public int NumColunas { get; set; } = 12;  // Qtda de colunas que a pergunta ocupa (limitado a 12)
 
         public virtual GrupoPergunta GrupoPergunta { get; set; }
 

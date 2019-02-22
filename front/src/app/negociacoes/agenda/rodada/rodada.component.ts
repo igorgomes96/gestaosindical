@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { RodadaNegociacao } from './../../../model/negociacao';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
@@ -26,7 +26,8 @@ export class RodadaComponent implements OnInit {
   spinnerArquivos = false;
 
   constructor(private service: RodadasApiService, private toast: ToastsService,
-    private router: Router, private negociacoesApi: NegociacoesApiService) { }
+    private router: Router, private negociacoesApi: NegociacoesApiService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.service.getArquivos(this.rodada.id)
@@ -98,12 +99,12 @@ export class RodadaComponent implements OnInit {
   relatorioFinal() {
     this.negociacoesApi.postRelatorio(this.rodada.negociacaoId)
     .subscribe(() => {
-      this.router.navigate([`${this.rodada.negociacaoId}/relatorio`]);
       this.toast.showMessage({
         message: 'Relatório gerado com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
       });
+      this.router.navigate(['./relatorio'], {relativeTo: this.route});
     });
   }
 
