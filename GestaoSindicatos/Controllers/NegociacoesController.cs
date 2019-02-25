@@ -159,12 +159,13 @@ namespace GestaoSindicatos.Controllers
                     return NotFound("Negociação não encontrada!");
                 return Ok(rodadas);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 return BadRequest(e.Message);
             }
 
         }
-        
+
 
         [HttpGet("{id}/concorrentes")]
         public ActionResult<List<Concorrente>> GetConcorrentes(int id)
@@ -383,6 +384,12 @@ namespace GestaoSindicatos.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpPost("{negociacaoId}/relatorio/download")]
+        public ActionResult DownloadRelatorio(string html)
+        {
+            return Ok();
         }
 
     }

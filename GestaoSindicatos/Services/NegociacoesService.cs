@@ -227,7 +227,8 @@ namespace GestaoSindicatos.Services
             return _parcelasService.Delete(id);
         }
 
-        public Relatorio GetRelatorioFinal(int negociacaoId) {
+        public Relatorio GetRelatorioFinal(int negociacaoId)
+        {
             Negociacao negociacao = Find(negociacaoId);
             if (negociacao == null) throw new NotFoundException();
 
@@ -237,13 +238,14 @@ namespace GestaoSindicatos.Services
                 .FirstOrDefault();
 
             relatorio.GruposPerguntas = relatorio.GruposPerguntas.OrderBy(g => g.Ordem).ToList();
-            foreach (GrupoPergunta grupo in relatorio.GruposPerguntas) {
+            foreach (GrupoPergunta grupo in relatorio.GruposPerguntas)
+            {
                 grupo.Respostas = grupo.Respostas.OrderBy(r => r.Ordem).ToList();
             }
             return relatorio;
         }
-        
-        public Relatorio GenerateRelatorioFinal (int negociacaoId)
+
+        public Relatorio GenerateRelatorioFinal(int negociacaoId)
         {
             Negociacao negociacao = Find(negociacaoId);
             if (negociacao == null) throw new NotFoundException();
@@ -304,26 +306,36 @@ namespace GestaoSindicatos.Services
             return relatorio;
         }
 
-        public void SaveRelatorio(int negociacaoId, Relatorio relatorio) {
+        public void SaveRelatorio(int negociacaoId, Relatorio relatorio)
+        {
             relatorio.NegociacaoId = negociacaoId;
             Relatorio oldRelatorio = _db.Relatorios.Find(relatorio.Id);
-            if (oldRelatorio != null) {
-                foreach (GrupoPergunta grupo in relatorio.GruposPerguntas) {
+            if (oldRelatorio != null)
+            {
+                foreach (GrupoPergunta grupo in relatorio.GruposPerguntas)
+                {
                     IEnumerable<RespostaRelatorio> respostas = grupo.Respostas;
                     grupo.Respostas = null;
                     GrupoPergunta oldGrupo = _db.GruposPerguntas.Find(grupo.Id);
-                    if (oldGrupo == null) {
+                    if (oldGrupo == null)
+                    {
                         _db.GruposPerguntas.Add(grupo);
                         _db.SaveChanges();
-                    } else {
+                    }
+                    else
+                    {
                         _db.Entry(oldGrupo).CurrentValues.SetValues(grupo);
                     }
-                    foreach (RespostaRelatorio resposta in respostas) {
+                    foreach (RespostaRelatorio resposta in respostas)
+                    {
                         resposta.GrupoPerguntaId = grupo.Id;
                         RespostaRelatorio oldResposta = _db.RespostasRelatorio.Find(resposta.Id);
-                        if (oldResposta == null) {
+                        if (oldResposta == null)
+                        {
                             _db.RespostasRelatorio.Add(resposta);
-                        } else {
+                        }
+                        else
+                        {
                             _db.Entry(oldResposta).CurrentValues.SetValues(resposta);
                         }
                     }
@@ -341,7 +353,10 @@ namespace GestaoSindicatos.Services
                 case "nome da empresa":
                     return negociacao.Empresa?.Nome ?? "";
                 case "cnpj":
-                    return negociacao.Empresa?.Cnpj;
+                    string cnpj = negociacao?.Empresa?.Cnpj;
+                    if (!string.IsNullOrEmpty(cnpj) && negociacao.Empresa.Cnpj.Length >= 14)
+                        return string.Format("{0}.{1}.{2}/{3}-{4}", cnpj.Substring(0, 2), cnpj.Substring(2, 3), cnpj.Substring(5, 3), cnpj.Substring(8, 4), cnpj.Substring(12));
+                    return cnpj;
                 case "uf":
                     return negociacao.Empresa.Endereco?.UF ?? "";
                 case "nome sindicato laboral":
@@ -358,7 +373,8 @@ namespace GestaoSindicatos.Services
             }
         }
 
-        public void DeleteRespostaRelatorio(int negociacaoId, int respostaId) {
+        public void DeleteRespostaRelatorio(int negociacaoId, int respostaId)
+        {
             RespostaRelatorio resposta = _db.RespostasRelatorio.Find(respostaId);
             if (resposta == null) throw new NotFoundException();
             _db.Entry(resposta).Reference(r => r.GrupoPergunta).Load();
@@ -368,13 +384,15 @@ namespace GestaoSindicatos.Services
             _db.SaveChanges();
         }
 
-        public void DeleteGrupoRelatorio(int negociacaoId, int grupoId) {
+        public void DeleteGrupoRelatorio(int negociacaoId, int grupoId)
+        {
             GrupoPergunta grupo = _db.GruposPerguntas.Find(grupoId);
             if (grupo == null) throw new NotFoundException();
             _db.Entry(grupo).Reference(r => r.Relatorio).Load();
             _db.Entry(grupo).Collection(r => r.Respostas).Load();
             if (grupo.Relatorio.NegociacaoId != negociacaoId) throw new Exception($"O grupo de ID {grupoId} não pertence ao relatório da negociação {negociacaoId}!");
-            foreach (RespostaRelatorio resposta in grupo.Respostas) {
+            foreach (RespostaRelatorio resposta in grupo.Respostas)
+            {
                 _db.RespostasRelatorio.Remove(resposta);
             }
             _db.GruposPerguntas.Remove(grupo);

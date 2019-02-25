@@ -65,7 +65,7 @@ namespace GestaoSindicatos.Services
         }
 
         public (string, string) GetPath(DependencyFileType dependencyType, int dependencyId) {
-            var relativePath = $@"{dependencyType.ToString()}\{dependencyId.ToString()}";
+            var relativePath = $@"arquivos\{dependencyType.ToString().ToLower()}\{dependencyId.ToString()}";
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), relativePath);
             return (path, relativePath);
         }

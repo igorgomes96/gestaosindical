@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { filter, switchMap } from 'rxjs/operators';
+import { filter, switchMap, finalize } from 'rxjs/operators';
 import { Relatorio, GrupoPergunta, AplicacaoResposta, RespostaRelatorio } from 'src/app/model/relatorio';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PdfGeneratorService } from 'src/app/shared/pdf-generator.service';
 import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
+import * as Ladda from 'ladda';
+declare var $: any;
 
 @Component({
   selector: 'app-relatorio',
@@ -16,6 +18,8 @@ export class RelatorioComponent implements OnInit {
 
   relatorio: Relatorio;
   AplicacaoResposta: typeof AplicacaoResposta = AplicacaoResposta;
+  saveLoadBtn: Ladda.LaddaButton;
+  downloadLoadBtn: Ladda.LaddaButton;
 
   constructor(private route: ActivatedRoute, private router: Router,
     private pdfGeneratorService: PdfGeneratorService,
@@ -23,6 +27,9 @@ export class RelatorioComponent implements OnInit {
     private toasts: ToastsService) { }
 
   ngOnInit() {
+    this.saveLoadBtn = Ladda.create(document.querySelector('#save-btn'));
+    this.downloadLoadBtn = Ladda.create(document.querySelector('#download-btn'));
+
     this.route.data
       .pipe(filter(d => d.hasOwnProperty('relatorio')))
       .subscribe(d => {
@@ -33,7 +40,7 @@ export class RelatorioComponent implements OnInit {
   addPergunta(grupo: GrupoPergunta) {
     grupo.respostas.push({
       id: undefined,
-      aplicacaoResposta: AplicacaoResposta.NA,
+      aplicacaoResposta: AplicacaoResposta.Sim,
       grupoPergunta: null,
       grupoPerguntaId: grupo.id,
       numColunas: 12,
@@ -44,7 +51,9 @@ export class RelatorioComponent implements OnInit {
   }
 
   salvar() {
+    this.saveLoadBtn.start();
     this.service.putRelatorio(this.relatorio.negociacaoId, this.relatorio)
+      .pipe(finalize(() => this.saveLoadBtn.stop()))
       .subscribe((_: void) => {
         this.toasts.showMessage({
           message: 'Relatório salvo com sucesso!',
@@ -74,14 +83,30 @@ export class RelatorioComponent implements OnInit {
   }
 
   deleteGrupo(grupo: GrupoPergunta) {
-    this.service.deleteGrupoRelatorio(this.relatorio.negociacaoId, grupo.id)
-      .subscribe();
-    this.relatorio.gruposPerguntas.splice(this.relatorio.gruposPerguntas.indexOf(grupo), 1);
+    this.toasts.swalMessage({
+      title: 'Confirma exlusão?',
+      message: 'Todas as perguntas desse grupo serão excluídas!',
+      type: ToastType.warning
+    }, () => this.service.deleteGrupoRelatorio(this.relatorio.negociacaoId, grupo.id).subscribe(_ => {
+      this.relatorio.gruposPerguntas.splice(this.relatorio.gruposPerguntas.indexOf(grupo), 1);
+      this.toasts.showMessage({
+        message: 'Grupo de Perguntas excluído com sucesso!',
+        title: 'Sucesso!',
+        type: ToastType.success
+      });
+    }));
   }
 
 
-  download() {
-    this.pdfGeneratorService.htmltoPDF('#relatorio', 'teste.pdf');
+  async download() {
+    this.downloadLoadBtn.start();
+    try {
+      await this.pdfGeneratorService.htmltoPDF('#relatorio .header', '#relatorio .group', `${this.relatorio.negociacao.empresa.nome} - ${this.relatorio.negociacao.ano}.pdf`);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this.downloadLoadBtn.stop();
+    }
   }
 
 }

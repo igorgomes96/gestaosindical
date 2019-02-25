@@ -1,22 +1,18 @@
-#relatorio {
-    padding: 15px;
-}
-
-#header {
+.header {
     border: 1px solid black;
     margin-bottom: 10px;
 }
 
-#header .img {
+.header .img {
     text-align: center;
     padding: 5px;
 }
 
-#header .img img {
-    width: 70%;
+.header .img img {
+    width: 80%;
 }
 
-#header .title {
+.header .title {
     background: #DCE6F1;
     font-weight: 500px;
     color: initial;
@@ -63,8 +59,7 @@
 .btn-remove {
     color: red;
     position: absolute;
-    right: 20px;
-    height: 88%;
+    right: 15px;
     border: 0;
     background: transparent;
 }

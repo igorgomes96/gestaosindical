@@ -86,4 +86,8 @@ export class NegociacoesApiService extends GenericApi<Negociacao> {
     return this.http.delete<void>(`${this.url}${idNegociacao}/relatorio/grupos/${grupoId}`).pipe(take(1));
   }
 
+  downloadRelatorio(idNegociacao: number, html: number): Observable<void> {
+    return this.http.post<void>(`${this.url}${idNegociacao}/relatorio/download`, html).pipe(take(1));
+  }
+
 }

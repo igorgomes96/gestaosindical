@@ -2,16 +2,16 @@
 
   <div id="relatorio">
 
-    <div id="header">
+    <div class="header">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-sm-3">
           <div class="img">
             <img src="assets/img/Logo-Algar.jpg" alt="Logo Algar">
           </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-sm-9">
           <div class="title">
-            <h2>{{ relatorio.titulo }}</h2>
+            <h2><div contenteditable="true" [textContent]="relatorio.titulo" (input)="relatorio.titulo=$event.target.textContent"></div></h2>
           </div>
         </div>
       </div>
@@ -22,28 +22,28 @@
         <h4 style="display: inline-block;">
           {{ relatorio?.gruposPerguntas[0]?.texto }}
         </h4>
-        <button class="btn-remove-grupo" (click)="deleteGrupo(relatorio?.gruposPerguntas[0])"><span
-            class="fa fa-times"></span></button>
+        <button class="btn-remove-grupo" (click)="deleteGrupo(relatorio?.gruposPerguntas[0])"><span class="fa fa-times"
+            data-html2canvas-ignore></span></button>
       </div>
 
       <div class="group-content">
         <div class="row">
-          <div class="col-md-6" *ngFor="let resposta of relatorio?.gruposPerguntas[0]?.respostas">
+          <div class="col-sm-6" *ngFor="let resposta of relatorio?.gruposPerguntas[0]?.respostas">
             <div class="row pergunta">
-              <div class="col-md-5">
+              <div class="col-sm-5">
                 <div contenteditable="true" class="pergunta-texto" [textContent]="resposta.pergunta"
                   (input)="resposta.pergunta=$event.target.textContent"></div>
               </div>
-              <div class="col-md-7">
+              <div class="col-sm-7">
                 <input type="text" class="form-control" [(ngModel)]="resposta.resposta">
                 <button class="btn-remove" (click)="deleteResposta(relatorio?.gruposPerguntas[0], resposta)"><span
-                    class="fa fa-times"></span></button>
+                    class="fa fa-times" data-html2canvas-ignore></span></button>
               </div>
             </div>
           </div>
 
-          <div class="col-md-6 m-t-sm">
-            <a (click)="addPergunta(relatorio?.gruposPerguntas[0])">[Nova Pergunta]</a>
+          <div class="col-sm-6 m-t-sm">
+            <a (click)="addPergunta(relatorio?.gruposPerguntas[0])" data-html2canvas-ignore>[Nova Pergunta]</a>
           </div>
         </div>
       </div>
@@ -54,53 +54,56 @@
         <h4 style="display: inline-block;">
           <div contenteditable="true" [textContent]="grupo.texto" (input)="grupo.texto=$event.target.textContent"></div>
         </h4>
-        <button class="btn-remove-grupo" (click)="deleteGrupo(grupo)"><span class="fa fa-times"></span></button>
+        <button class="btn-remove-grupo" data-html2canvas-ignore (click)="deleteGrupo(grupo)"><span
+            class="fa fa-times"></span></button>
       </div>
 
       <div class="group-content">
         <div class="row">
-          <div class="col-md-12" *ngFor="let resposta of grupo.respostas">
+          <div class="col-sm-12" *ngFor="let resposta of grupo.respostas">
             <div class="row pergunta">
-              <div class="col-md-3">
+              <div class="col-sm-3">
                 <div contenteditable="true" class="pergunta-texto" [textContent]="resposta.pergunta"
                   (input)="resposta.pergunta=$event.target.textContent"></div>
               </div>
-              <div class="col-md-2">
+              <div class="col-sm-2">
                 <select class="form-control" [(ngModel)]="resposta.aplicacaoResposta">
                   <option [value]="AplicacaoResposta[AplicacaoResposta.Sim]">Sim</option>
                   <option [value]="AplicacaoResposta[AplicacaoResposta.Nao]">Não</option>
                   <option [value]="AplicacaoResposta[AplicacaoResposta.NA]">N/A</option>
                 </select>
               </div>
-              <div class="col-md-7">
+              <div class="col-sm-7">
                 <textarea class="form-control" rows="1" [(ngModel)]="resposta.resposta"></textarea>
-                <button class="btn-remove" (click)="deleteResposta(grupo, resposta)"><span
-                    class="fa fa-times"></span></button>
+                <button class="btn-remove" (click)="deleteResposta(grupo, resposta)"><span class="fa fa-times"
+                    data-html2canvas-ignore></span></button>
               </div>
             </div>
           </div>
 
-          <div class="col-md-12 m-t-sm">
-            <a (click)="addPergunta(grupo)">[Nova Pergunta]</a>
+          <div class="col-sm-12 m-t-sm">
+            <a (click)="addPergunta(grupo)" data-html2canvas-ignore>[Nova Pergunta]</a>
           </div>
         </div>
       </div>
     </div>
 
-
-  </div>
-
-  <div class="row">
-    <div class="col-md-12 m-t-sm m-b-md">
-      <a (click)="addGrupo()">[Novo Grupo]</a>
+    <div class="row" data-html2canvas-ignore>
+      <div class="col-md-12 m-t-sm m-b-md">
+        <a (click)="addGrupo()">[Novo Grupo]</a>
+      </div>
     </div>
-  </div>
 
-  <div class="row m-t-sm">
-    <div class="col-md-12">
-      <button class="btn btn-primary m-r-sm" (click)="salvar()">Salvar</button>
-      <button class="btn btn-success" (click)="download()">Download</button>
+    <div class="row m-t-sm" data-html2canvas-ignore>
+      <div class="col-md-12">
+        <button class="btn btn-primary m-r-sm" (click)="salvar()" id="save-btn" data-style="zoom-in"
+          ladda-button>Salvar</button>
+        <button class="btn btn-success" (click)="download()" id="download-btn" data-style="zoom-in"
+          ladda-button>Download</button>
+      </div>
     </div>
+
+
   </div>
 
 </app-panel>
