@@ -3,6 +3,9 @@ import { filter, switchMap } from 'rxjs/operators';
 import { Relatorio, GrupoPergunta, AplicacaoResposta, RespostaRelatorio } from 'src/app/model/relatorio';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PdfGeneratorService } from 'src/app/shared/pdf-generator.service';
+import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
+import { ToastsService } from 'src/app/shared/toasts.service';
+import { ToastType } from 'src/app/shared/toasts/toasts.component';
 
 @Component({
   selector: 'app-relatorio',
@@ -15,7 +18,9 @@ export class RelatorioComponent implements OnInit {
   AplicacaoResposta: typeof AplicacaoResposta = AplicacaoResposta;
 
   constructor(private route: ActivatedRoute, private router: Router,
-    private pdfGeneratorService: PdfGeneratorService) { }
+    private pdfGeneratorService: PdfGeneratorService,
+    private service: NegociacoesApiService,
+    private toasts: ToastsService) { }
 
   ngOnInit() {
     this.route.data
@@ -33,9 +38,20 @@ export class RelatorioComponent implements OnInit {
       grupoPerguntaId: grupo.id,
       numColunas: 12,
       ordem: grupo.respostas.length + 1,
-      pergunta: "Nova Pergunta",
+      pergunta: 'Nova Pergunta',
       resposta: ''
     });
+  }
+
+  salvar() {
+    this.service.putRelatorio(this.relatorio.negociacaoId, this.relatorio)
+      .subscribe((_: void) => {
+        this.toasts.showMessage({
+          message: 'Relatório salvo com sucesso!',
+          title: 'Sucesso!',
+          type: ToastType.success
+        });
+      });
   }
 
   addGrupo() {
@@ -48,8 +64,24 @@ export class RelatorioComponent implements OnInit {
     });
   }
 
+  deleteResposta(grupo: GrupoPergunta, resposta: RespostaRelatorio) {
+    const index = grupo.respostas.indexOf(resposta);
+    if (resposta.id != null) {
+      this.service.deleteRespostaRelatorio(this.relatorio.negociacaoId, resposta.id)
+        .subscribe();
+    }
+    grupo.respostas.splice(index, 1);
+  }
+
+  deleteGrupo(grupo: GrupoPergunta) {
+    this.service.deleteGrupoRelatorio(this.relatorio.negociacaoId, grupo.id)
+      .subscribe();
+    this.relatorio.gruposPerguntas.splice(this.relatorio.gruposPerguntas.indexOf(grupo), 1);
+  }
+
+
   download() {
-    this.pdfGeneratorService.htmltoPDF('#relatorio-container', 'teste.pdf');
+    this.pdfGeneratorService.htmltoPDF('#relatorio', 'teste.pdf');
   }
 
 }

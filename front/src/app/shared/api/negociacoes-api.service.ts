@@ -74,4 +74,16 @@ export class NegociacoesApiService extends GenericApi<Negociacao> {
     return this.http.get<Relatorio>(`${this.url}${idNegociacao}/relatorio`).pipe(take(1));
   }
 
+  putRelatorio(idNegociacao: number, relatorio: Relatorio): Observable<void> {
+    return this.http.put<void>(`${this.url}${idNegociacao}/relatorio`, relatorio).pipe(take(1));
+  }
+
+  deleteRespostaRelatorio(idNegociacao: number, respostaId: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}${idNegociacao}/relatorio/respostas/${respostaId}`).pipe(take(1));
+  }
+
+  deleteGrupoRelatorio(idNegociacao: number, grupoId: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}${idNegociacao}/relatorio/grupos/${grupoId}`).pipe(take(1));
+  }
+
 }

@@ -358,5 +358,28 @@ namespace GestaoSindicatos.Services
             }
         }
 
+        public void DeleteRespostaRelatorio(int negociacaoId, int respostaId) {
+            RespostaRelatorio resposta = _db.RespostasRelatorio.Find(respostaId);
+            if (resposta == null) throw new NotFoundException();
+            _db.Entry(resposta).Reference(r => r.GrupoPergunta).Load();
+            _db.Entry(resposta.GrupoPergunta).Reference(g => g.Relatorio).Load();
+            if (resposta.GrupoPergunta.Relatorio.NegociacaoId != negociacaoId) throw new Exception($"A pergunta de ID {respostaId} não pertence ao relatório da negociação {negociacaoId}!");
+            _db.RespostasRelatorio.Remove(resposta);
+            _db.SaveChanges();
+        }
+
+        public void DeleteGrupoRelatorio(int negociacaoId, int grupoId) {
+            GrupoPergunta grupo = _db.GruposPerguntas.Find(grupoId);
+            if (grupo == null) throw new NotFoundException();
+            _db.Entry(grupo).Reference(r => r.Relatorio).Load();
+            _db.Entry(grupo).Collection(r => r.Respostas).Load();
+            if (grupo.Relatorio.NegociacaoId != negociacaoId) throw new Exception($"O grupo de ID {grupoId} não pertence ao relatório da negociação {negociacaoId}!");
+            foreach (RespostaRelatorio resposta in grupo.Respostas) {
+                _db.RespostasRelatorio.Remove(resposta);
+            }
+            _db.GruposPerguntas.Remove(grupo);
+            _db.SaveChanges();
+        }
+
     }
 }

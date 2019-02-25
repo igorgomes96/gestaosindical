@@ -1,16 +1,16 @@
 import { Negociacao } from './negociacao';
 
 export enum AplicacaoResposta {
-    Sim = 'Sim',
-    Nao = 'Não',
-    NA = 'N/A'
+    Sim,
+    Nao,
+    NA
 }
 
 export class Relatorio {
     id: number;
     negociacaoId: number;
     titulo: string;
-    
+
     negociacao: Negociacao;
     gruposPerguntas: GrupoPergunta[];
 }

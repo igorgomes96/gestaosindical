@@ -349,5 +349,41 @@ namespace GestaoSindicatos.Controllers
             }
         }
 
+        [HttpDelete("{negociacaoId}/relatorio/respostas/{respostaId}")]
+        public ActionResult DeleteRespostaRelatorio(int negociacaoId, int respostaId)
+        {
+            try
+            {
+                _service.DeleteRespostaRelatorio(negociacaoId, respostaId);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("Negociação não encontrada!");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{negociacaoId}/relatorio/grupos/{grupoId}")]
+        public ActionResult DeleteGrupoRelatorio(int negociacaoId, int grupoId)
+        {
+            try
+            {
+                _service.DeleteGrupoRelatorio(negociacaoId, grupoId);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("Negociação não encontrada!");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }
