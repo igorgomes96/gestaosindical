@@ -122,32 +122,59 @@ namespace GestaoSindicatos.Services
 
         public override Negociacao Delete(params object[] key)
         {
-
             Negociacao negociacao = Find(key);
-
             if (negociacao == null) throw new NotFoundException();
 
-            // Remove os concorrentes e seus reajustes
-            _db.Concorrentes.Where(c => c.NegociacaoId == (int)key[0])
-                .ToList().ForEach(c =>
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
                 {
-                    _db.Reajustes.Remove(_db.Reajustes.Find(c.ReajusteId));
-                    _db.Concorrentes.Remove(c);
-                });
+                    // Remove os concorrentes e seus reajustes
+                    _db.Concorrentes.Where(c => c.NegociacaoId == (int)key[0])
+                        .ToList().ForEach(c =>
+                        {
+                            _db.Reajustes.Remove(_db.Reajustes.Find(c.ReajusteId));
+                            _db.Concorrentes.Remove(c);
+                        });
 
-            // Remove as rodadas
-            _rodadasService.Delete(r => r.NegociacaoId == (int)key[0]);
+                    // Remove as rodadas
+                    _rodadasService.Delete(r => r.NegociacaoId == (int)key[0]);
 
-            // Remove os reajustes
-            if (negociacao.OrcadoId.HasValue)
-                _reajustesService.Delete(negociacao.OrcadoId.Value);
+                    // Remove os reajustes
+                    if (negociacao.OrcadoId.HasValue)
+                        _reajustesService.Delete(negociacao.OrcadoId.Value);
 
-            if (negociacao.NegociadoId.HasValue)
-                _reajustesService.Delete(negociacao.NegociadoId.Value);
+                    if (negociacao.NegociadoId.HasValue)
+                        _reajustesService.Delete(negociacao.NegociadoId.Value);
 
-            _arquivosService.DeleteFiles(DependencyFileType.Negociacao, (int)key[0]);
+                    _arquivosService.DeleteFiles(DependencyFileType.Negociacao, (int)key[0]);
 
-            return base.Delete((int)key[0]);
+                    // Remove o relatório
+                    Relatorio relatorio = _db.Relatorios
+                        .Where(x => x.NegociacaoId == (int)key[0])
+                        .Include(r => r.GruposPerguntas)
+                            .ThenInclude(g => g.Respostas)
+                        .FirstOrDefault();
+                    if (relatorio != null)
+                    {
+                        foreach (GrupoPergunta grupo in relatorio.GruposPerguntas)
+                        {
+                            foreach (RespostaRelatorio resposta in grupo.Respostas)
+                            {
+                                _db.RespostasRelatorio.Remove(resposta);
+                            }
+                            _db.GruposPerguntas.Remove(grupo);
+                        }
+                        _db.Relatorios.Remove(relatorio);
+                    }
+                    negociacao = base.Delete((int)key[0]);
+                    transaction.Commit();
+                } catch (Exception ex) {
+                    transaction.Rollback();
+                    throw ex;
+                }
+            }
+            return negociacao;
         }
 
         public RodadaNegociacao AbrirRodada(int idNegociacao)

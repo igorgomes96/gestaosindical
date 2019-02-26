@@ -70,3 +70,10 @@
     background: transparent;
     font-size: 16px;
 }
+
+.btn-remove-grupo-3colunas {
+    position: absolute;
+    right: 40px;
+    margin-top: -10px;
+    color: red;
+}

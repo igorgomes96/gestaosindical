@@ -96,6 +96,8 @@
       <ng-template #grupo3Colunas>
         <div class="group-content">
           <div class="row">
+            <button class="btn-remove-grupo btn-remove-grupo-3colunas" data-html2canvas-ignore (click)="deleteGrupo(grupo)"><span
+                class="fa fa-times"></span></button>
             <div class="col-md-3 m-t-md">
               <div contenteditable="true" class="pergunta-texto" [textContent]="grupo.texto"
                 (input)="grupo.texto=$event.target.textContent">
@@ -120,6 +122,7 @@
                 </div>
               </div>
             </div>
+
 
             <div class="col-sm-12 m-t-sm">
               <a (click)="addPergunta(grupo)" data-html2canvas-ignore>[Nova Pergunta]</a>
