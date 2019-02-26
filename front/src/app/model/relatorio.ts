@@ -1,5 +1,10 @@
 import { Negociacao } from './negociacao';
 
+export enum LayoutGrupo {
+    Grupo1Coluna,
+    Grupo3Colunas
+}
+
 export enum AplicacaoResposta {
     Sim,
     Nao,
@@ -20,6 +25,7 @@ export class GrupoPergunta {
     relatorioId: number;
     ordem: number;
     texto: string;
+    layoutGrupo: LayoutGrupo;
 
     respostas: RespostaRelatorio[];
 }

@@ -38,7 +38,7 @@
   <div class="col-md-12">
     <button type="submit" class="btn btn-primary m-r-sm" (click)="salvar()" [disabled]="!rodada.data">Salvar</button>
     <button class="btn btn-danger m-r-sm" (click)="excluir()">Excluir</button>
-    <a class="btn btn-success m-r-sm" *ngIf="final" (click)="relatorioFinal()">Relatório Final</a>
-    <!-- <a class="btn btn-default" (click)="navigatePlanosAcao()">Planos de Ações nesta data</a> -->
+    <a class="btn btn-success m-r-sm relatorio-btn" *ngIf="final" (click)="relatorioFinal()" data-style="zoom-in"
+    ladda-button>Relatório Final</a>
   </div>
 </div>

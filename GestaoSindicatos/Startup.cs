@@ -358,6 +358,11 @@ namespace GestaoSindicatos
                 Ordem = 18,
                 Texto = "Falta desconta DSR e feriado"
             };
+            GrupoPerguntaPadrao grupo19 = new GrupoPerguntaPadrao
+            {
+                Ordem = 19,
+                Texto = "Carência de intervalo"
+            };
             GrupoPerguntaPadrao grupo20 = new GrupoPerguntaPadrao
             {
                 Ordem = 20,
@@ -371,7 +376,8 @@ namespace GestaoSindicatos
 
             context.GruposPerguntasPadrao.AddRange(new List<GrupoPerguntaPadrao> {
                     grupo1, grupo2, grupo3, grupo4, grupo5, grupo6, grupo7, grupo8,
-                    grupo9, grupo10, grupo11
+                    grupo9, grupo10, grupo11, grupo12, grupo13, grupo14, grupo15, grupo16, grupo17, grupo18,
+                    grupo19, grupo20, grupo21
                 });
             context.SaveChanges();
 
@@ -753,93 +759,93 @@ namespace GestaoSindicatos
             {
                 Ordem = 7,
                 Texto = "Pré-Aposentadoria",
-                GrupoPerguntaId = grupo8.Id
+                GrupoPerguntaId = grupo9.Id
             };
             PerguntaPadrao p64 = new PerguntaPadrao
             {
                 Ordem = 8,
                 Texto = "Retorno de Férias",
-                GrupoPerguntaId = grupo8.Id
+                GrupoPerguntaId = grupo9.Id
             };
             PerguntaPadrao p65 = new PerguntaPadrao
             {
                 Ordem = 9,
                 Texto = "Cipa",
-                GrupoPerguntaId = grupo8.Id
+                GrupoPerguntaId = grupo9.Id
             };
             PerguntaPadrao p66 = new PerguntaPadrao
             {
                 Ordem = 10,
                 Texto = "Mandado sindical",
-                GrupoPerguntaId = grupo8.Id,
+                GrupoPerguntaId = grupo9.Id,
             };
             PerguntaPadrao p67 = new PerguntaPadrao
             {
                 Ordem = 11,
                 Texto = "Auxílio doença",
-                GrupoPerguntaId = grupo8.Id,
+                GrupoPerguntaId = grupo9.Id,
             };
             PerguntaPadrao p68 = new PerguntaPadrao
             {
                 Ordem = 12,
                 Texto = "Periodo de Trindidio",
-                GrupoPerguntaId = grupo8.Id,
+                GrupoPerguntaId = grupo9.Id,
             };
             PerguntaPadrao p69 = new PerguntaPadrao
             {
                 Ordem = 13,
                 Texto = "Licença maternidade",
-                GrupoPerguntaId = grupo8.Id
+                GrupoPerguntaId = grupo9.Id
             };
 
             PerguntaPadrao p70 = new PerguntaPadrao
             {
                 Ordem = 1,
                 Texto = "Adcional de Férias acima dos 33,33%",
-                GrupoPerguntaId = grupo9.Id
+                GrupoPerguntaId = grupo10.Id
             };
             PerguntaPadrao p71 = new PerguntaPadrao
             {
                 Ordem = 2,
                 Texto = "Regra de fracionamento de férias",
-                GrupoPerguntaId = grupo9.Id
+                GrupoPerguntaId = grupo10.Id
             };
             PerguntaPadrao p72 = new PerguntaPadrao
             {
                 Ordem = 3,
                 Texto = "Regra para inicio de férias",
-                GrupoPerguntaId = grupo9.Id
+                GrupoPerguntaId = grupo10.Id
             };
 
             PerguntaPadrao p73 = new PerguntaPadrao
             {
                 Ordem = 1,
                 Texto = "Utiliza ponto por Excessão",
-                GrupoPerguntaId = grupo10.Id
+                GrupoPerguntaId = grupo11.Id
             };
             PerguntaPadrao p74 = new PerguntaPadrao
             {
                 Ordem = 2,
                 Texto = "Banco de Horas",
-                GrupoPerguntaId = grupo10.Id
+                GrupoPerguntaId = grupo11.Id
             };
             PerguntaPadrao p75 = new PerguntaPadrao
             {
                 Ordem = 3,
                 Texto = "Prazo do Banco de Horas",
-                GrupoPerguntaId = grupo10.Id
+                GrupoPerguntaId = grupo11.Id
             };
             PerguntaPadrao p76 = new PerguntaPadrao
             {
                 Ordem = 4,
                 Texto = "Existe proporção do Banco de Horas",
-                GrupoPerguntaId = grupo10.Id
+                GrupoPerguntaId = grupo11.Id
             };
             PerguntaPadrao p77 = new PerguntaPadrao
             {
                 Ordem = 3,
                 Texto = "Regra do Banco de Horas",
-                GrupoPerguntaId = grupo10.Id
+                GrupoPerguntaId = grupo11.Id
             };
 
             PerguntaPadrao p78 = new PerguntaPadrao
@@ -873,6 +879,116 @@ namespace GestaoSindicatos
                 Texto = "Domingo e Feriado",
                 GrupoPerguntaId = grupo13.Id
             };
+
+            PerguntaPadrao p83 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "% Aplicado",
+                GrupoPerguntaId = grupo14.Id
+            };
+            PerguntaPadrao p84 = new PerguntaPadrao
+            {
+                Ordem = 2,
+                Texto = "Início",
+                GrupoPerguntaId = grupo14.Id
+            };
+            PerguntaPadrao p85 = new PerguntaPadrao
+            {
+                Ordem = 3,
+                Texto = "Fim",
+                GrupoPerguntaId = grupo14.Id
+            };
+
+            PerguntaPadrao p86 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "% Aplicado",
+                GrupoPerguntaId = grupo15.Id
+            };
+
+            PerguntaPadrao p87 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "% Aplicado",
+                GrupoPerguntaId = grupo16.Id
+            };
+
+            PerguntaPadrao p88 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "% Aplicado",
+                GrupoPerguntaId = grupo17.Id
+            };
+
+            PerguntaPadrao p89 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "Aplica",
+                GrupoPerguntaId = grupo18.Id
+            };
+
+            PerguntaPadrao p90 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "Aplica",
+                GrupoPerguntaId = grupo19.Id
+            };
+
+            PerguntaPadrao p91 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "Aplica",
+                GrupoPerguntaId = grupo20.Id
+            };
+
+            PerguntaPadrao p92 = new PerguntaPadrao
+            {
+                Ordem = 1,
+                Texto = "Adicional Noturno",
+                GrupoPerguntaId = grupo21.Id
+            };
+            PerguntaPadrao p93 = new PerguntaPadrao
+            {
+                Ordem = 2,
+                Texto = "Aplica",
+                GrupoPerguntaId = grupo21.Id
+            };
+            PerguntaPadrao p94 = new PerguntaPadrao
+            {
+                Ordem = 3,
+                Texto = "Falta",
+                GrupoPerguntaId = grupo21.Id
+            };
+            PerguntaPadrao p95 = new PerguntaPadrao
+            {
+                Ordem = 4,
+                Texto = "Quitação de Banco",
+                GrupoPerguntaId = grupo21.Id
+            };
+            PerguntaPadrao p96 = new PerguntaPadrao
+            {
+                Ordem = 5,
+                Texto = "Hora Extra",
+                GrupoPerguntaId = grupo21.Id
+            };
+            PerguntaPadrao p97 = new PerguntaPadrao
+            {
+                Ordem = 6,
+                Texto = "Débito",
+                GrupoPerguntaId = grupo21.Id
+            };
+            PerguntaPadrao p98 = new PerguntaPadrao
+            {
+                Ordem = 7,
+                Texto = "Sobreaviso",
+                GrupoPerguntaId = grupo21.Id
+            };
+            PerguntaPadrao p99 = new PerguntaPadrao
+            {
+                Ordem = 8,
+                Texto = "DSR",
+                GrupoPerguntaId = grupo21.Id
+            };
             
             context.PerguntasPadrao.AddRange(new List<PerguntaPadrao> {
                     p1, p2, p3, p4, p5, p6, p7, p8, p9, 
@@ -881,7 +997,10 @@ namespace GestaoSindicatos
                     p30, p31, p32, p33, p34, p35, p36, p37, p38, p39,
                     p40, p41, p42, p43, p44, p45, p46, p47, p48, p49,
                     p50, p51, p52, p53, p54, p55, p56, p57, p58, p59,
-                    p60, p61, p62, p63, p64, p65, p66, p67, p68, p69
+                    p60, p61, p62, p63, p64, p65, p66, p67, p68, p69,
+                    p70, p71, p72, p73, p74, p75, p76, p77, p78, p79,
+                    p80, p81, p82, p83, p84, p85, p86, p87, p88, p89,
+                    p90, p91, p92, p93, p94, p95, p96, p97, p98, p99
                 });
             context.SaveChanges();
 

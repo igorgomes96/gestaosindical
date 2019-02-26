@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { filter, switchMap, finalize } from 'rxjs/operators';
-import { Relatorio, GrupoPergunta, AplicacaoResposta, RespostaRelatorio } from 'src/app/model/relatorio';
+import { filter, switchMap, finalize, map } from 'rxjs/operators';
+import { Relatorio, GrupoPergunta, AplicacaoResposta, RespostaRelatorio, LayoutGrupo } from 'src/app/model/relatorio';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PdfGeneratorService } from 'src/app/shared/pdf-generator.service';
 import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
@@ -18,8 +18,15 @@ export class RelatorioComponent implements OnInit {
 
   relatorio: Relatorio;
   AplicacaoResposta: typeof AplicacaoResposta = AplicacaoResposta;
+  LayoutGrupo: typeof LayoutGrupo = LayoutGrupo;
   saveLoadBtn: Ladda.LaddaButton;
   downloadLoadBtn: Ladda.LaddaButton;
+
+  grupo3Colunas = [
+    'Proporção do Banco', 'Percentual de Horas Extras', 'Adicional Noturno',
+    'Percentual de sobreaviso', 'Percentual intrajornada', 'Percentual interjornada',
+    'Falta desconta DSR e feriado', 'Carência de intervalo', 'Tempo para não considerar intervalo'
+  ];
 
   constructor(private route: ActivatedRoute, private router: Router,
     private pdfGeneratorService: PdfGeneratorService,
@@ -31,9 +38,23 @@ export class RelatorioComponent implements OnInit {
     this.downloadLoadBtn = Ladda.create(document.querySelector('#download-btn'));
 
     this.route.data
-      .pipe(filter(d => d.hasOwnProperty('relatorio')))
-      .subscribe(d => {
-        this.relatorio = d['relatorio'];
+      .pipe(
+        filter(d => d.hasOwnProperty('relatorio')),
+        map((d: any) => {
+          const relatorio = d['relatorio'];
+          if (relatorio) {
+            relatorio.gruposPerguntas.forEach(g => {
+              if (this.grupo3Colunas.indexOf(g.texto) > -1) {
+                g.layoutGrupo = LayoutGrupo.Grupo3Colunas;
+              } else {
+                g.layoutGrupo = LayoutGrupo.Grupo1Coluna;
+              }
+            });
+          }
+          return relatorio;
+        })
+      ).subscribe(d => {
+        this.relatorio = d;
       });
   }
 
@@ -69,6 +90,7 @@ export class RelatorioComponent implements OnInit {
       ordem: this.relatorio.gruposPerguntas.length,
       relatorioId: this.relatorio.id,
       respostas: [],
+      layoutGrupo: LayoutGrupo.Grupo1Coluna,
       texto: 'Novo Grupo'
     });
   }
@@ -101,6 +123,7 @@ export class RelatorioComponent implements OnInit {
   async download() {
     this.downloadLoadBtn.start();
     try {
+      // tslint:disable-next-line:max-line-length
       await this.pdfGeneratorService.htmltoPDF('#relatorio .header', '#relatorio .group', `${this.relatorio.negociacao.empresa.nome} - ${this.relatorio.negociacao.ano}.pdf`);
     } catch (err) {
       console.error(err);

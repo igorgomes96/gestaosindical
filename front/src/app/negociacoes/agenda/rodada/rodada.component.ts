@@ -8,6 +8,7 @@ import { switchMap, finalize } from 'rxjs/operators';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { RodadasApiService } from 'src/app/shared/api/rodadas-api.service';
 import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
+import * as Ladda from 'ladda';
 
 @Component({
   selector: 'app-rodada',
@@ -24,6 +25,7 @@ export class RodadaComponent implements OnInit {
   form: FormGroup;
   data: Date;
   spinnerArquivos = false;
+  relatorioLoadBtn: Ladda.LaddaButton;
 
   constructor(private service: RodadasApiService, private toast: ToastsService,
     private router: Router, private negociacoesApi: NegociacoesApiService,
@@ -97,7 +99,9 @@ export class RodadaComponent implements OnInit {
   }
 
   relatorioFinal() {
+    // this.relatorioLoadBtn.start();
     this.negociacoesApi.postRelatorio(this.rodada.negociacaoId)
+    // .pipe(finalize(() => this.relatorioLoadBtn.stop()))
     .subscribe(() => {
       this.toast.showMessage({
         message: 'Relatório gerado com sucesso!',
