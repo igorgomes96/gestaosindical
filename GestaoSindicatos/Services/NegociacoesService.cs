@@ -390,7 +390,7 @@ namespace GestaoSindicatos.Services
                     return negociacao.SindicatoLaboral?.Nome ?? "";
                 case "nome sindicato patronal":
                     return negociacao.SindicatoPatronal?.Nome ?? "";
-                case "instrumento coletivo (ACT/CCT)":
+                case "instrum. col. (act/cct)":
                     return negociacao.SindicatoLaboral == null ? "" : (negociacao.SindicatoLaboral.Cct_act == CCT_ACT.ACT ? "ACT" : "CCT");
                 case "data base":
                     return negociacao.SindicatoLaboral == null ? "" :

@@ -1,8 +1,8 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { RodadaNegociacao } from './../../../model/negociacao';
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup} from '@angular/forms';
+import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Arquivo } from 'src/app/model/arquivo';
 import { switchMap, finalize } from 'rxjs/operators';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
@@ -10,12 +10,14 @@ import { RodadasApiService } from 'src/app/shared/api/rodadas-api.service';
 import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.service';
 import * as Ladda from 'ladda';
 
+declare var $: any;
+
 @Component({
   selector: 'app-rodada',
   templateUrl: './rodada.component.html',
   styleUrls: ['./rodada.component.css']
 })
-export class RodadaComponent implements OnInit {
+export class RodadaComponent implements OnInit, AfterViewInit {
 
   @Input() rodada: RodadaNegociacao;
   @Input() final: boolean;
@@ -32,8 +34,16 @@ export class RodadaComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
+
     this.service.getArquivos(this.rodada.id)
       .subscribe(a => this.arquivos = a);
+  }
+
+  ngAfterViewInit() {
+    const elem = $('.ladda-button').last();
+    if (elem && elem.length > 0) {
+      this.relatorioLoadBtn = Ladda.create(elem[0]);
+    }
   }
 
   setData($event) {
@@ -46,9 +56,9 @@ export class RodadaComponent implements OnInit {
   upload(files: FileList) {
     this.spinnerArquivos = true;
     this.service.uploadFiles(this.rodada.id, files)
-    .pipe(switchMap(_ => this.service.getArquivos(this.rodada.id)),
-      finalize(() => this.spinnerArquivos = false))
-    .subscribe(d => this.arquivos = d);
+      .pipe(switchMap(_ => this.service.getArquivos(this.rodada.id)),
+        finalize(() => this.spinnerArquivos = false))
+      .subscribe(d => this.arquivos = d);
   }
 
   deleteFile(event: any) {
@@ -99,17 +109,17 @@ export class RodadaComponent implements OnInit {
   }
 
   relatorioFinal() {
-    // this.relatorioLoadBtn.start();
+    this.relatorioLoadBtn.start();
     this.negociacoesApi.postRelatorio(this.rodada.negociacaoId)
-    // .pipe(finalize(() => this.relatorioLoadBtn.stop()))
-    .subscribe(() => {
-      this.toast.showMessage({
-        message: 'Relatório gerado com sucesso!',
-        title: 'Sucesso!',
-        type: ToastType.success
+      .pipe(finalize(() => this.relatorioLoadBtn.stop()))
+      .subscribe(() => {
+        this.toast.showMessage({
+          message: 'Relatório gerado com sucesso!',
+          title: 'Sucesso!',
+          type: ToastType.success
+        });
+        this.router.navigate(['./relatorio'], { relativeTo: this.route });
       });
-      this.router.navigate(['./relatorio'], {relativeTo: this.route});
-    });
   }
 
 }

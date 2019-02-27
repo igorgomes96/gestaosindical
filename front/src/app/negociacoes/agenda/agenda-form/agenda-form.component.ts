@@ -17,7 +17,6 @@ import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.servic
 import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
 import { PatronaisApiService } from 'src/app/shared/api/patronais-api.service';
 import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
-import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 
 @Component({
   selector: 'app-agenda-form',
