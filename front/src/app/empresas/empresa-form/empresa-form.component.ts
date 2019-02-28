@@ -19,7 +19,7 @@ import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
 import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
 import { PatronaisApiService } from 'src/app/shared/api/patronais-api.service';
 import { EstadosApiService } from 'src/app/shared/api/estados-api.service';
-
+import * as Ladda from 'ladda';
 
 @Component({
   selector: 'app-empresa-form',
@@ -40,6 +40,8 @@ export class EmpresaFormComponent implements OnInit {
   urlPatronalList = environment.api + endpoints.sindicatosPatronais;
   urlLaboralList = environment.api + endpoints.sindicatosLaborais;
 
+  salvarLoadBtn: Ladda.LaddaButton;
+
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder, private router: Router,
     private empresasApi: EmpresasApiService,
@@ -49,6 +51,7 @@ export class EmpresaFormComponent implements OnInit {
     private toast: ToastsService) { }
 
   ngOnInit() {
+    this.salvarLoadBtn = Ladda.create(document.querySelector('.ladda-button'));
     this.form = this.formBuilder.group({
       id: [{ value: '', disabled: true }],
       nome: ['', Validators.required],
@@ -127,22 +130,24 @@ export class EmpresaFormComponent implements OnInit {
   }
 
   put(empresa: Empresa) {
+    this.salvarLoadBtn.start();
     this.empresasApi.put(empresa.id, empresa)
       .pipe(tap(_ => this.toast.showMessage({
         message: 'Empresa salva com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.salvarLoadBtn.stop()))
       .subscribe(_ => this.router.navigate(['/empresas', empresa.id]));
   }
 
   post(empresa: Empresa) {
+    this.salvarLoadBtn.start();
     this.empresasApi.post(empresa)
       .pipe(tap(_ => this.toast.showMessage({
         message: 'Empresa salva com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.salvarLoadBtn.stop()))
       .subscribe((e: Empresa) => this.router.navigate(['/empresas', e.id]));
   }
 
