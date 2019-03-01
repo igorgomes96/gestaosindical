@@ -20,7 +20,8 @@ namespace GestaoSindicatos.Auth
         private readonly string password;
 
         // Get our parameterized configuration
-        public EmailSender(string host, int port, bool enableSSL, bool useDefaultCredentials, string userName = null, string password = null)
+        public EmailSender(string host, int port, bool enableSSL, bool useDefaultCredentials,
+            string userName = null, string password = null, string adminEmail = null)
         {
             this.host = host;
             this.port = port;

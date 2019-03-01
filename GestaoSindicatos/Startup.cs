@@ -85,7 +85,8 @@ namespace GestaoSindicatos
                     Configuration.GetValue<bool>("EmailSender:EnableSSL"),
                     Configuration.GetValue<bool>("EmailSender:UseDefaultCredentials"),
                     Configuration["EmailSender:UserName"],
-                    Configuration["EmailSender:Password"]
+                    Configuration["EmailSender:Password"],
+                    Configuration["EmailSender:EmailAdmin"]
                 )
             );
 

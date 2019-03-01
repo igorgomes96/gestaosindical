@@ -8,23 +8,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using GestaoSindicatos.Properties;
+using Microsoft.Extensions.Configuration;
 
 namespace GestaoSindicatos.Services
 {
-    public class UsuariosService: CrudService<Usuario>
+    public class UsuariosService : CrudService<Usuario>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly Context _db;
         private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _configuration;
 
         public UsuariosService(UserManager<ApplicationUser> userManager, Context context,
-            IEmailSender emailSender): base(context)
+            IEmailSender emailSender, IConfiguration configuration) : base(context)
         {
             _userManager = userManager;
             _db = context;
             _emailSender = emailSender;
+            _configuration = configuration;
         }
 
         public void CreateUser(Usuario user, string password, string initialRole = null)
@@ -45,11 +49,23 @@ namespace GestaoSindicatos.Services
                     user.Id = _userManager.FindByNameAsync(user.Login).Result.Id;
                     user.Perfil = Roles.PADRAO;
                     Add(user);
-                } else
+
+                    string emailAdmin =  _configuration["EmailSender:EmailAdmin"];
+                    string link =  _configuration["URL"];
+
+                    _emailSender.SendEmailAsync(emailAdmin, "[Gestão Sindical] Liberação de Acesso",
+                        Resource.GrantAccessTemplate.Replace("@USUARIO", user.Nome)
+                            .Replace("@LOGIN", user.Login)
+                            .Replace("@HORA", DateTime.Now.ToString("HH:mm:ss"))
+                            .Replace("@DIA", DateTime.Now.ToString("dd/MM/yyyy"))
+                            .Replace("@LINK", $"{link}/usuarios/{user.Login}")).Wait();
+                }
+                else
                 {
                     throw new Exception(resultado.Errors.First().Code);
                 }
-            } else
+            }
+            else
             {
                 throw new Exception("Usuário já cadastrado!");
             }
@@ -171,7 +187,7 @@ namespace GestaoSindicatos.Services
             _userManager.AddToRoleAsync(appUser, Roles.PADRAO).Wait();
             if (_userManager.IsInRoleAsync(appUser, Roles.ADMIN).Result)
                 _userManager.RemoveFromRoleAsync(appUser, Roles.ADMIN).Wait();
-            
+
         }
 
     }

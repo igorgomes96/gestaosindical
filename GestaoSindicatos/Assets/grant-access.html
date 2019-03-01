@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Recuperação de Senha</title>
+    <title>Cadastro de Usuário</title>
     <style>
         * {
             margin: 0;
@@ -98,8 +98,8 @@
                 <div class="content">
                     <table class="main" width="100%" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td class="alert" style="background: #1ab394;">
-                                Código de Recuperação
+                            <td class="alert" style="background: #1ab394">
+                                Liberação de Acesso
                             </td>
                         </tr>
                         <tr>
@@ -107,17 +107,19 @@
                                 <table width="100%" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <td class="content-block">
-                                            Utilize o código abaixo para redefinir sua senha:
+                                            O usuário @USUARIO (login @LOGIN) se cadastrou no sistema às @HORA do dia @DIA.<br>
+                                            Para que ele consiga ter acesso aos dados é necessário que o usuário seja vinculado às suas respecitvas empresas ou seu perfil seja alterado para Administrador.<br>
+                                            Acesse o sistema para realizar os ajustes necessários.
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="content-block">
-                                            <h1>@CODIGO</h1>
+                                            <h1><a href="@LINK">@LINK</a></h1>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="content-block">
-                                            Esse código expira 24 horas após sua criação.
+                                            Cuidado: o perfil Administrador tem permissão para incluir, editar ou excluir qualquer registro ou arquivo do sistema.
                                         </td>
                                     </tr>
                                 </table>

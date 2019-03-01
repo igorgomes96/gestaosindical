@@ -71,11 +71,18 @@ namespace GestaoSindicatos.Properties {
         ///        * {
         ///            margin: 0;
         ///            padding: 0;
-        ///            font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif;        /// [rest of string was truncated]&quot;;.
+        ///            font-family: &quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string RecoveryPasswordTemplate {
             get {
                 return ResourceManager.GetString("RecoveryPasswordTemplate", resourceCulture);
+            }
+        }
+
+        public static string GrantAccessTemplate {
+            get {
+                return ResourceManager.GetString("GrantAccessTemplate", resourceCulture);
             }
         }
     }
