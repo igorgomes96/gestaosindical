@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-12">
                 <app-panel>
-                    <form role="form" [formGroup]="form" (submit)="salvar()">
+                    <form role="form" [formGroup]="form">
                         <h2>Sindicato</h2>
                         <p>
                             Cadastro/edição de sindicatos laborais
@@ -111,9 +111,9 @@
                             </div>
                         </div>
 
-                        <input type="submit" class="btn btn-success" value="Salvar" [disabled]="form.invalid">
-
                         <app-related-link [relatedLinks]="relatedLinks"></app-related-link>
+
+                        <button type="button" class="btn btn-success ladda-button" data-style="zoom-in" (click)="salvar()" [disabled]="form.invalid">Salvar</button>
 
                     </form>
                 </app-panel>

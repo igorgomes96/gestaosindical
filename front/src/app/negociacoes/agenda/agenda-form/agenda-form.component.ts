@@ -2,7 +2,7 @@ import { ToastsService } from 'src/app/shared/toasts.service';
 import { Concorrente, TipoReajuste, ParcelaReajuste } from '../../../model/negociacao';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Arquivo } from 'src/app/model/arquivo';
 import { switchMap, filter, tap, distinctUntilChanged, finalize } from 'rxjs/operators';
@@ -17,13 +17,15 @@ import { NegociacoesApiService } from 'src/app/shared/api/negociacoes-api.servic
 import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
 import { PatronaisApiService } from 'src/app/shared/api/patronais-api.service';
 import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
+import * as Ladda from 'ladda';
+
 
 @Component({
   selector: 'app-agenda-form',
   templateUrl: './agenda-form.component.html',
   styleUrls: ['./agenda-form.component.css']
 })
-export class AgendaFormComponent implements OnInit {
+export class AgendaFormComponent implements OnInit, AfterViewInit {
 
   form: FormGroup;
   parcelasForm: FormGroup;
@@ -39,6 +41,10 @@ export class AgendaFormComponent implements OnInit {
   spinnerArquivos = false;
   tipoReajuste = null;
   reajuste = null;
+
+  btnSalvarLoad: Ladda.LaddaButton;
+  btnNovaRodadaLoad: Ladda.LaddaButton;
+
 
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -83,6 +89,8 @@ export class AgendaFormComponent implements OnInit {
       plr1Sem: [''],
       plr2Sem: ['']
     });
+
+    this.btnSalvarLoad = Ladda.create(document.querySelector('#btnSalvar')); 
 
     this.parcelasForm = this.formBuilder.group({
       id: [''],
@@ -134,6 +142,12 @@ export class AgendaFormComponent implements OnInit {
       });
   }
 
+  ngAfterViewInit() {
+    if (this.negociacao) {
+      this.btnNovaRodadaLoad = Ladda.create(document.querySelector('#btnNovaRodada'));  
+    }
+  }
+
   hasError(control: AbstractControl) {
     return control.dirty && control.invalid;
   }
@@ -176,7 +190,7 @@ export class AgendaFormComponent implements OnInit {
     });
   }
 
-  closeModal(_) {
+  closeModal(_: any) {
     this.tipoReajuste = null;
     this.reajuste = null;
     this.parcelasForm.reset();
@@ -210,8 +224,9 @@ export class AgendaFormComponent implements OnInit {
   }
 
   novaRodada() {
+    this.btnNovaRodadaLoad.start();
     this.service.put(this.negociacao.id, this.negociacaoToSave)
-      .pipe(switchMap(_ => this.service.postRodada(this.negociacao.id)))
+      .pipe(switchMap(_ => this.service.postRodada(this.negociacao.id)), finalize(() => this.btnNovaRodadaLoad.stop()))
       .subscribe(r => {
         this.rodadas.push(r);
         this.toast.showMessage({
@@ -229,22 +244,24 @@ export class AgendaFormComponent implements OnInit {
   }
 
   put(negociacao: Negociacao) {
+    this.btnSalvarLoad.start();
     this.service.put(negociacao.id, negociacao)
       .pipe(tap(_ => this.toast.showMessage({
         message: 'Negociação salva com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.btnSalvarLoad.stop()))
       .subscribe(_ => this.router.navigate(['/negociacoes/gestao', negociacao.id]));
   }
 
   post(negociacao: Negociacao) {
+    this.btnSalvarLoad.start();
     this.service.post(negociacao)
       .pipe(tap(_ => this.toast.showMessage({
         message: 'Negociação salva com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.btnSalvarLoad.stop()))
       .subscribe((neg: Negociacao) => this.router.navigate(['/negociacoes/gestao', neg.id]));
   }
 

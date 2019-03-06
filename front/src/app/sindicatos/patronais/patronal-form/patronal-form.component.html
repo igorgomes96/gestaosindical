@@ -69,7 +69,7 @@
                             </div>
                         </div>
 
-                        <input type="submit" class="btn btn-success" value="Salvar" [disabled]="form.invalid">
+                        <button type="button" (click)="salvar()" class="btn btn-success ladda-button"  data-style="zoom-in" [disabled]="form.invalid" >Salvar</button>
 
                         <app-related-link [relatedLinks]="relatedLinks"></app-related-link>
 

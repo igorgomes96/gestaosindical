@@ -10,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 import { switchMap, filter, finalize, tap } from 'rxjs/operators';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
+import * as Ladda from 'ladda';
 
 @Component({
   selector: 'app-laboral-form',
@@ -24,6 +25,7 @@ export class LaboralFormComponent implements OnInit {
   arquivos: Arquivo[];
   relatedLinks: RelatedLink[];
   spinnerArquivos = false;
+  buttonLoad: Ladda.LaddaButton;
 
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -44,6 +46,8 @@ export class LaboralFormComponent implements OnInit {
       database: ['Janeiro', Validators.required],
       cct_act: ['ACT', Validators.required]
     });
+
+    this.buttonLoad = Ladda.create(document.querySelector('.ladda-button'));
 
     this.route.data
       .pipe(
@@ -121,22 +125,24 @@ export class LaboralFormComponent implements OnInit {
   }
 
   post(sindicato: SindicatoLaboral) {
+    this.buttonLoad.start();
     this.service.post(sindicato)
       .pipe(tap(_ => this.toast.showMessage({
         message: 'Sindicato salvo com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.buttonLoad.stop()))
       .subscribe(s => this.router.navigate(['/sindicatos/laborais', s.id]));
   }
 
   put(sindicato: SindicatoLaboral) {
+    this.buttonLoad.start();
     this.service.put(sindicato.id, sindicato)
       .pipe(tap(_ => this.toast.showMessage({
         message: 'Sindicato salvo com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.buttonLoad.stop()))
       .subscribe(_ => this.router.navigate(['/sindicatos/laborais', sindicato.id]));
   }
 

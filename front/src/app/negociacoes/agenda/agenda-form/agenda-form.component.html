@@ -305,8 +305,8 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <button class="btn btn-primary m-r-sm" (click)="salvar()" [disabled]="form.invalid">Salvar</button>
-          <button class="btn btn-success m-r-sm" (click)="novaRodada()" *ngIf="negociacao">Abrir Nova Rodada</button>
+          <button class="btn btn-primary ladda-button m-r-sm" id="btnSalvar" data-style="zoom-in" (click)="salvar()" [disabled]="form.invalid">Salvar</button>
+          <button class="btn btn-success ladda-button m-r-sm" id="btnNovaRodada" data-style="zoom-in" (click)="novaRodada()" *ngIf="negociacao">Abrir Nova Rodada</button>
         </div>
       </div>
     </app-panel>

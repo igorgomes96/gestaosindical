@@ -1,7 +1,7 @@
 import { ToastsService } from './../../../shared/toasts.service';
 import { Arquivo } from 'src/app/model/arquivo';
 import { ProcedimentoLitigio, Litigio, Referente, ItemLitigio } from './../../../model/litigio';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { endpoints } from 'src/environments/endpoints';
@@ -14,13 +14,14 @@ import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { EstadosApiService } from 'src/app/shared/api/estados-api.service';
 import { ItensLitigiosApiService } from 'src/app/shared/api/itens-litigios-api.service';
 import { LitigiosApiService } from 'src/app/shared/api/litigios-api.service';
+import * as Ladda from 'ladda';
 
 @Component({
   selector: 'app-litigio-form',
   templateUrl: './litigio-form.component.html',
   styleUrls: ['./litigio-form.component.css']
 })
-export class LitigioFormComponent implements OnInit {
+export class LitigioFormComponent implements OnInit, AfterViewInit {
 
   litigio: Litigio;
   arquivos: Arquivo[];
@@ -32,6 +33,9 @@ export class LitigioFormComponent implements OnInit {
   urlLaboralList = environment.api + endpoints.sindicatosLaborais;
   urlPatronalList = environment.api + endpoints.sindicatosPatronais;
   spinnerArquivos = false;
+
+  btnSalvarLoad: Ladda.LaddaButton;
+  btnAddReclamacao: Ladda.LaddaButton;
 
   constructor(private formBuilder: FormBuilder,
     private service: LitigiosApiService,
@@ -53,6 +57,9 @@ export class LitigioFormComponent implements OnInit {
       resumoAssuntos: [''],
       participantes: ['']
     });
+
+    this.btnSalvarLoad = Ladda.create(document.querySelector('#btnSalvar'));
+
     this.estados$ = this.estadosApi.getEstados();
     this.form.get('referente').valueChanges
       .pipe(distinctUntilChanged())
@@ -85,11 +92,18 @@ export class LitigioFormComponent implements OnInit {
       });
   }
 
+  ngAfterViewInit() {
+    if (this.litigio) {
+      this.btnAddReclamacao = Ladda.create(document.querySelector('#btnAddReclamacao'));
+    }
+  }
+
   hasError(formControl: AbstractControl) {
     return formControl.dirty && formControl.invalid;
   }
 
   addItem() {
+    this.btnAddReclamacao.start();
     const novoItem = {
       litigioId: this.litigio.id,
       assuntos: '',
@@ -97,6 +111,7 @@ export class LitigioFormComponent implements OnInit {
     };
     if (this.litigio) {
       this.itensApi.post(<ItemLitigio>novoItem)
+        .pipe(finalize(() => this.btnAddReclamacao.stop()))
         .subscribe((item: ItemLitigio) => {
           if (!this.litigio.itens) {
             this.litigio.itens = [];
@@ -131,22 +146,24 @@ export class LitigioFormComponent implements OnInit {
   }
 
   put(litigio: Litigio) {
+    this.btnSalvarLoad.start();
     this.service.put(litigio.id, litigio)
       .pipe(tap(_ => this.toasts.showMessage({
         message: 'Litígio salvo com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.btnSalvarLoad.stop()))
       .subscribe(_ => this.router.navigate(['negociacoes/litigios', litigio.id]));
   }
 
   post(litigio: Litigio) {
+    this.btnSalvarLoad.start();
     this.service.post(litigio)
       .pipe(tap(_ => this.toasts.showMessage({
         message: 'Litígio salvo com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.btnSalvarLoad.stop()))
       .subscribe(l => this.router.navigate(['negociacoes/litigios', l.id]));
   }
 

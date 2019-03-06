@@ -13,6 +13,7 @@ import { Arquivo } from 'src/app/model/arquivo';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { PatronaisApiService } from 'src/app/shared/api/patronais-api.service';
 
+import * as Ladda from 'ladda';
 
 @Component({
   selector: 'app-patronal-form',
@@ -27,6 +28,7 @@ export class PatronalFormComponent implements OnInit {
   arquivos: Arquivo[];
   relatedLinks: RelatedLink[];
   spinnerArquivos = false;
+  buttonLoad: Ladda.LaddaButton;
 
   constructor(private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -44,6 +46,8 @@ export class PatronalFormComponent implements OnInit {
       gestao: [''],
       site: ['']
     });
+
+    this.buttonLoad = Ladda.create(document.querySelector('.ladda-button'));
 
     this.route.data
       .pipe(
@@ -120,22 +124,24 @@ export class PatronalFormComponent implements OnInit {
   }
 
   post(patronal: SindicatoPatronal) {
+    this.buttonLoad.start();
     this.service.post(patronal)
       .pipe(tap(_ => this.toast.showMessage({
         message: 'Sindicato salvo com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.buttonLoad.stop()))
       .subscribe((s: SindicatoPatronal) => this.router.navigate(['/sindicatos/patronais', s.id]));
   }
 
   put(patronal: SindicatoPatronal) {
+    this.buttonLoad.start();
     this.service.put(patronal.id, patronal)
       .pipe(tap(_ => this.toast.showMessage({
         message: 'Sindicato salvo com sucesso!',
         title: 'Sucesso!',
         type: ToastType.success
-      })))
+      })), finalize(() => this.buttonLoad.stop()))
       .subscribe(_ => this.router.navigate(['/sindicatos/patronais', patronal.id]));
   }
 
