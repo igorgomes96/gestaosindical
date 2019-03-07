@@ -13,7 +13,7 @@ namespace GestaoSindicatos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize("Bearer")]
     public class PesquisaController : ControllerBase
     {
         private readonly PesquisaService _pesquisaService;
@@ -29,7 +29,7 @@ namespace GestaoSindicatos.Controllers
                 return null;
             try
             {
-                return _pesquisaService.Pesquisa(nome);
+                return _pesquisaService.Pesquisa(nome, User);
             } catch (Exception e)
             {
                 return BadRequest(e.Message);

@@ -1,5 +1,5 @@
-<app-list-container [list]="empresas" title="Empresa" description="Relação de todas as empresas cadastradas."
-    searchPlaceholder="Pesquisar Empresas" newLink="/empresas/nova" (onFilter)="onFilter($event)">
+<app-list-container title="Empresa" description="Relação de todas as empresas cadastradas."
+    searchPlaceholder="Pesquisar Empresas" newLink="/empresas/nova" (onFilter)="onFilter($event)" [onLoad]="onLoad">
 
     <div class="clients-list">
         <div class="table-responsive">

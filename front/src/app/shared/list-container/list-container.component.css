@@ -1,0 +1,9 @@
+nav {
+    text-align: center;
+}
+
+
+.pagination>li.active>a {
+    background: #1d84c6;
+    color: white;
+}

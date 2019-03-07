@@ -16,6 +16,7 @@
                                 <div class="content-nav">
                                     <div class="m-b-sm">
                                         #{{ item.obj.id }} {{ item.obj.nome }}
+                                        <span *ngIf="item.entityType == EntityType[EntityType.Empresa]"> ({{ item.obj.endereco?.cidade }})</span>
                                     </div>
                                     <button class="btn btn-xs m-r-xs btn-default" (click)="navigate('/negociacoes/gestao', item, $event)">Negociações</button>
                                     <!-- <button class="btn btn-xs m-r-xs btn-default" (click)="navigate('/negociacoes/planosacao', item, $event)">Planos de Ação</button> -->
@@ -25,8 +26,6 @@
                             </div>
                         </ng-template>
                     </app-autocomplete>
-                    <!-- <input type="text" placeholder="Pesquisar..." formControlName="pesquisa" class="form-control" name="top-search"
-                        id="top-search"> -->
                 </div>
             </form>
         </div>

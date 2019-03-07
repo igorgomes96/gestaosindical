@@ -1,6 +1,6 @@
-<app-list-container [list]="sindicatos" title="Sindicatos Laborais" 
+<app-list-container title="Sindicatos Laborais" 
   description="Relação de todos os sindicatos cadastrados." searchPlaceholder="Pesquisar Sindicatos" 
-  newLink="/sindicatos/laborais/novo" (onFilter)="onFilter($event)">
+  newLink="/sindicatos/laborais/novo" (onFilter)="onFilter($event)" [onLoad]="onLoad">
   
   <div class="clients-list">
     <div class="table-responsive">

@@ -20,7 +20,53 @@
       </form>
 
       <a class="btn btn-primary m-t-md" *ngIf="newLink" [routerLink]="newLink">Novo <span class="fa fa-plus"></span></a>
-      <ng-content></ng-content>      
+
+      <hr>
+
+      <nav aria-label="Page navigation" *ngIf="nPages > 1">
+        <ul class="pagination">
+          <li>
+            <a (click)="previousPage()" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li *ngFor="let page of pages" [class.active]="page === pageIndex">
+            <a (click)="loadPage(page)">{{ page }}</a>
+          </li>
+          <li>
+            <a (click)="nextPage()" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div>
+        <small>
+          Registros por página: {{ pageSize }} <br>
+          Total: {{ filteredList?.length }} registros
+        </small>
+      </div>
+
+      <ng-content></ng-content>
+      <nav aria-label="Page navigation" *ngIf="nPages > 1">
+        <ul class="pagination">
+          <li>
+            <a (click)="previousPage()" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li *ngFor="let page of pages" [class.active]="page === pageIndex">
+            <a (click)="loadPage(page)">{{ page }}</a>
+          </li>
+          <li>
+            <a (click)="nextPage()" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
     </app-panel>
   </div>
 </div>

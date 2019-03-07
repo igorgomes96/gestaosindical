@@ -6,7 +6,7 @@
         placeholder="Empresa">
         <ng-template let-item>
           <span class="fa fa-users m-r-sm"></span>
-          <strong>#{{item.id}}</strong> {{item.nome}}
+          <strong>#{{item.id}}</strong> {{item.nome}} ({{ item.endereco?.cidade }})
         </ng-template>
       </app-autocomplete>
     </form>

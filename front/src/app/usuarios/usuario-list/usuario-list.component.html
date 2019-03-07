@@ -1,6 +1,6 @@
-<app-list-container [list]="usuarios" title="Usuários do Sistema" 
+<app-list-container title="Usuários do Sistema" 
   description="Relação de todos os usuários cadastrados." searchPlaceholder="Pesquisar Usuários"
-  (onFilter)="onFilter($event)">
+  (onFilter)="onFilter($event)" [onLoad]="onLoad">
 
   <div class="clients-list">
     <div class="table-responsive">

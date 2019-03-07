@@ -1,6 +1,6 @@
 import { StatusPlanoAcao } from './../../../model/plano-acao';
 import { Litigio, ProcedimentoLitigio, Referente } from './../../../model/litigio';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { tap, switchMap } from 'rxjs/operators';
 import { Options } from 'ng5-slider/options';
@@ -23,7 +23,6 @@ export class LitigioListComponent implements OnInit {
     private intervalService: IntervalFilterService,
     private toast: ToastsService) { }
 
-  litigios: Litigio[];
   litigiosFiltrados: Litigio[];
   referent: any;
   value: number;
@@ -31,6 +30,7 @@ export class LitigioListComponent implements OnInit {
   ProcedimentoLitigio: typeof ProcedimentoLitigio = ProcedimentoLitigio;
   StatusPlanoAcao: typeof StatusPlanoAcao = StatusPlanoAcao;
   Referente: typeof Referente = Referente;
+  onLoad: EventEmitter<Litigio[]> = new EventEmitter<Litigio[]>();
   filterParams = (v: string) => ({ empresa: { nome: v } });
 
   ngOnInit() {
@@ -50,8 +50,7 @@ export class LitigioListComponent implements OnInit {
       }),
       switchMap(_ => this.api.getAll(this.referent))
     ).subscribe(d => {
-      this.litigios = d;
-      this.litigiosFiltrados = d;
+      this.onLoad.emit(d);
     });
 
   }
@@ -142,8 +141,7 @@ export class LitigioListComponent implements OnInit {
     this.referent['de'] = new Date(new Date(start).setHours(0, 0, 0, 0)).toLocaleString('en-US');
     this.referent['ate'] = new Date(new Date(end).setHours(23, 59, 59, 99)).toLocaleString('en-US');
     this.api.getAll(this.referent).subscribe(d => {
-      this.litigios = d;
-      this.litigiosFiltrados = d;
+      this.onLoad.emit(d);
     });
   }
 
@@ -157,8 +155,7 @@ export class LitigioListComponent implements OnInit {
   load() {
     this.api.getAll(this.referent)
     .subscribe((d: Litigio[]) => {
-      this.litigios = d;
-      this.litigiosFiltrados = this.litigios;
+      this.onLoad.emit(d);
     });
   }
 

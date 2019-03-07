@@ -1,6 +1,6 @@
 import { ToastsService } from './../../../shared/toasts.service';
 import { ToastType } from './../../../shared/toasts/toasts.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 
 import { SindicatoPatronal } from 'src/app/model/sindicato-patronal';
 import { take } from 'rxjs/operators';
@@ -15,8 +15,10 @@ declare var swal: any;
 })
 export class PatronalListComponent implements OnInit {
 
-  sindicatos: SindicatoPatronal[];
   sindicatosFiltrados: SindicatoPatronal[];
+
+  onLoad: EventEmitter<SindicatoPatronal[]> = new EventEmitter<SindicatoPatronal[]>();
+
   constructor(private api: PatronaisApiService, private toastService: ToastsService) { }
 
   ngOnInit() {
@@ -27,8 +29,7 @@ export class PatronalListComponent implements OnInit {
     this.api.getAll()
       .pipe(take(1))
       .subscribe(d => {
-        this.sindicatos = d;
-        this.sindicatosFiltrados = d;
+        this.onLoad.emit(d);
       });
   }
 

@@ -1,5 +1,5 @@
-<app-list-container [list]="litigios" title="Litígios" description="Relação de todos os litígios." searchPlaceholder="Pesquisar Litígios"
-  newLink="/negociacoes/litigios/novo" [referent]="referent" (onFilter)="onFilter($event)" [filterParams]="filterParams">
+<app-list-container title="Litígios" description="Relação de todos os litígios." searchPlaceholder="Pesquisar Litígios"
+  newLink="/negociacoes/litigios/novo" [referent]="referent" (onFilter)="onFilter($event)" [filterParams]="filterParams" [onLoad]="onLoad">
 
   <div class="hr-line-dashed"></div>
   <div>

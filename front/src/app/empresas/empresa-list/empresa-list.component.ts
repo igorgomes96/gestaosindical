@@ -1,6 +1,6 @@
 import { ToastsService } from './../../shared/toasts.service';
 import { take } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Empresa } from 'src/app/model/empresa';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
@@ -12,8 +12,8 @@ import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
 })
 export class EmpresaListComponent implements OnInit {
 
-  empresas: Empresa[];
   empresasFiltradas: Empresa[];
+  onLoad: EventEmitter<Empresa[]> = new EventEmitter<Empresa[]>();
   filterParams = (v: string) => {
     return {
       empresa: { nome: v },
@@ -31,8 +31,7 @@ export class EmpresaListComponent implements OnInit {
   load() {
     this.api.getAll().pipe(take(1))
       .subscribe(e => {
-        this.empresas = e;
-        this.empresasFiltradas = e;
+        this.onLoad.emit(e);
       });
   }
 

@@ -1,6 +1,6 @@
-<app-list-container [list]="negociacoes" title="Negociações" description="Relação de todas as negociações."
+<app-list-container title="Negociações" description="Relação de todas as negociações."
   searchPlaceholder="Pesquisar Negociações" newLink="/negociacoes/gestao/nova" [referent]="referent" (onFilter)="onFilter($event)"
-  [filterParams]="filterParams">
+  [filterParams]="filterParams" [onLoad]="onLoad">
 
   <div class="hr-line-dashed"></div>
   <div> <!-- class="custom-slider" -->

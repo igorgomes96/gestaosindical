@@ -1,7 +1,7 @@
 import { ToastsService } from './../../../shared/toasts.service';
 import { tap, switchMap } from 'rxjs/operators';
 import { SindicatoLaboral, Mes } from './../../../model/sindicato-laboral';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
@@ -13,9 +13,10 @@ import { LaboraisApiService } from 'src/app/shared/api/laborais-api.service';
 })
 export class LaboralListComponent implements OnInit {
 
-  sindicatos: SindicatoLaboral[];
   sindicatosFiltrados: SindicatoLaboral[];
   Mes: typeof Mes = Mes;
+
+  onLoad: EventEmitter<SindicatoLaboral[]> = new EventEmitter<SindicatoLaboral[]>();
 
   constructor(private api: LaboraisApiService, private route: ActivatedRoute, private toast: ToastsService) { }
 
@@ -27,8 +28,7 @@ export class LaboralListComponent implements OnInit {
     this.route.queryParamMap.pipe(
       switchMap(d => this.api.getAll(d))
     ).subscribe(s => {
-      this.sindicatos = s;
-      this.sindicatosFiltrados = s;
+      this.onLoad.emit(s);
     });
   }
 

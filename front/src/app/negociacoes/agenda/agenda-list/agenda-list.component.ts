@@ -1,6 +1,6 @@
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { IntervalFilterService } from './../../../shared/interval-filter.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Negociacao, StatusNegociacao } from 'src/app/model/negociacao';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
@@ -17,13 +17,13 @@ declare var $: any;
   styleUrls: ['./agenda-list.component.css']
 })
 export class AgendaListComponent implements OnInit {
-
-  negociacoes: Negociacao[];
   negociacoesFiltradas: Negociacao[];
   referent: any;
   value: number;
   options: Options;
   StatusNegociacao: typeof StatusNegociacao = StatusNegociacao;
+  onLoad: EventEmitter<Negociacao[]> = new EventEmitter<Negociacao[]>();
+
   filterParams = (v: string) => { return {
       empresa: { nome: v },
       sindicatoLaboral: { nome: v },
@@ -57,8 +57,7 @@ export class AgendaListComponent implements OnInit {
       }),
       switchMap(_ => this.api.getAll(this.referent))
     ).subscribe((d: Negociacao[]) => {
-      this.negociacoes = d;
-      this.negociacoesFiltradas = this.negociacoes;
+      this.onLoad.emit(d);
     });
 
   }
@@ -73,8 +72,7 @@ export class AgendaListComponent implements OnInit {
   load() {
     this.api.getAll(this.referent)
     .subscribe((d: Negociacao[]) => {
-      this.negociacoes = d;
-      this.negociacoesFiltradas = this.negociacoes;
+      this.onLoad.emit(d);
     });
   }
 

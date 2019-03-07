@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ToastsService } from 'src/app/shared/toasts.service';
 import { Usuario } from 'src/app/model/usuario';
 import { take } from 'rxjs/operators';
@@ -14,8 +14,8 @@ declare var swal: any;
 })
 export class UsuarioListComponent implements OnInit {
 
-  usuarios: Usuario[];
   usuariosFiltrados: Usuario[];
+  onLoad: EventEmitter<Usuario[]> = new EventEmitter<Usuario[]>();
   constructor(private api: UsuariosApiService, private toastService: ToastsService) { }
 
   ngOnInit() {
@@ -26,8 +26,7 @@ export class UsuarioListComponent implements OnInit {
     this.api.getAll()
       .pipe(take(1))
       .subscribe(d => {
-        this.usuarios = d;
-        this.usuariosFiltrados = d;
+        this.onLoad.emit(d);
       });
   }
 
