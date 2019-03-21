@@ -34,15 +34,15 @@ namespace GestaoSindicatos
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddDbContext<Context>(opt =>
-            // {
-            //     opt.UseInMemoryDatabase("GestaoSindical");
-            // });
-
             services.AddDbContext<Context>(opt =>
             {
-                opt.UseSqlServer(Configuration.GetConnectionString("Base"));
+                opt.UseInMemoryDatabase("GestaoSindical");
             });
+
+            //services.AddDbContext<Context>(opt =>
+            //{
+            //    opt.UseSqlServer(Configuration.GetConnectionString("Base"));
+            //});
 
             // services.AddDbContext<Context>(opt =>
             // {
@@ -71,10 +71,10 @@ namespace GestaoSindicatos
             // Authentication
             services.AddDbContext<AuthContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Base")));
-            // services.AddDbContext<AuthContext>(opt =>
-            // {
-            //     opt.UseInMemoryDatabase("GestaoSindical");
-            // });
+            //services.AddDbContext<AuthContext>(opt =>
+            //{
+            //    opt.UseInMemoryDatabase("GestaoSindical");
+            //});
             // services.AddDbContext<AuthContext>(options =>
             //     options.UseMySql(Configuration.GetConnectionString("BaseMySql")));
 
@@ -163,7 +163,7 @@ namespace GestaoSindicatos
                 app.UseDeveloperExceptionPage();
             }
 
-            // SeedDataTest(context);
+            //SeedDataTest(context);
 
             // Criação de estruturas, usuários e permissões
             // na base do ASP.NET Identity Core (caso ainda não
@@ -218,6 +218,7 @@ namespace GestaoSindicatos
             Empresa empresa = new Empresa
             {
                 Cnpj = "12312312312312",
+                Database = Mes.Abril,
                 EnderecoId = endereco.Id,
                 Nome = "Empresa Teste",
                 MassaSalarial = 989,

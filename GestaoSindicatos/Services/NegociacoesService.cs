@@ -280,8 +280,8 @@ namespace GestaoSindicatos.Services
             Relatorio relatorio = _db.Relatorios.FirstOrDefault(r => r.NegociacaoId == negociacaoId);
             if (relatorio == null)
             {
-                using (var transaction = _db.Database.BeginTransaction())
-                {
+                //using (var transaction = _db.Database.BeginTransaction())
+                //{
                     try
                     {
                         relatorio = new Relatorio
@@ -321,14 +321,14 @@ namespace GestaoSindicatos.Services
                             _db.SaveChanges();
                         }
 
-                        transaction.Commit();
+                        //transaction.Commit();
                     }
                     catch (Exception e)
                     {
-                        transaction.Rollback();
+                        // transaction.Rollback();
                         throw e;
                     }
-                }
+                // }
             }
             return relatorio;
         }
@@ -393,8 +393,8 @@ namespace GestaoSindicatos.Services
                 case "instrum. col. (act/cct)":
                     return negociacao.SindicatoLaboral == null ? "" : (negociacao.SindicatoLaboral.Cct_act == CCT_ACT.ACT ? "ACT" : "CCT");
                 case "data base":
-                    return negociacao.SindicatoLaboral == null ? "" :
-                        (negociacao.SindicatoLaboral.Database == Mes.Marco ? "Março" : negociacao.SindicatoLaboral.Database.ToString());
+                    return negociacao.Empresa == null ? "" :
+                        (negociacao.Empresa.Database == Mes.Marco ? "Março" : negociacao.Empresa.ToString());
                 default:
                     return "";
             }

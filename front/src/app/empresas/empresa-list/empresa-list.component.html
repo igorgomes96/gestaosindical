@@ -13,6 +13,7 @@
                         <th class="text-right">Massa Salarial</th>
                         <th class="text-right">Qtda. Trabalhadores</th>
                         <th>Cidade - UF</th>
+                        <th>Database</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,6 +32,7 @@
                         <td class="text-right">{{ empresa.massaSalarial | number:'1.2-2' }}</td>
                         <td class="text-right">{{ empresa.qtdaTrabalhadores }}</td>
                         <td>{{ empresa.endereco?.cidade }} - {{ empresa.endereco?.uf }}</td>
+                        <td>{{ empresa.database ? Mes[empresa.database] : '' }}</td>
                     </tr>
                 </tbody>
             </table>

@@ -22,35 +22,60 @@
                                     <label class="control-label">CNPJ</label>
                                     <input type="text" mask="00.000.000/0000-00" placeholder="CNPJ" class="form-control"
                                         formControlName="cnpj">
-                                    <app-validator-message [control]="form.get('cnpj')" controlName="CNPJ"></app-validator-message>
+                                    <app-validator-message [control]="form.get('cnpj')" controlName="CNPJ">
+                                    </app-validator-message>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <app-custom-input formControlName="nome" [control]="form.get('nome')" id="nome" label="Nome"
-                                    name="nome">
+                                <app-custom-input formControlName="nome" [control]="form.get('nome')" id="nome"
+                                    label="Nome" name="nome">
                                 </app-custom-input>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <app-custom-input formControlName="qtdaTrabalhadores" [readOnly]="!!empresa" [control]="form.get('qtdaTrabalhadores')"
-                                            id="qtdaTrabalhadores" label="Qtda. de Trabalhadores" name="qtdaTrabalhadores"
-                                            type="number">
+                                        <app-custom-input formControlName="qtdaTrabalhadores" [readOnly]="!!empresa"
+                                            [control]="form.get('qtdaTrabalhadores')" id="qtdaTrabalhadores"
+                                            label="Qtda. de Trabalhadores" name="qtdaTrabalhadores" type="number">
                                         </app-custom-input>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <app-custom-input formControlName="massaSalarial" [readOnly]="!!empresa" [control]="form.get('massaSalarial')"
-                                    id="massaSalarial" label="Massa Salarial" name="massaSalarial" type="number">
+                            <div class="col-md-4">
+                                <app-custom-input formControlName="massaSalarial" [readOnly]="!!empresa"
+                                    [control]="form.get('massaSalarial')" id="massaSalarial" label="Massa Salarial"
+                                    name="massaSalarial" type="number">
                                 </app-custom-input>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group" [class.has-error]="hasError(form.get('database'))">
+                                    <label class="control-label">Database</label>
+                                    <select name="selectDatabase" id="selectDatabase" class="form-control"
+                                        formControlName="database">
+                                        <option value="Janeiro">Janeiro</option>
+                                        <option value="Fevereiro">Fevereiro</option>
+                                        <option value="Marco">Março</option>
+                                        <option value="Abril">Abril</option>
+                                        <option value="Maio">Maio</option>
+                                        <option value="Junho">Junho</option>
+                                        <option value="Julho">Julho</option>
+                                        <option value="Agosto">Agosto</option>
+                                        <option value="Setembro">Setembro</option>
+                                        <option value="Outubro">Outubro</option>
+                                        <option value="Novembro">Novembro</option>
+                                        <option value="Dezembro">Dezembro</option>
+                                    </select>
+                                    <app-validator-message [control]="form.get('database')" controlName="Database">
+                                    </app-validator-message>
+                                </div>
                             </div>
                         </div>
 
@@ -59,7 +84,8 @@
                                 <div class="form-group" [class.has-error]="hasError(form.get('sindicatoLaboral'))">
                                     <label class="control-label">Sindicato Laboral</label>
                                     <app-autocomplete formControlName="sindicatoLaboral" [urlSource]="urlLaboralList"
-                                        [mapShowFunction]="mapShow" [linkFunction]="linkLaboral" placeholder="Sindicato Laboral">
+                                        [mapShowFunction]="mapShow" [linkFunction]="linkLaboral"
+                                        placeholder="Sindicato Laboral">
                                         <ng-template let-item>
                                             <span class="fa fa-building-o m-r-sm"></span>
                                             <strong>#{{item.id}}</strong> {{item.nome}}
@@ -72,7 +98,8 @@
                                 <div class="form-group" [class.has-error]="hasError(form.get('sindicatoPatronal'))">
                                     <label class="control-label">Sindicato Patronal</label>
                                     <app-autocomplete formControlName="sindicatoPatronal" [urlSource]="urlPatronalList"
-                                        [mapShowFunction]="mapShow" [linkFunction]="linkPatronal" placeholder="Sindicato Patronal">
+                                        [mapShowFunction]="mapShow" [linkFunction]="linkPatronal"
+                                        placeholder="Sindicato Patronal">
                                         <ng-template let-item>
                                             <span class="fa fa-building m-r-sm"></span>
                                             <strong>#{{item.id}}</strong> {{item.nome}}
@@ -120,8 +147,9 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <app-custom-input formControlName="logradouro" [control]="form.get('endereco.logradouro')"
-                                        id="logradouro" label="Logradouro" name="logradouro" placeholder="Rua / Avenida">
+                                    <app-custom-input formControlName="logradouro"
+                                        [control]="form.get('endereco.logradouro')" id="logradouro" label="Logradouro"
+                                        name="logradouro" placeholder="Rua / Avenida">
                                     </app-custom-input>
                                 </div>
                             </div>
@@ -141,7 +169,8 @@
 
                         </fieldset>
 
-                        <button class="btn btn-primary m-r-sm ladda-button" data-style="zoom-in" [disabled]="form.invalid" (click)="salvar()">Salvar</button>
+                        <button class="btn btn-primary m-r-sm ladda-button" data-style="zoom-in"
+                            [disabled]="form.invalid" (click)="salvar()">Salvar</button>
 
                         <app-related-link [relatedLinks]="relatedLinks"></app-related-link>
 
@@ -152,12 +181,14 @@
         <div class="row">
             <div class="col-md-12">
                 <app-panel *ngIf="empresa">
-                    <app-contato [contatos$]="contatos$" (novoContato)="novoContato($event)" (deleteContato)="removeContato($event)"></app-contato>
+                    <app-contato [contatos$]="contatos$" (novoContato)="novoContato($event)"
+                        (deleteContato)="removeContato($event)"></app-contato>
                 </app-panel>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <app-arquivos *ngIf="empresa" [spinner]="spinnerArquivos" (upload)="upload($event)" (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
+        <app-arquivos *ngIf="empresa" [spinner]="spinnerArquivos" (upload)="upload($event)"
+            (delete)="deleteFile($event)" [arquivos]="arquivos"></app-arquivos>
     </div>
 </div>

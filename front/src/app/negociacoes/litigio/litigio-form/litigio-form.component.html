@@ -49,7 +49,7 @@
                   <app-autocomplete formControlName="empresa" [urlSource]="urlEmpresaList" placeholder="Empresa">
                     <ng-template let-item>
                       <span class="fa fa-users m-r-sm"></span>
-                      <strong>#{{item.id}}</strong> {{item.nome}}
+                      <strong>#{{item.id}}</strong> {{item.nome}} <span *ngIf="item.endereco">({{ item.endereco?.cidade }})</span>
                     </ng-template>
                   </app-autocomplete>
                 </div>

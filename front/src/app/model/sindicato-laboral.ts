@@ -28,7 +28,7 @@ export class SindicatoLaboral {
     site: string;
     federacao: string;
     cct_act: CCT_ACT;
-    database: Mes;
+    // database: Mes;
     presidente: Contato;
     negociador: Contato;
 }

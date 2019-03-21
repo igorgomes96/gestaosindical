@@ -66,6 +66,7 @@ export class EmpresaFormComponent implements OnInit {
       }),
       qtdaTrabalhadores: [''],
       massaSalarial: [''],
+      database: ['Janeiro', Validators.required],
       sindicatoLaboral: [''],
       sindicatoPatronal: ['']
     });

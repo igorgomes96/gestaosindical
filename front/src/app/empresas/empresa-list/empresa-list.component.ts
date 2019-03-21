@@ -4,6 +4,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Empresa } from 'src/app/model/empresa';
 import { ToastType } from 'src/app/shared/toasts/toasts.component';
 import { EmpresasApiService } from 'src/app/shared/api/empresas-api.service';
+import { Mes } from 'src/app/model/sindicato-laboral';
 
 @Component({
   selector: 'app-empresa-list',
@@ -14,6 +15,7 @@ export class EmpresaListComponent implements OnInit {
 
   empresasFiltradas: Empresa[];
   onLoad: EventEmitter<Empresa[]> = new EventEmitter<Empresa[]>();
+  Mes: typeof Mes = Mes;
   filterParams = (v: string) => {
     return {
       empresa: { nome: v },

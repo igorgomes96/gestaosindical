@@ -1,5 +1,5 @@
 import { SindicatoPatronal } from './sindicato-patronal';
-import { SindicatoLaboral } from './sindicato-laboral';
+import { SindicatoLaboral, Mes } from './sindicato-laboral';
 import { Endereco } from './endereco';
 
 export class Empresa {
@@ -9,6 +9,7 @@ export class Empresa {
     endereco: Endereco;
     qtdaTrabalhadores: number;
     massaSalarial: number;
+    database: Mes;
     sindicatoLaboralId: number;
     sindicatoPatronalId: number;
 

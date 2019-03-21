@@ -21,6 +21,7 @@ namespace GestaoSindicatos.Model
         public double MassaSalarial { get; set; }
         public int? SindicatoLaboralId { get; set; }
         public int? SindicatoPatronalId { get; set; }
+        public Mes Database { get; set; }
 
         public virtual SindicatoLaboral SindicatoLaboral { get; set; }
         public virtual SindicatoPatronal SindicatoPatronal { get; set; }
