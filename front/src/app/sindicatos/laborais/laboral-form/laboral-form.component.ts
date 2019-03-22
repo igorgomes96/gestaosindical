@@ -43,7 +43,6 @@ export class LaboralFormComponent implements OnInit {
       gestao: [''],
       site: [''],
       federacao: ['', Validators.required],
-      database: ['Janeiro', Validators.required],
       cct_act: ['ACT', Validators.required]
     });
 

@@ -34,15 +34,15 @@ namespace GestaoSindicatos
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Context>(opt =>
-            {
-                opt.UseInMemoryDatabase("GestaoSindical");
-            });
-
             //services.AddDbContext<Context>(opt =>
             //{
-            //    opt.UseSqlServer(Configuration.GetConnectionString("Base"));
+            //    opt.UseInMemoryDatabase("GestaoSindical");
             //});
+
+            services.AddDbContext<Context>(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("Base"));
+            });
 
             // services.AddDbContext<Context>(opt =>
             // {
@@ -163,7 +163,7 @@ namespace GestaoSindicatos
                 app.UseDeveloperExceptionPage();
             }
 
-            //SeedDataTest(context);
+            // SeedDataTest(context);
 
             // Criação de estruturas, usuários e permissões
             // na base do ASP.NET Identity Core (caso ainda não
@@ -184,7 +184,6 @@ namespace GestaoSindicatos
             SindicatoLaboral laboral = new SindicatoLaboral
             {
                 Cnpj = "12312312312312",
-                Database = Mes.Abril,
                 Federacao = "Federação Teste",
                 Gestao = "Gestão Teste",
                 Nome = "Laboral Teste",

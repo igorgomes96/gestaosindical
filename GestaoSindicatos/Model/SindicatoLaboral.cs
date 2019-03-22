@@ -48,8 +48,8 @@ namespace GestaoSindicatos.Model
         public string Federacao { get; set; }
         [Required]
         public CCT_ACT Cct_act { get; set; }
-        [Required]
-        public Mes Database { get; set; }
+        //[Required]
+        //public Mes Database { get; set; }
 
     }
 }

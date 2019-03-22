@@ -27,6 +27,9 @@ export class RelatorioComponent implements OnInit {
     'Percentual de sobreaviso', 'Percentual intrajornada', 'Percentual interjornada',
     'Falta desconta DSR e feriado', 'Carência de intervalo', 'Tempo para não considerar intervalo'
   ];
+  grupoSemCombo = [
+    'Ponto'
+  ];
 
   constructor(private route: ActivatedRoute, private router: Router,
     private pdfGeneratorService: PdfGeneratorService,
@@ -46,6 +49,8 @@ export class RelatorioComponent implements OnInit {
             relatorio.gruposPerguntas.forEach(g => {
               if (this.grupo3Colunas.indexOf(g.texto) > -1) {
                 g.layoutGrupo = LayoutGrupo.Grupo3Colunas;
+              } else if (this.grupoSemCombo.indexOf(g.texto) > -1) {
+                g.layoutGrupo = LayoutGrupo.GrupoSemCombo;
               } else {
                 g.layoutGrupo = LayoutGrupo.Grupo1Coluna;
               }

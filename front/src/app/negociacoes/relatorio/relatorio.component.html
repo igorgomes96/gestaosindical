@@ -53,7 +53,7 @@
     </div>
 
     <div class="group" *ngFor="let grupo of relatorio.gruposPerguntas.slice(1)">
-      <div *ngIf="grupo.layoutGrupo == LayoutGrupo.Grupo1Coluna; else grupo3Colunas">
+      <div *ngIf="grupo.layoutGrupo == LayoutGrupo.Grupo1Coluna || grupo.layoutGrupo == LayoutGrupo.GrupoSemCombo; else grupo3Colunas">
         <div class="group-title">
           <h4 style="display: inline-block;">
             <div contenteditable="true" [textContent]="grupo.texto" (input)="grupo.texto=$event.target.textContent">
@@ -71,14 +71,14 @@
                   <div contenteditable="true" class="pergunta-texto" [textContent]="resposta.pergunta"
                     (input)="resposta.pergunta=$event.target.textContent"></div>
                 </div>
-                <!-- <div class="col-sm-2">
+                <div class="col-sm-2" *ngIf="grupo.layoutGrupo != LayoutGrupo.GrupoSemCombo">
                   <select class="form-control" [(ngModel)]="resposta.aplicacaoResposta">
                     <option [value]="AplicacaoResposta[AplicacaoResposta.Sim]">Sim</option>
                     <option [value]="AplicacaoResposta[AplicacaoResposta.Nao]">Não</option>
                     <option [value]="AplicacaoResposta[AplicacaoResposta.NA]">N/A</option>
                   </select>
-                </div> -->
-                <div class="col-sm-9">
+                </div>
+                <div [ngClass]="grupo.layoutGrupo == LayoutGrupo.GrupoSemCombo ? 'col-sm-9' : 'col-sm-7'">
                   <textarea class="form-control" rows="1" [(ngModel)]="resposta.resposta"></textarea>
                   <button class="btn-remove" (click)="deleteResposta(grupo, resposta)"><span class="fa fa-times"
                       data-html2canvas-ignore></span></button>
@@ -113,12 +113,12 @@
                           (input)="resposta.pergunta=$event.target.textContent"></div>
                       </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col-sm-12 pergunta">
                         <textarea class="form-control" rows="1" [(ngModel)]="resposta.resposta"></textarea>
                       </div>
-                    </div>
-                    <!-- <div class="row">
+                    </div> -->
+                    <div class="row">
                       <div class="col-sm-12">
                         <select class="form-control" [(ngModel)]="resposta.aplicacaoResposta">
                           <option [value]="AplicacaoResposta[AplicacaoResposta.Sim]">Sim</option>
@@ -126,7 +126,7 @@
                           <option [value]="AplicacaoResposta[AplicacaoResposta.NA]">N/A</option>
                         </select>
                       </div>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </div>

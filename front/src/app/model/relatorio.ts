@@ -2,7 +2,8 @@ import { Negociacao } from './negociacao';
 
 export enum LayoutGrupo {
     Grupo1Coluna,
-    Grupo3Colunas
+    Grupo3Colunas,
+    GrupoSemCombo
 }
 
 export enum AplicacaoResposta {

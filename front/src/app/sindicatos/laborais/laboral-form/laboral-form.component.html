@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <app-custom-input formControlName="federacao" [control]="form.get('federacao')" id="federacao"
                                     label="Federação" name="federacao">
                                 </app-custom-input>
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <div class="form-group" [class.has-error]="hasError(form.get('database'))">
                                     <label class="control-label">Database</label>
                                     <select name="selectDatabase" id="selectDatabase" class="form-control"
@@ -108,7 +108,7 @@
                                     </select>
                                     <app-validator-message [control]="form.get('database')" controlName="Database"></app-validator-message>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <app-related-link [relatedLinks]="relatedLinks"></app-related-link>
