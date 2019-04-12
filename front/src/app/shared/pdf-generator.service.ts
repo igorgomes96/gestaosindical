@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { Observable, of } from 'rxjs';
 
 declare var $: any;
 
@@ -15,10 +14,10 @@ export class PdfGeneratorService {
   async htmltoPDF(headerSelector: string, groupSelector: string, filename: string) {
     const header = $(headerSelector)[0];
     const pdf = new jsPDF('p', 'px', 'a4');
-    const scale = 1.8;
+    const scale = 1;
     const proportion = 0.43;
     const margins = 20;
-    let height = margins;
+    let height = 10;
     const options = {
       scale: scale,
       useCORS: true,
@@ -38,7 +37,7 @@ export class PdfGeneratorService {
       .then((canvas: any) => {
         const headerHeight = (canvas.height / scale) * proportion;
         height += headerHeight;
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margins, margins, 450 - (margins * 2), headerHeight);
+        pdf.addImage(canvas.toDataURL('image/jpeg', 1), 'JPEG', margins, margins, 450 - (margins * 2), headerHeight);
       });
 
 
@@ -52,7 +51,8 @@ export class PdfGeneratorService {
             pdf.addPage();
             height = groupHeight;
           }
-          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margins, margins + height - groupHeight, 450 - (margins * 2), groupHeight);
+          // tslint:disable-next-line:max-line-length
+          pdf.addImage(canvas.toDataURL('image/jpeg', 1), 'JPEG', margins, margins + height - groupHeight, 450 - (margins * 2), groupHeight);
         });
     }
     await pdf.save(filename);

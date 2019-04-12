@@ -22,13 +22,15 @@ export class RelatorioComponent implements OnInit {
   saveLoadBtn: Ladda.LaddaButton;
   downloadLoadBtn: Ladda.LaddaButton;
 
-  grupo3Colunas = [
-    'Proporção do Banco', 'Percentual de Horas Extras', 'Adicional Noturno',
+  // grupo3Colunas = [
+  //   'Proporção do Banco', 'Percentual de Horas Extras', 'Adicional Noturno',
+  //   'Percentual de sobreaviso', 'Percentual intrajornada', 'Percentual interjornada',
+  //   'Falta desconta DSR e feriado', 'Carência de intervalo', 'Tempo para não considerar intervalo'
+  // ];
+  grupoSemCombo = [
+    'Ponto', 'Proporção do Banco', 'Percentual de Horas Extras', 'Adicional Noturno',
     'Percentual de sobreaviso', 'Percentual intrajornada', 'Percentual interjornada',
     'Falta desconta DSR e feriado', 'Carência de intervalo', 'Tempo para não considerar intervalo'
-  ];
-  grupoSemCombo = [
-    'Ponto'
   ];
 
   constructor(private route: ActivatedRoute, private router: Router,
@@ -47,9 +49,10 @@ export class RelatorioComponent implements OnInit {
           const relatorio = d['relatorio'];
           if (relatorio) {
             relatorio.gruposPerguntas.forEach(g => {
-              if (this.grupo3Colunas.indexOf(g.texto) > -1) {
-                g.layoutGrupo = LayoutGrupo.Grupo3Colunas;
-              } else if (this.grupoSemCombo.indexOf(g.texto) > -1) {
+              // if (this.grupo3Colunas.indexOf(g.texto) > -1) {
+              //   g.layoutGrupo = LayoutGrupo.Grupo3Colunas;
+              // } else
+              if (this.grupoSemCombo.indexOf(g.texto) > -1) {
                 g.layoutGrupo = LayoutGrupo.GrupoSemCombo;
               } else {
                 g.layoutGrupo = LayoutGrupo.Grupo1Coluna;

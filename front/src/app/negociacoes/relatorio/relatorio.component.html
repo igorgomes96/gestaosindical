@@ -53,7 +53,7 @@
     </div>
 
     <div class="group" *ngFor="let grupo of relatorio.gruposPerguntas.slice(1)">
-      <div *ngIf="grupo.layoutGrupo == LayoutGrupo.Grupo1Coluna || grupo.layoutGrupo == LayoutGrupo.GrupoSemCombo; else grupo3Colunas">
+      <div *ngIf="grupo.layoutGrupo == LayoutGrupo.Grupo1Coluna || grupo.layoutGrupo == LayoutGrupo.GrupoSemCombo">
         <div class="group-title">
           <h4 style="display: inline-block;">
             <div contenteditable="true" [textContent]="grupo.texto" (input)="grupo.texto=$event.target.textContent">
@@ -93,7 +93,7 @@
         </div>
       </div>
 
-      <ng-template #grupo3Colunas>
+      <!-- <ng-template #grupo3Colunas>
         <div class="group-content">
           <div class="row">
             <button class="btn-remove-grupo btn-remove-grupo-3colunas" data-html2canvas-ignore
@@ -113,12 +113,12 @@
                           (input)="resposta.pergunta=$event.target.textContent"></div>
                       </div>
                     </div>
-                    <!-- <div class="row">
+                    <div class="row">
                       <div class="col-sm-12 pergunta">
                         <textarea class="form-control" rows="1" [(ngModel)]="resposta.resposta"></textarea>
                       </div>
-                    </div> -->
-                    <div class="row">
+                    </div>
+                    <-- <div class="row">
                       <div class="col-sm-12">
                         <select class="form-control" [(ngModel)]="resposta.aplicacaoResposta">
                           <option [value]="AplicacaoResposta[AplicacaoResposta.Sim]">Sim</option>
@@ -139,7 +139,7 @@
             </div>
           </div>
         </div>
-      </ng-template>
+      </ng-template> -->
     </div>
 
 
