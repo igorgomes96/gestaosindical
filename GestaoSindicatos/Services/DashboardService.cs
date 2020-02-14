@@ -93,11 +93,11 @@ namespace GestaoSindicatos.Services
                     .Where(x => x.Data.Year == ano);
 
             return PlanosByClaims(planos, claims)
-                .GroupBy(x => x.ItemLitigio.Litigio.Referente)
+                .GroupBy(x => x.ItemLitigio.Litigio.Referente.ToString())
                 .Select(x => new ChartData
                 {
                     Y = x.Count(),
-                    Label = x.Key.ToString()
+                    Label = x.Key
                 }).ToList();
 
         }
@@ -128,7 +128,7 @@ namespace GestaoSindicatos.Services
 
         }
 
-        public ICollection<ChartData> LitigiosGroup<TKey>(ClaimsPrincipal claims, int ano, Expression<Func<Litigio, TKey>> groupByKey)
+        public ICollection<ChartData> LitigiosGroup(ClaimsPrincipal claims, int ano, Expression<Func<Litigio, string>> groupByKey)
         {
             IQueryable<Litigio> litigios = _db.Litigios
                     .Where(x => x.Data.Year == ano);
@@ -138,7 +138,7 @@ namespace GestaoSindicatos.Services
                 .Select(x => new ChartData
                 {
                     Y = x.Count(),
-                    Label = x.Key.ToString()
+                    Label = x.Key
                 }).ToList();
 
         }
@@ -190,7 +190,7 @@ namespace GestaoSindicatos.Services
                 .Include(x => x.Negociacao)
                     .ThenInclude(x => x.Empresa)
                         .ThenInclude(x => x.Endereco)
-                .Where(x => x.Data != null && x.Data.Year == ano 
+                .Where(x => x.Data.Year == ano 
                     && x.Negociacao.EmpresaId.HasValue 
                     && empresasIds.Contains(x.Negociacao.EmpresaId.Value));
 
@@ -242,7 +242,8 @@ namespace GestaoSindicatos.Services
                .Include(x => x.Concorrentes)
                .ThenInclude(c => c.Reajuste);
 
-            if (negociacoes.Count() > 0)
+            var qtdaNegociacoes = negociacoes.Count();
+            if (qtdaNegociacoes > 0)
             {
                 ChartDataset orcado = new ChartDataset
                 {

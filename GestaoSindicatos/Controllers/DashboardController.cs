@@ -131,7 +131,7 @@ namespace GestaoSindicatos.Controllers
         {
             try
             {
-                return _service.LitigiosGroup(User, ano, l => l.Referente)
+                return _service.LitigiosGroup(User, ano, l => l.Referente.ToString())
                     .ToList();
             }
             catch (Exception e)
@@ -145,7 +145,7 @@ namespace GestaoSindicatos.Controllers
         {
             try
             {
-                return _service.LitigiosGroup(User, ano, l => l.Procedimento)
+                return _service.LitigiosGroup(User, ano, l => l.Procedimento.ToString())
                     .ToList();
             }
             catch (Exception e)

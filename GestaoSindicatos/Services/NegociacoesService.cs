@@ -280,8 +280,8 @@ namespace GestaoSindicatos.Services
             Relatorio relatorio = _db.Relatorios.FirstOrDefault(r => r.NegociacaoId == negociacaoId);
             if (relatorio == null)
             {
-                //using (var transaction = _db.Database.BeginTransaction())
-                //{
+                using (var transaction = _db.Database.BeginTransaction())
+                {
                     try
                     {
                         relatorio = new Relatorio
@@ -321,14 +321,14 @@ namespace GestaoSindicatos.Services
                             _db.SaveChanges();
                         }
 
-                        //transaction.Commit();
+                        transaction.Commit();
                     }
                     catch (Exception e)
                     {
-                        // transaction.Rollback();
+                        transaction.Rollback();
                         throw e;
                     }
-                // }
+                }
             }
             return relatorio;
         }
