@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using GestaoSindicatos.Auth;
 using GestaoSindicatos.Model;
 using GestaoSindicatos.Services;
@@ -130,41 +129,40 @@ namespace GestaoSindicatos
                     .RequireAuthenticatedUser().Build());
             });
 
-            services.AddMvc().AddJsonOptions(options =>
+            services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            });
 
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Context context,
+        public void Configure(
+            IApplicationBuilder app,
+            Context context,
             AuthContext authContext,
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager,
-            ILoggerFactory loggerFactory)
+            RoleManager<IdentityRole> roleManager)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             // Criação de estruturas, usuários e permissões
             // na base do ASP.NET Identity Core (caso ainda não
             // existam)
             new IdentityInitializer(authContext, userManager, roleManager).Initialize();
 
-            loggerFactory.AddDebug();
-            loggerFactory.AddEventLog();
-
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseMvc();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
 
     }
