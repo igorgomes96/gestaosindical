@@ -35,11 +35,11 @@ namespace GestaoSindicatos.Controllers
         public ActionResult<List<Negociacao>> Get(int? laboralId = null, int? patronalId = null, int? empresaId = null, int? ano = null)
         {
             IQueryable<Negociacao> negociacoes = _service
-                .Query(n => FilterQuery.And(
-                    new Tuple<object, object>(n.SindicatoLaboralId, laboralId),
-                    new Tuple<object, object>(n.SindicatoPatronalId, patronalId),
-                    new Tuple<object, object>(n.EmpresaId, empresaId),
-                    new Tuple<object, object>(n.Ano, ano)), User)
+                .Query(n => 
+                    (!laboralId.HasValue || laboralId.Value.Equals(n.SindicatoLaboralId)) &&
+                    (!patronalId.HasValue || patronalId.Value.Equals(n.SindicatoPatronalId)) &&
+                    (!empresaId.HasValue || empresaId.Value.Equals(n.EmpresaId)) &&
+                    (!ano.HasValue || ano.Value.Equals(n.Ano)), User)
                 .Include(n => n.Empresa)
                 .Include(n => n.SindicatoLaboral)
                 .Include(n => n.SindicatoPatronal);
