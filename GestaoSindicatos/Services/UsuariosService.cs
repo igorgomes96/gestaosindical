@@ -3,15 +3,10 @@ using GestaoSindicatos.Exceptions;
 using GestaoSindicatos.Model;
 using Microsoft.AspNetCore.Identity;
 using System;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
-using System.Text;
-using System.IO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using GestaoSindicatos.Properties;
-using Microsoft.Extensions.Configuration;
 
 namespace GestaoSindicatos.Services
 {

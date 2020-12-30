@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import * as htmlToImage from 'html-to-image';
+import { toJpeg } from 'html-to-image';
+import { optimizeGroupPlayer } from '@angular/animations/browser/src/render/shared';
 
 declare var $: any;
 
@@ -11,52 +14,61 @@ export class PdfGeneratorService {
 
   constructor() { }
 
+
   async htmltoPDF(headerSelector: string, groupSelector: string, filename: string) {
     const header = $(headerSelector)[0];
     const pdf = new jsPDF('p', 'px', 'a4');
-    const scale = 1;
     const proportion = 0.43;
     const margins = 20;
-    let height = 10;
+    const contentWidth = 408;
     const options = {
-      scale: scale,
-      useCORS: true,
-      logging: false,
-      windowWidth: 1440,
-      windowHeight: 600,
-      onclone: function(document) {
-        let el = $(document).find(headerSelector);
-        el.width('1000px');
-        el.css('display', 'block');
-        el = $(document).find(groupSelector);
-        el.css('display', 'block');
-        el.width('1000px');
-      }
+      pixelRatio: 1,
+      backgroundColor: '#ffffff',
+      quality: 1
     };
-    await html2canvas(header, options)
-      .then((canvas: any) => {
-        const headerHeight = (canvas.height / scale) * proportion;
-        height += headerHeight;
-        pdf.addImage(canvas.toDataURL('image/jpeg', 1), 'JPEG', margins, margins, 450 - (margins * 2), headerHeight);
-      });
+    let height = 10;
 
+    const generateImage = (dataUrl: any) => {
+      const img = new Image();
+      img.src = dataUrl;
+      return img;
+    }
+
+    const dataUrlHeader = await htmlToImage.toJpeg(header, options)
+    const headerImage = generateImage(dataUrlHeader);
+
+    headerImage.onload = () => {
+      const headerHeight = headerImage.height * proportion;
+      height += headerHeight;
+      pdf.addImage(dataUrlHeader, 'JPEG', margins, margins, contentWidth + 3, headerHeight);
+    }
 
     const grupos = $(groupSelector);
+    const promises = [];
     for (let i = 0; i < grupos.length; i++) {
-      await html2canvas(grupos[i], options)
-        .then((canvas: any) => {
-          const groupHeight = (canvas.height / scale) * proportion;
-          height += groupHeight;
-          if (height > 580) {
-            pdf.addPage();
-            height = groupHeight;
-          }
-          // tslint:disable-next-line:max-line-length
-          pdf.addImage(canvas.toDataURL('image/jpeg', 1), 'JPEG', margins, margins + height - groupHeight, 450 - (margins * 2), groupHeight);
+      const promise = htmlToImage.toJpeg(grupos[i], options)
+        .then(dataUrl => {
+          const image = generateImage(dataUrl);
+          return new Promise((resolve) => {
+            image.onload = () => resolve(image);
+          })
         });
+      promises.push(promise);
     }
-    await pdf.save(filename);
 
+    const images = await Promise.all(promises);
+
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      const groupHeight = image.height * proportion;
+      height += groupHeight;
+      if (height > 580) {
+        pdf.addPage();
+        height = groupHeight;
+      }
+      pdf.addImage(image.src, 'JPEG', margins, margins + height - groupHeight, contentWidth, groupHeight);
+    }
+    pdf.save(filename);
   }
 
 }

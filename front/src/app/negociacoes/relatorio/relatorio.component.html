@@ -1,6 +1,6 @@
 <app-panel>
 
-  <div id="relatorio">
+  <div #relatorioRef>
 
     <div class="header">
       <div class="row">
@@ -92,54 +92,6 @@
           </div>
         </div>
       </div>
-
-      <!-- <ng-template #grupo3Colunas>
-        <div class="group-content">
-          <div class="row">
-            <button class="btn-remove-grupo btn-remove-grupo-3colunas" data-html2canvas-ignore
-              (click)="deleteGrupo(grupo)"><span class="fa fa-times"></span></button>
-            <div class="col-md-3 m-t-md">
-              <div contenteditable="true" class="pergunta-texto" [textContent]="grupo.texto"
-                (input)="grupo.texto=$event.target.textContent">
-              </div>
-            </div>
-            <div class="col-md-9">
-              <div class="row">
-                <div class="col-sm-4" *ngFor="let resposta of grupo.respostas">
-                  <div class="pergunta">
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div contenteditable="true" class="pergunta-texto" [textContent]="resposta.pergunta"
-                          (input)="resposta.pergunta=$event.target.textContent"></div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-12 pergunta">
-                        <textarea class="form-control" rows="1" [(ngModel)]="resposta.resposta"></textarea>
-                      </div>
-                    </div>
-                    <-- <div class="row">
-                      <div class="col-sm-12">
-                        <select class="form-control" [(ngModel)]="resposta.aplicacaoResposta">
-                          <option [value]="AplicacaoResposta[AplicacaoResposta.Sim]">Sim</option>
-                          <option [value]="AplicacaoResposta[AplicacaoResposta.Nao]">Não</option>
-                          <option [value]="AplicacaoResposta[AplicacaoResposta.NA]">N/A</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-            <div class="col-sm-12 m-t-sm">
-              <a (click)="addPergunta(grupo)" data-html2canvas-ignore>[Nova Pergunta]</a>
-            </div>
-          </div>
-        </div>
-      </ng-template> -->
     </div>
 
 
@@ -163,3 +115,9 @@
   </div>
 
 </app-panel>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div id="relatorio" #relatorioCloneRef></div>
+  </div>
+</div>

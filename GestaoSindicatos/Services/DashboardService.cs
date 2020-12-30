@@ -22,24 +22,26 @@ namespace GestaoSindicatos.Services
             _empresasService = empresasService;
         }
 
-        public ICollection<ChartData> StatusPorMassaSalarial<TKey>(ClaimsPrincipal claims, int ano, Expression<Func<Negociacao, TKey>> groupByKey)
+        public ICollection<ChartData> StatusPorMassaSalarial<TKey>(ClaimsPrincipal claims, int ano, Func<Negociacao, TKey> groupByKey)
         {
             return StatusPorMassaSalarial(_empresasService.Query(claims)
                 .Select(x => x.Id).ToList(), ano, groupByKey);
         }
 
-        public ICollection<ChartData> StatusPorQtdaTrabalhadores<TKey>(ClaimsPrincipal claims, int ano, Expression<Func<Negociacao, TKey>> groupByKey)
+        public ICollection<ChartData> StatusPorQtdaTrabalhadores<TKey>(ClaimsPrincipal claims, int ano, Func<Negociacao, TKey> groupByKey)
         {
             return StatusPorQtdaTrabalhadores(_empresasService.Query(claims)
                 .Select(x => x.Id).ToList(), ano, groupByKey);
         }
 
 
-        public ICollection<ChartData> StatusPorMassaSalarial<TKey>(List<int> empresasIds, int ano, Expression<Func<Negociacao, TKey>> groupByKey)
+        public ICollection<ChartData> StatusPorMassaSalarial<TKey>(List<int> empresasIds, int ano, Func<Negociacao, TKey> groupByKey)
         {
             return _db.Negociacoes
-                .Where(x => x.Ano == ano && x.EmpresaId.HasValue && empresasIds.Contains(x.EmpresaId.Value))
+                .Where(x => x.Ano == ano && x.EmpresaId.HasValue)
                 .Include(x => x.Empresa)
+                .ToList()
+                .Where(x => empresasIds.Contains(x.EmpresaId.Value))
                 .GroupBy(groupByKey)
                 .Select(x => new ChartData
                 {
@@ -48,11 +50,13 @@ namespace GestaoSindicatos.Services
                 }).ToList();
         }
 
-        public ICollection<ChartData> StatusPorQtdaTrabalhadores<TKey>(List<int> empresasIds, int ano, Expression<Func<Negociacao, TKey>> groupByKey)
+        public ICollection<ChartData> StatusPorQtdaTrabalhadores<TKey>(List<int> empresasIds, int ano, Func<Negociacao, TKey> groupByKey)
         {
             return _db.Negociacoes
-                .Where(x => x.Ano == ano && x.EmpresaId.HasValue && empresasIds.Contains(x.EmpresaId.Value))
+                .Where(x => x.Ano == ano && x.EmpresaId.HasValue)
                 .Include(x => x.Empresa)
+                .ToList()
+                .Where(x => empresasIds.Contains(x.EmpresaId.Value))
                 .GroupBy(groupByKey)
                 .Select(x => new ChartData
                 {
@@ -61,21 +65,21 @@ namespace GestaoSindicatos.Services
                 }).ToList();
         }
 
-        public IQueryable<PlanoAcao> PlanosByClaims(IQueryable<PlanoAcao> planos, ClaimsPrincipal claims)
+        public IEnumerable<PlanoAcao> PlanosByClaims(IEnumerable<PlanoAcao> planos, ClaimsPrincipal claims)
         {
             if (claims.IsInRole(Roles.ADMIN))
                 return planos;
 
-            IQueryable<Litigio> litigios = LitigiosByClaims(planos.Select(p => p.ItemLitigio.Litigio), claims);
+            var litigios = LitigiosByClaims(planos.Select(p => p.ItemLitigio.Litigio).ToList(), claims);
             return planos.Where(p => litigios.Any(l => l.Id == p.ItemLitigio.LitigioId));
 
         }
 
         public ICollection<ChartData> StatusPorPlanosAcao(ClaimsPrincipal claims, int ano)
         {
-            IQueryable<PlanoAcao> planos = _db.PlanosAcao
-                    .Include(p => p.ItemLitigio.Litigio)
-                    .Where(x => x.Data.Year == ano);
+            var planos = _db.PlanosAcao
+                .Include(p => p.ItemLitigio.Litigio)
+                .Where(x => x.Data.Year == ano).ToList();
 
             return PlanosByClaims(planos, claims)
                 .GroupBy(x => x.Status)
@@ -104,9 +108,11 @@ namespace GestaoSindicatos.Services
 
         public ICollection<ChartData> PlanosProcedencia(ClaimsPrincipal claims, int ano)
         {
-            IQueryable<PlanoAcao> planos = _db.PlanosAcao
+            var planos = _db.PlanosAcao
                 .Include(p => p.ItemLitigio.Litigio)
-                .Where(x => x.Data.Year == ano && x.Status == StatusPlanoAcao.Solucionado);
+                .Where(x => x.Data.Year == ano)
+                .ToList()
+                .Where(x => x.Status == StatusPlanoAcao.Solucionado);
 
             return PlanosByClaims(planos, claims)
                 .GroupBy(x => x.Procedencia ? "Procedente" : "Improcedente")
@@ -118,20 +124,21 @@ namespace GestaoSindicatos.Services
 
         }
 
-        public IQueryable<Litigio> LitigiosByClaims(IQueryable<Litigio> litigios, ClaimsPrincipal claims)
+        public IEnumerable<Litigio> LitigiosByClaims(IEnumerable<Litigio> litigios, ClaimsPrincipal claims)
         {
             if (claims.IsInRole(Roles.ADMIN))
                 return litigios;
 
-            IQueryable<Empresa> empresas = _empresasService.Query(claims);
-            return litigios.Where(x => empresas.Any(y => y.Id == x.EmpresaId));
+            var empresas = _empresasService.Query(claims).ToDictionary(x => x.Id);
+            return litigios.Where(x => empresas.ContainsKey(x.EmpresaId));
 
         }
 
-        public ICollection<ChartData> LitigiosGroup(ClaimsPrincipal claims, int ano, Expression<Func<Litigio, string>> groupByKey)
+        public ICollection<ChartData> LitigiosGroup(ClaimsPrincipal claims, int ano, Func<Litigio, string> groupByKey)
         {
-            IQueryable<Litigio> litigios = _db.Litigios
-                    .Where(x => x.Data.Year == ano);
+            var litigios = _db.Litigios
+                .Where(x => x.Data.Year == ano)
+                .ToList();
 
             return LitigiosByClaims(litigios, claims)
                 .GroupBy(groupByKey)
@@ -145,8 +152,9 @@ namespace GestaoSindicatos.Services
 
         public ICollection<ChartData> LitigiosMensal(ClaimsPrincipal claims, int ano)
         {
-            IQueryable<Litigio> litigios = _db.Litigios
-                    .Where(x => x.Data.Year == ano);
+            var litigios = _db.Litigios
+                .Where(x => x.Data.Year == ano)
+                .ToList();
 
             return LitigiosByClaims(litigios, claims)
                 .GroupBy(x => x.Data.Month - 1)
@@ -160,11 +168,12 @@ namespace GestaoSindicatos.Services
 
         public ICollection<ChartData> LitigiosPorEmpresa(ClaimsPrincipal claims, int ano)
         {
-            IQueryable<Litigio> litigios = _db.Litigios
-                    .Where(x => x.Data.Year == ano);
+            var litigios = _db.Litigios
+                .Include(x => x.Empresa)
+                .Where(x => x.Data.Year == ano)
+                .ToList();
 
             return LitigiosByClaims(litigios, claims)
-                .Include(x => x.Empresa)
                 .GroupBy(x => x.Empresa.Nome)
                 .Select(x => new ChartData
                 {
@@ -174,15 +183,15 @@ namespace GestaoSindicatos.Services
 
         }
 
-        public ICollection<ChartData> QtdaReunioes<TKey>(ClaimsPrincipal claims, int ano, Expression<Func<RodadaNegociacao, TKey>> groupByKey, Expression<Func<RodadaNegociacao, bool>> query = null)
+        public ICollection<ChartData> QtdaReunioes<TKey>(ClaimsPrincipal claims, int ano, Func<RodadaNegociacao, TKey> groupByKey, Func<RodadaNegociacao, bool> query = null)
         {
-            return QtdaReunioes(_empresasService.Query(claims)
-                .Select(x => x.Id).ToList(), ano, groupByKey, query);
+            var empresas = _empresasService.Query(claims).Select(x => x.Id).ToList();
+            return QtdaReunioes(empresas, ano, groupByKey, query);
         }
 
-        public ICollection<ChartData> QtdaReunioes<TKey>(List<int> empresasIds, int ano, Expression<Func<RodadaNegociacao, TKey>> groupByKey, Expression<Func<RodadaNegociacao, bool>> query)
+        public ICollection<ChartData> QtdaReunioes<TKey>(List<int> empresasIds, int ano, Func<RodadaNegociacao, TKey> groupByKey, Func<RodadaNegociacao, bool> query)
         {
-            IQueryable<RodadaNegociacao> rodadas = _db.RodadasNegociacoes
+            var rodadas = _db.RodadasNegociacoes
                 .Include(x => x.Negociacao)
                     .ThenInclude(x => x.SindicatoLaboral)
                 .Include(x => x.Negociacao)
@@ -191,8 +200,9 @@ namespace GestaoSindicatos.Services
                     .ThenInclude(x => x.Empresa)
                         .ThenInclude(x => x.Endereco)
                 .Where(x => x.Data.Year == ano 
-                    && x.Negociacao.EmpresaId.HasValue 
-                    && empresasIds.Contains(x.Negociacao.EmpresaId.Value));
+                    && x.Negociacao.EmpresaId.HasValue)
+                .ToList() // monta a query
+                .Where(x => empresasIds.Contains(x.Negociacao.EmpresaId.Value));
 
             if (query != null)
                 rodadas = rodadas.Where(query);
@@ -202,7 +212,8 @@ namespace GestaoSindicatos.Services
                 {
                     Y = x.Count(),
                     Label = x.Key.ToString()
-                }).ToList();
+                })
+                .OrderByDescending(x => x.Y).ToList();
         }
 
 
@@ -216,7 +227,9 @@ namespace GestaoSindicatos.Services
             return _db.RodadasNegociacoes
                 .Where(x => x.Data.Year == ano)
                 .Include(x => x.Negociacao)
-                .Where(x => x.Negociacao.EmpresaId.HasValue && empresasIds.Contains(x.Negociacao.EmpresaId.Value) && x.CustosViagens.HasValue)
+                .Where(x => x.Negociacao.EmpresaId.HasValue && x.CustosViagens.HasValue)
+                .ToList()
+                .Where(x => empresasIds.Contains(x.Negociacao.EmpresaId.Value))
                 .GroupBy(x => x.Data.Month - 1)
                 .Select(x => new ChartData
                 {

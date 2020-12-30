@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { filter, switchMap, finalize, map } from 'rxjs/operators';
 import { Relatorio, GrupoPergunta, AplicacaoResposta, RespostaRelatorio, LayoutGrupo } from 'src/app/model/relatorio';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,12 +21,9 @@ export class RelatorioComponent implements OnInit {
   LayoutGrupo: typeof LayoutGrupo = LayoutGrupo;
   saveLoadBtn: Ladda.LaddaButton;
   downloadLoadBtn: Ladda.LaddaButton;
+  @ViewChild('relatorioRef') relatorioRef: ElementRef;
+  @ViewChild('relatorioCloneRef') relatorioCloneRef: ElementRef;
 
-  // grupo3Colunas = [
-  //   'Proporção do Banco', 'Percentual de Horas Extras', 'Adicional Noturno',
-  //   'Percentual de sobreaviso', 'Percentual intrajornada', 'Percentual interjornada',
-  //   'Falta desconta DSR e feriado', 'Carência de intervalo', 'Tempo para não considerar intervalo'
-  // ];
   grupoSemCombo = [
     'Ponto', 'Proporção do Banco', 'Percentual de Horas Extras', 'Adicional Noturno',
     'Percentual de sobreaviso', 'Percentual intrajornada', 'Percentual interjornada',
@@ -49,9 +46,6 @@ export class RelatorioComponent implements OnInit {
           const relatorio = d['relatorio'];
           if (relatorio) {
             relatorio.gruposPerguntas.forEach(g => {
-              // if (this.grupo3Colunas.indexOf(g.texto) > -1) {
-              //   g.layoutGrupo = LayoutGrupo.Grupo3Colunas;
-              // } else
               if (this.grupoSemCombo.indexOf(g.texto) > -1) {
                 g.layoutGrupo = LayoutGrupo.GrupoSemCombo;
               } else {
@@ -63,7 +57,19 @@ export class RelatorioComponent implements OnInit {
         })
       ).subscribe(d => {
         this.relatorio = d;
+        setTimeout(() => {
+          this.expandirTextareas(this.relatorioRef.nativeElement);
+        }, 30);
       });
+  }
+
+  expandirTextareas(parent: any) {
+    const textAreas = parent.querySelectorAll('textarea');
+    for (let i = 0; i < textAreas.length; i++) {
+      const element = textAreas[i];
+      element.style.height = "1px";
+      element.style.height = (8 + element.scrollHeight) + "px";
+    }
   }
 
   addPergunta(grupo: GrupoPergunta) {
@@ -130,9 +136,25 @@ export class RelatorioComponent implements OnInit {
 
   async download() {
     this.downloadLoadBtn.start();
+    const clone = this.relatorioRef.nativeElement.cloneNode(true);
+    clone.setAttribute('style', 'margin-top: 200px');
+    this.relatorioCloneRef.nativeElement.appendChild(clone);
+    this.expandirTextareas(this.relatorioCloneRef.nativeElement);
+
+    const itensRemover = this.relatorioCloneRef.nativeElement.querySelectorAll('[data-html2canvas-ignore]');
+    for (let i = 0; i < itensRemover.length; i++) {
+      itensRemover[i].remove();
+    }
+
+    // Aguarda renderização, para carregar a imagem
+    await new Promise(resolve => setTimeout(resolve, 10));
+
     try {
-      // tslint:disable-next-line:max-line-length
-      await this.pdfGeneratorService.htmltoPDF('#relatorio .header', '#relatorio .group', `${this.relatorio.negociacao.empresa.nome} - ${this.relatorio.negociacao.ano}.pdf`);
+      await this.pdfGeneratorService.htmltoPDF(
+        '#relatorio .header',
+        '#relatorio .group',
+        `${this.relatorio.negociacao.empresa.nome} - ${this.relatorio.negociacao.ano}.pdf`);
+      this.relatorioCloneRef.nativeElement.innerHTML = '';
     } catch (err) {
       console.error(err);
     } finally {

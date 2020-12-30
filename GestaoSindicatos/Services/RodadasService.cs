@@ -71,9 +71,10 @@ namespace GestaoSindicatos.Services
         {
             Dictionary<int, Negociacao> negociacoes = GetNegociacoes(claims)
                 .Include(n => n.Empresa).ThenInclude(e => e.Endereco)
-                .ToDictionary(x => x.Id);
+                .ToList().ToDictionary(x => x.Id);
 
-            return Query(r => r.Data.Month == mes && negociacoes.ContainsKey(r.NegociacaoId)).OrderBy(x => x.Data).ToList()
+            return Query(r => r.Data.Month == mes).OrderBy(x => x.Data).ToList()
+                .Where(r => negociacoes.ContainsKey(r.NegociacaoId))
                 .Select((r, i) =>
                 {
                     Negociacao neg = negociacoes[r.NegociacaoId];
@@ -85,9 +86,7 @@ namespace GestaoSindicatos.Services
                         Color = _colors.ElementAt(i % _colors.Count),
                         Title = $"#{r.NegociacaoId} {neg.Empresa.Nome}, {neg.Empresa.Endereco.Cidade} - {neg.Empresa.Endereco.UF}"
                     };
-                })
-                .ToList();
-
+                }).ToList();
         }
 
         public override void Delete(Expression<Func<RodadaNegociacao, bool>> query)

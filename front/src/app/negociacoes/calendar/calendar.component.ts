@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { CalendarView, CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
@@ -40,70 +40,13 @@ export class CalendarComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
-
-  actions: CalendarEventAction[] = [
-    // {
-    //   label: '<i class="fa fa-fw fa-pencil"></i>',
-    //   onClick: ({ event }: { event: CalendarEvent }): void => {
-    //     // this.handleEvent('Edited', event);
-    //   }
-    // }
-    // },
-    // {
-    //   label: '<i class="fa fa-fw fa-times"></i>',
-    //   onClick: ({ event }: { event: CalendarEvent }): void => {
-    //     this.events = this.events.filter(iEvent => iEvent !== event);
-    //     // this.handleEvent('Deleted', event);
-    //   }
-    // }
-  ];
-
   refresh: Subject<any> = new Subject();
   events: CalendarEvent[] = [];
-  /*events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    }
-  ];*/
 
-  activeDayIsOpen = true;
 
-  constructor(private api: NegociacoesApiService, private router: Router) { }
+  activeDayIsOpen = false;
+
+  constructor(private api: NegociacoesApiService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.load(this.viewDate.getMonth() + 1);
@@ -116,13 +59,13 @@ export class CalendarComponent implements OnInit {
     ).subscribe((ev: CalendarEvent[]) => this.events = ev);
   }
 
-  handleEvent($event) {
+  handleEvent($event: any) {
     if ($event && $event.hasOwnProperty('title')) {
       const title = $event['title'];
       const pattern = /\d.+? /;
       if (pattern.test(title)) {
-        const id = title.match(/\d.+?/)[0].toString().trim();
-        this.router.navigate(['/negociacoes/gestao', id]);
+        const id = title.match(/\d.+? /)[0].toString().trim();
+        this.router.navigate(['../', 'gestao', id], { relativeTo: this.route });
       }
     }
   }
@@ -143,11 +86,7 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd
-  }: CalendarEventTimesChangedEvent): void {
+  eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
     this.refresh.next();

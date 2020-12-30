@@ -12,7 +12,7 @@ declare var Chart: any;
 export class ChartsService {
 
   StatusNegociacao: typeof StatusNegociacao = StatusNegociacao;
-  colors = ['#1c84c6', '#f8ac59', '#1ab394', '#ed5565', '#23c6c8', '#f3f3f4'];
+  colors = ['#1c84c6', '#f8ac59', '#1ab394', '#ed5565', '#23c6c8', '#590C0C', '#A6A437', '#A62626', '#166EA6', '#103D59', '#3D9BBD', '#DEBCB0', '#045252', '#DA641A', '#001D23'];
   ultimaEmpresa = null;
 
   constructor() { }

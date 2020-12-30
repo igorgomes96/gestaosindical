@@ -65,7 +65,8 @@
             <td>{{ reuniao.empresa?.nome }}</td>
             <td>{{ reuniao.empresa?.endereco?.cidade }} - {{ reuniao.empresa?.endereco?.uf }}</td>
             <td>
-              <a class="btn btn-success btn-xs" [routerLink]="['/negociacoes/gestao', reuniao.negociacaoId]"><i class="fa fa-info"></i></a>
+              <a class="btn btn-success btn-xs" [routerLink]="['/negociacoes/gestao', reuniao.negociacaoId]"><i
+                  class="fa fa-info"></i></a>
             </td>
           </tr>
         </tbody>
@@ -75,22 +76,27 @@
 </div>
 
 <div class="row">
-  <div class="col-md-12">
-    <app-panel title="Quantidade de Reuniões" [collapsible]="false">
-      <div class="row">
-        <div class="col-lg-3 col-md-6">
-          <canvas id="reunioesLaboral" height="320px"></canvas>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <canvas id="reunioesPatronal" height="320px"></canvas>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <canvas id="reunioesEmpresa" height="320px"></canvas>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <canvas id="reunioesEstado" height="320px"></canvas>
-        </div>
-      </div>
+  <div class="col-md-6">
+    <app-panel title="Reuniões por Sind. Laboral" [collapsible]="false">
+      <canvas id="reunioesLaboral" height="400px"></canvas>
+    </app-panel>
+  </div>
+  <div class="col-md-6">
+    <app-panel title="Reuniões por Sind. Patronal" [collapsible]="false">
+      <canvas id="reunioesPatronal" height="400px"></canvas>
+    </app-panel>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <app-panel title="Reuniões por Empresa" [collapsible]="false">
+      <canvas id="reunioesEmpresa" height="400px"></canvas>
+    </app-panel>
+  </div>
+  <div class="col-md-6">
+    <app-panel title="Reuniões por UF" [collapsible]="false">
+      <canvas id="reunioesEstado" height="400px"></canvas>
     </app-panel>
   </div>
 </div>

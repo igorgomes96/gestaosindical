@@ -30,15 +30,15 @@ namespace GestaoSindicatos.Controllers
         public ActionResult<List<Litigio>> Get(int? empresaId = null, int? laboralId = null, int? patronalId = null, int? ano = null, DateTime? de = null, DateTime? ate = null)
         {
             return _service.Query(n => 
-                FilterQuery.And(
-                    new Tuple<object, object>(n.LaboralId, laboralId),
-                    new Tuple<object, object>(n.PatronalId, patronalId),
-                    new Tuple<object, object>(n.EmpresaId, empresaId), 
-                    new Tuple<object, object>(n.Data.Year, ano)), User)
-                .Where(l => (!de.HasValue || !ate.HasValue || (l.Data >= de.Value && l.Data <= ate.Value)))
+                    (!laboralId.HasValue || laboralId.Value.Equals(n.LaboralId)) &&
+                    (!patronalId.HasValue || patronalId.Value.Equals(n.PatronalId)) &&
+                    (!empresaId.HasValue || empresaId.Value.Equals(n.EmpresaId)) &&
+                    (!ano.HasValue || ano.Value.Equals(n.Data.Year)), User)
                 .Include(e => e.Empresa).Include(e => e.Laboral).Include(e => e.Patronal)
                 .Include(l => l.Itens).ThenInclude(i => i.PlanoAcao)
                 .OrderByDescending(l => l.Data)
+                .ToList()
+                .Where(l => (!de.HasValue || !ate.HasValue || (l.Data >= de.Value && l.Data <= ate.Value)))
                 .Select(litigio => _service.UpdateStatus(litigio)).ToList();
         }
 
