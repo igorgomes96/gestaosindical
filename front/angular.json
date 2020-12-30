@@ -34,7 +34,8 @@
               "node_modules/daterangepicker/moment.min.js",
               "node_modules/daterangepicker/daterangepicker.js",
               "src/assets/js/pace/pace.min.js",
-              "src/assets/plugins/toastr/toastr.min.js"
+              "src/assets/plugins/toastr/toastr.min.js",
+              "node_modules/chart.js/dist/Chart.min.js"
             ]
           },
           "configurations": {

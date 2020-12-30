@@ -1,10 +1,10 @@
 import { Referente, ProcedimentoLitigio } from './../../model/litigio';
 import { StatusPlanoAcao } from './../../model/plano-acao';
 import { Mes } from './../../model/sindicato-laboral';
-import { StatusNegociacao, RodadaNegociacao } from 'src/app/model/negociacao';
+import { StatusNegociacao } from 'src/app/model/negociacao';
 import { Component, OnInit } from '@angular/core';
 import { ChartsService } from '../charts.service';
-import { tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Options, ChangeContext } from 'ng5-slider';
 import { IntervalFilterService } from 'src/app/shared/interval-filter.service';
 import { ActivatedRoute } from '@angular/router';
@@ -196,13 +196,13 @@ export class DashboardNegociacoesComponent implements OnInit {
       });
 
     this.api.getQtdaReunioesEstado(this.ano)
-      .subscribe(x => this.charts.push(this.chartHorizontalBar('reunioesEstado', x, 'Reuniões por UF')));
+      .subscribe(x => this.charts.push(this.chartHorizontalBar('reunioesEstado', x)));
     this.api.getQtdaReunioesLaboral(this.ano)
-      .subscribe(x => this.charts.push(this.chartHorizontalBar('reunioesLaboral', x, 'Reuniões por Sind. Laboral')));
+      .subscribe(x => this.charts.push(this.chartHorizontalBar('reunioesLaboral', x)));
     this.api.getQtdaReunioesPatronal(this.ano)
-      .subscribe(x => this.charts.push(this.chartHorizontalBar('reunioesPatronal', x, 'Reuniões por Sind. Patronal')));
+      .subscribe(x => this.charts.push(this.chartHorizontalBar('reunioesPatronal', x)));
     this.api.getQtdaReunioesEmpresa(this.ano)
-      .subscribe(x => this.charts.push(this.chartHorizontalBar('reunioesEmpresa', x, 'Reuniões por Empresa')));
+      .subscribe(x => this.charts.push(this.chartHorizontalBar('reunioesEmpresa', x)));
 
     const statusPlanos = (<HTMLCanvasElement>$('#statusPlanos')[0]).getContext('2d');
     this.api.getStatusPlanosAcao(this.ano)
